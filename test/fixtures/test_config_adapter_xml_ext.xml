@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <production>
+        <api>
+            <url>https://api.commons.com</url>
+            <id>1234</id>
+        </api>
+    </production>
+    <development extends="production">
+        <application>
+            <host>http://localhost</host>
+            <uri>/php_commons/</uri>
+        </application>
+	    <database>
+	        <host>localhost</host>
+	        <port>1234</port>
+	        <dbname>php_commons</dbname>
+	        <username>root</username>
+	        <password>secret</password>
+	    </database>
+    </development>
+    <testing extends="development">
+        <api>
+            <url>http://localhost/testing_php_commons/</url>
+        </api>
+        <application>
+            <uri>/testing_php_commons/</uri>
+        </application>
+    </testing>
+</config>

@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+
+<project name="php_commons" default="build" basedir=".">
+
+    <property file="./build.properties"/>
+
+    <!-- Clean -->
+    <target name="clean"
+        description="Clean">
+        <delete dir="./test/results" includeemptydirs="true" verbose="true" failonerror="true" />
+        <delete dir="./test/coverage" includeemptydirs="true" verbose="true" failonerror="true" />
+        <delete dir="./test/tmp" includeemptydirs="true" verbose="true" failonerror="true" />
+    </target>
+  
+    <!-- Prepare -->
+    <target name="prepare"
+            description="Prepare">
+        <mkdir dir="./test/results"/>
+        <mkdir dir="./test/coverage"/>
+        <mkdir dir="./test/tmp"/>
+    </target>
+    
+    <!-- Test -->
+    <target name="test" depends="prepare"
+            description="Unit testing">
+        <exec 
+                command="bash -c 'phpunit --debug --bootstrap bootstrap.php --verbose --process-isolation --log-junit results/unittests.xml .'" 
+                dir="./test/"  
+                passthru="true"
+                checkreturn="true"/>
+    </target>
+    
+    <!-- Test with coverage -->
+    <target name="coverage" depends="prepare"
+            description="Unit testing">
+        <exec 
+                command="bash -c 'phpunit --debug --bootstrap bootstrap.php --verbose --process-isolation --coverage-html coverage/ --log-junit results/unittests.xml .'" 
+                dir="./test/"  
+                passthru="true"
+                checkreturn="true"/>
+    </target>
+    
+    <!-- Create documentation -->
+    <target name="doc" depends=""
+            description="Create documentation">
+        <exec command="doxygen" dir="./doc" checkreturn="true" />
+    </target>
+    
+    <!-- Build -->
+    <target name="build" depends="clean, prepare"
+            description="Build project">
+    </target>
+
+    <!-- Continous integration -->
+    <target name="ci" depends="clean, prepare, test"
+            description="Continous integration">
+    </target>
+
+</project>
+
