@@ -1,0 +1,24 @@
+<html>
+<head>
+    <base href="http://<?= $_SERVER['SERVER_NAME'] ?>/php_commons-4/demo/light/web/" />
+</head>
+<body>
+
+<div>
+    <a href="index">[index]</a>
+    <a href="index/second?x=123">[index/second]</a>
+    <a href="index/json">[index/json]</a>
+    <a href="index/xml">[index/xml]</a>
+    <br />
+    <a href="custom">[custom]</a>
+    <a href="simple-route.html">[custom/simple-route]</a>
+    <a href="regex,123,xyz.html">[custom/regex-route]</a>
+    <hr />
+</div>
+
+<div>
+    <?= $this->content ?>
+</div>
+
+</body>
+</html>

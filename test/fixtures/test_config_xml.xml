@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <a>
+        <x>123</x>
+        <y>456</y>
+        <z>789</z>
+    </a>
+    <b extends="a">
+        <x>321</x>
+    </b>
+    <c extends="b">
+        <y>654</y>
+    </c>
+    <d extends="c">
+        <z>987</z>
+    </d>
+    <e extends="d">
+    </e>
+</config>

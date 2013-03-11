@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <production>
+    </production>
+    <testing>
+        <application>
+            <test1>12</test1>
+            <test2>34</test2>
+        </application>
+        <database>
+            <test1>56</test1>
+            <test2>78</test2>
+        </database>
+    </testing>
+    <development>
+    </development>
+</config>

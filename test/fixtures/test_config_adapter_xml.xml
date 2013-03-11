@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <application>
+        <host>http://localhost</host>
+        <uri>/php_commons/</uri>
+    </application>
+    <database>
+        <host>localhost</host>
+        <port>1234</port>
+        <dbname>php_commons</dbname>
+        <username>root</username>
+        <password>secret</password>
+    </database>
+</config>
