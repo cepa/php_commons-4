@@ -18,6 +18,19 @@ interface KeyStoreInterface
 {
     
     /**
+     * Open a connection to a key store.
+     * @param mixed $options
+     * @return KeyStoreInterface
+     */
+    public function connect($options = null);
+    
+    /**
+     * Close connection to a key store.
+     * @return KeyStoreInterface
+     */
+    public function close();
+    
+    /**
      * Set key value.
      * @param string $name
      * @param mixed $value
