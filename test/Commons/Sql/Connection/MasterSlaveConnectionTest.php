@@ -154,7 +154,7 @@ class MasterSlaveConnectionTest extends \PHPUnit_Framework_TestCase
         $connection = new MasterSlaveConnection(new MockDriver(), new MockDriver());
         
         $connection->createQuery()
-            ->insertInto('foo')
+            ->insert('foo')
             ->set('x', 123)
             ->execute();
         
@@ -183,7 +183,7 @@ class MasterSlaveConnectionTest extends \PHPUnit_Framework_TestCase
         $connection->begin();
         
         $connection->createQuery()
-            ->insertInto('foo')
+            ->insert('foo')
             ->set('x', 123)
             ->execute();
         

@@ -348,11 +348,11 @@ class Query implements \Countable
     }
 
     /**
-     * INSERT statement.
+     * INSERT INTO statement.
      * @param string $sql
      * @return Query
      */
-    public function insertInto($sql)
+    public function insert($sql)
     {
         $args = func_get_args();
         $this->_type = self::TYPE_INSERT;
@@ -379,7 +379,7 @@ class Query implements \Countable
     }
 
     /**
-     * DELETE statement.
+     * DELETE FROM statement.
      * @param string $sql
      * @return Query
      */

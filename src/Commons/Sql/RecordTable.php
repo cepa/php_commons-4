@@ -187,7 +187,7 @@ class RecordTable extends AbstractDao
                 ->update($this->getTableName())
                 ->where($primaryKey.' = ?', $record->get($primaryKey));
         } else {
-            $query->insertInto($this->getTableName());
+            $query->insert($this->getTableName());
         }
         
         foreach ($record as $name => $value) {
