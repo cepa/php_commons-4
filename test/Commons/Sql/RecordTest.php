@@ -16,6 +16,9 @@ namespace Commons\Sql;
 
 use Commons\Container\AssocContainer;
 use Commons\Sql\Driver\PdoDriver;
+use Commons\Sql\Connection\ConnectionInterface;
+use Commons\Sql\Connection\SingleConnection;
+use Mock\Sql\Connection as MockConnection;
 
 class RecordTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,9 +32,9 @@ class RecordTest extends \PHPUnit_Framework_TestCase
     public function testSetGetConnection()
     {
         $record = new Record();
-        $r = $record->setConnection(new Connection());
+        $r = $record->setConnection(new MockConnection());
         $this->assertTrue($r instanceof Record);
-        $this->assertTrue($r->getConnection() instanceof Connection);
+        $this->assertTrue($r->getConnection() instanceof ConnectionInterface);
     }
     
     public function testGetConnection_Exception()
@@ -44,14 +47,14 @@ class RecordTest extends \PHPUnit_Framework_TestCase
     public function testCreateQuery()
     {
         $record = new Record();
-        $record->setConnection(new Connection());
+        $record->setConnection(new MockConnection());
         $this->assertTrue($record->createQuery() instanceof Query);
     }
     
     public function testGetTable()
     {
         $record = new \Mock\Sql\Record();
-        $record->setConnection(new Connection());
+        $record->setConnection(new MockConnection());
         $this->assertTrue($record->getTable() instanceof \Mock\Sql\RecordTable);
     }
     
@@ -59,7 +62,7 @@ class RecordTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $database = \Bootstrap::createDatabase();
-            $connection = new Connection();
+            $connection = new SingleConnection();
             $connection
                 ->setDriver(new PdoDriver())
                 ->connect(\Bootstrap::getDatabaseOptions($database));
@@ -112,7 +115,7 @@ class RecordTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $database = \Bootstrap::createDatabase();
-            $connection = new Connection();
+            $connection = new SingleConnection();
             $connection
                 ->setDriver(new PdoDriver())
                 ->connect(\Bootstrap::getDatabaseOptions($database));

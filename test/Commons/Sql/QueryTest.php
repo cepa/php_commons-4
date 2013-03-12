@@ -15,6 +15,9 @@
 namespace Commons\Sql;
 
 use Commons\Sql\Driver\PdoDriver;
+use Commons\Sql\Connection\ConnectionInterface;
+use Commons\Sql\Connection\SingleConnection;
+use Mock\Sql\Driver as MockDriver;
 
 class QueryTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,8 +26,8 @@ class QueryTest extends \PHPUnit_Framework_TestCase
        
     public function setUp()
     {
-        $this->_connection = new Connection();
-        $this->_connection->setDriver(new \Mock\Sql\Driver());
+        $this->_connection = new SingleConnection();
+        $this->_connection->setDriver(new MockDriver());
     }
     
     public function testSetGetObjectClassName()
@@ -40,11 +43,11 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     {
         $query = $this->getQuery();
         $this->assertTrue($query instanceof Query);
-        $this->assertTrue($query->getConnection() instanceof Connection);
+        $this->assertTrue($query->getConnection() instanceof ConnectionInterface);
         
         $query = $this->getQuery();
         $this->assertTrue($query instanceof Query);
-        $this->assertTrue($query->getConnection() instanceof Connection);
+        $this->assertTrue($query->getConnection() instanceof ConnectionInterface);
         
         $this->assertTrue($query->getBeginning() instanceof QueryExpression);
         $this->assertTrue($query->getFrom() instanceof QueryExpression);
@@ -389,7 +392,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals(123, $a->x);
             $this->assertEquals(456, $a->y);
             
-            $this->assertTrue($a->getConnection() instanceof Connection);
+            $this->assertTrue($a->getConnection() instanceof ConnectionInterface);
                  
             $this->_connection->disconnect();
             \Bootstrap::dropDatabase($database);
@@ -453,7 +456,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             
             foreach ($a as $o) {
                 $this->assertTrue($o instanceof Record);
-                $this->assertTrue($o->getConnection() instanceof Connection);
+                $this->assertTrue($o->getConnection() instanceof ConnectionInterface);
             }
                  
             $this->_connection->disconnect();

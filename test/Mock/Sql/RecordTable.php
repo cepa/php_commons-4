@@ -14,12 +14,12 @@
 
 namespace Mock\Sql;
 
-use Commons\Sql\Connection;
+use Commons\Sql\Connection\ConnectionInterface;
 
 class RecordTable extends \Commons\Sql\RecordTable
 {
     
-    public function __construct(Connection $connection)
+    public function __construct(ConnectionInterface $connection)
     {
         parent::__construct($connection);
         $this->setTableName('mock_record');
