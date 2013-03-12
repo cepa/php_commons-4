@@ -17,6 +17,7 @@ namespace Commons\Sql\Driver;
 use Commons\Exception\InvalidArgumentException;
 use Commons\Sql\Exception;
 use Commons\Sql\Statement\PdoStatement;
+use Commons\Sql\Sql;
 
 class PdoDriver implements DriverInterface
 {
@@ -55,11 +56,16 @@ class PdoDriver implements DriverInterface
     }
 
     /**
-     * @see Commons\Sql\Driver\DriverInterface::getName()
+     * @see Commons\Sql\Driver\DriverInterface::getDatabaseType()
      */
-    public function getName()
+    public function getDatabaseType()
     {
-        return 'pdo';
+        $driverName = strtolower($this->getPdo()->getAttribute(\PDO::ATTR_DRIVER_NAME));
+        switch ($driverName) {
+            case 'mysql': return Sql::TYPE_MYSQL;
+            case 'pgsql': return Sql::TYPE_POSTGRESQL;
+        }
+        return $driverName;
     }
     
     /**

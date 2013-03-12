@@ -17,6 +17,9 @@ namespace Commons\Sql;
 class Sql
 {
 
+    const TYPE_MYSQL = 'mysql';
+    const TYPE_POSTGRESQL = 'pgsql';
+    
     const FETCH_ARRAY        = 0;
     const FETCH_OBJECT       = 1;
     

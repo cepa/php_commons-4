@@ -21,21 +21,6 @@ use Commons\Sql\Query;
 class Connection extends AbstractConnection
 {
     
-    public function setDriver(DriverInterface $driver, $id = null)
-    {
-        return $this;
-    }
-    
-    public function getDriver($id = null)
-    {
-        return new Driver();
-    }
-    
-    public function hasDriver($id = null)
-    {
-        return true;
-    }
-    
     public function connect($options = null)
     {
         return $this;
@@ -74,6 +59,11 @@ class Connection extends AbstractConnection
     public function inTransaction()
     {
         return false;
+    }
+    
+    public function getDatabaseType()
+    {
+        return null;
     }
     
 }

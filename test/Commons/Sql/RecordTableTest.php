@@ -37,14 +37,13 @@ class RecordTableTest extends \PHPUnit_Framework_TestCase
                 ->setDriver(new PdoDriver())
                 ->connect(\Bootstrap::getDatabaseOptions($database));
             
-            $driverName = strtolower($this->_connection->getDriver()->getPdo()->getAttribute(\PDO::ATTR_DRIVER_NAME));
-        
-            if ($driverName == 'mysql') {
+            $databaseType = $this->_connection->getDatabaseType();
+            if ($databaseType == Sql::TYPE_MYSQL) {
                 $this->executeStatement("CREATE TABLE test ( id int primary key auto_increment, a int, b varchar(128) )");
-            } else if ($driverName == 'pgsql') {
+            } else if ($databaseType == Sql::TYPE_POSTGRESQL) {
                 $this->executeStatement("CREATE TABLE test ( id serial, a int, b varchar(128) )");
             } else {
-                throw new NotImplementedException("Unsupported driver '{$driverName}'!");
+                throw new NotImplementedException("Unsupported driver '{$databaseType}'!");
             }
         
             $this->executeStatement("INSERT INTO test(a, b) VALUES (123, 'abc')");
@@ -136,14 +135,13 @@ class RecordTableTest extends \PHPUnit_Framework_TestCase
                 ->setDriver(new PdoDriver())
                 ->connect(\Bootstrap::getDatabaseOptions($database));
             
-            $driverName = strtolower($this->_connection->getDriver()->getPdo()->getAttribute(\PDO::ATTR_DRIVER_NAME));
-        
-            if ($driverName == 'mysql') {
+            $databaseType = $this->_connection->getDatabaseType();
+            if ($databaseType == Sql::TYPE_MYSQL) {
                 $this->executeStatement("CREATE TABLE test2 ( test_id int primary key auto_increment, test_a int, test_b varchar(128) )");
-            } else if ($driverName == 'pgsql') {
+            } else if ($databaseType == Sql::TYPE_POSTGRESQL) {
                 $this->executeStatement("CREATE TABLE test2 ( test_id serial, test_a int, test_b varchar(128) )");
             } else {
-                throw new NotImplementedException("Unsupported driver '{$driverName}'!");
+                throw new NotImplementedException("Unsupported driver '{$databaseType}'!");
             }
         
             $this->executeStatement("INSERT INTO test2(test_a, test_b) VALUES (123, 'abc')");

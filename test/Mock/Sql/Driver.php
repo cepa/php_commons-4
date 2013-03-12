@@ -23,7 +23,7 @@ class Driver implements DriverInterface
     protected $_isConnected = false;
     protected $_inTransaction = false;
     
-    public function getName()
+    public function getDatabaseType()
     {
         return 'mock';
     }
