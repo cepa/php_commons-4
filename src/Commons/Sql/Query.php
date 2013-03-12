@@ -800,12 +800,13 @@ class Query implements \Countable
     /**
      * Execute a query and fetch the result.
      * @param int $hydrate
+     * @param mixed $options
      * @return Query
      */
-    public function execute()
+    public function execute($options = null)
     {
         $this->_statement = $this->getConnection()
-            ->prepareStatement($this->toSql());
+            ->prepareStatement($this->toSql(), $options);
 
         foreach ($this->_params->getAll() as $name => $value) {
             $this->getStatement()->bind(':'.$name, $value);

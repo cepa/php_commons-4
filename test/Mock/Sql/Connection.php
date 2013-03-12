@@ -51,7 +51,7 @@ class Connection extends AbstractConnection
         return true;
     }
     
-    public function prepareStatement($rawSql)
+    public function prepareStatement($rawSql, $options = null)
     {
         return Statement($this->getDriver(), $rawSql);
     }
