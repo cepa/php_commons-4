@@ -15,6 +15,7 @@
 namespace Commons\Sql\Connection;
 
 use Commons\Sql\Driver\DriverInterface;
+use Commons\Sql\Driver\PdoDriver;
 use Commons\Sql\Exception;
 
 class SingleConnection extends AbstractConnection
@@ -50,8 +51,8 @@ class SingleConnection extends AbstractConnection
      */
     public function getDriver()
     {
-        if (!$this->_driver) {
-            throw new Exception("Driver is not set!");
+        if (!isset($this->_driver)) {
+            $this->setDriver(new PdoDriver());
         }
         return $this->_driver;
     }
