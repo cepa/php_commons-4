@@ -15,6 +15,7 @@
 namespace Commons\Sql;
 
 use Commons\Container\AssocContainer;
+use Commons\Sql\Connection\ConnectionInterface;
 
 class Record extends AssocContainer
 {
@@ -24,10 +25,10 @@ class Record extends AssocContainer
     
     /**
      * Set connection.
-     * @param Commons\Sql\Connection $connection
+     * @param Commons\Sql\Connection\ConnectionInterface $connection
      * @return Commons\Sql\Record
      */
-    public function setConnection(Connection $connection)
+    public function setConnection(ConnectionInterface $connection)
     {
         $this->_connection = $connection;
         return $this;
@@ -36,7 +37,7 @@ class Record extends AssocContainer
     /**
      * Get connection.
      * @throws Commons\Sql\Exception
-     * @return Commons\Sql\Connection
+     * @return Commons\Sql\Connection\ConnectionInterface
      */
     public function getConnection()
     {

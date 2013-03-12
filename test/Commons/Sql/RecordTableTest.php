@@ -16,6 +16,8 @@ namespace Commons\Sql;
 
 use Commons\Exception\NotImplementedException;
 use Commons\Sql\Driver\PdoDriver;
+use Commons\Sql\Connection\ConnectionInterface;
+use Commons\Sql\Connection\SingleConnection;
 
 class RecordTableTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +26,7 @@ class RecordTableTest extends \PHPUnit_Framework_TestCase
        
     public function setUp()
     {
-        $this->_connection = new Connection();
+        $this->_connection = new SingleConnection();
     }
     
     public function testTable()
@@ -75,7 +77,7 @@ class RecordTableTest extends \PHPUnit_Framework_TestCase
             $record = $table->createRecord();
             $this->assertTrue($record instanceof Record);
             $this->assertTrue($record->getTable() instanceof RecordTable);
-            $this->assertTrue($record->getConnection() instanceof Connection);
+            $this->assertTrue($record->getConnection() instanceof ConnectionInterface);
             
             $record = $table->find(1);
             $this->assertTrue($record instanceof Record);
@@ -175,7 +177,7 @@ class RecordTableTest extends \PHPUnit_Framework_TestCase
             $record = $table->createRecord();
             $this->assertTrue($record instanceof Record);
             $this->assertTrue($record->getTable() instanceof RecordTable);
-            $this->assertTrue($record->getConnection() instanceof Connection);
+            $this->assertTrue($record->getConnection() instanceof ConnectionInterface);
             
             $record = $table->find(1);
             $this->assertTrue($record instanceof Record);

@@ -15,8 +15,8 @@
 namespace Commons\Sql;
 
 use Commons\Exception\InvalidArgumentException;
-
 use Commons\Container\AssocContainer;
+use Commons\Sql\Connection\ConnectionInterface;
 
 class Query implements \Countable 
 {
@@ -50,9 +50,9 @@ class Query implements \Countable
     
     /**
      * Init a new query.
-     * @param Connection $connection
+     * @param ConnectionInterface $connection
      */
-    public function __construct(Connection $connection = null)
+    public function __construct(ConnectionInterface $connection = null)
     {
         $this->_connection = $connection;
         $this->reset();
@@ -116,10 +116,10 @@ class Query implements \Countable
     
     /**
      * Set sql connection.
-     * @param Connection $connection
+     * @param ConnectionInterface $connection
      * @return Query
      */
-    public function setConnection(Connection $connection)
+    public function setConnection(ConnectionInterface $connection)
     {
         $this->_connection = $connection;
         return $this;
@@ -127,7 +127,7 @@ class Query implements \Countable
 
     /**
      * Get connection.
-     * @return Connection
+     * @return ConnectionInterface
      */
     public function getConnection()
     {

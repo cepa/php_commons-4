@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Sql/Connection.php
+ * @file        Commons/Sql/Connection/SingleConnection.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,13 +12,12 @@
  * =============================================================================
  */
 
-namespace Commons\Sql;
+namespace Commons\Sql\Connection;
 
 use Commons\Sql\Driver\DriverInterface;
 use Commons\Sql\Exception;
-use Commons\Sql\RecordTable;
 
-class Connection
+class SingleConnection extends AbstractConnection
 {
 
     protected $_driver;
@@ -36,9 +35,10 @@ class Connection
     /**
      * Set driver instance.
      * @param Commons\Sql\Driver\DriverInterface $driver
+     * @param string $id Ignored
      * @return Commons\Sql\Connection
      */
-    public function setDriver(DriverInterface $driver)
+    public function setDriver(DriverInterface $driver, $id = null)
     {
         $this->_driver = $driver;
         return $this;
@@ -46,10 +46,11 @@ class Connection
     
     /**
      * Get driver instance.
+     * @param string $id Ignored
      * @throws Commons\Sql\Exception
      * @return Commons\Sql\Driver\DriverInterface
      */
-    public function getDriver()
+    public function getDriver($id = null)
     {
         if (!$this->_driver) {
             throw new Exception("Driver is not set!");
@@ -59,9 +60,10 @@ class Connection
     
     /**
      * Check if driver is set.
+     * @param string $id Ignored
      * @return boolean
      */
-    public function hasDriver()
+    public function hasDriver($id = null)
     {
         return isset($this->_driver);
     }
@@ -143,47 +145,6 @@ class Connection
     public function inTransaction()
     {
         return $this->getDriver()->inTransaction();
-    }
-    
-    /**
-     * Create a new query.
-     * @return Query
-     */
-    public function createQuery()
-    {
-        return new Query($this);
-    }
-    
-    /**
-     * Set table.
-     * @param string $recordName
-     * @param Commons\Sql\RecordTable $table
-     * @return Commons\Sql\Connection
-     */
-    public function setTable($recordName, RecordTable $table)
-    {
-        $className = $recordName.'Table';
-        $this->_tables[$className] = $table;
-        return $this;
-    }
-    
-    /**
-     * Get table.
-     * @param string $recordName
-     * @return Commons\Sql\RecordTable
-     */
-    public function getTable($recordName)
-    {
-        $className = $recordName.'Table';
-        if (!isset($this->_tables[$className])) {
-            if (class_exists($className)) {
-                $table = new $className($this);
-            } else {
-                $table = new RecordTable($this);
-            }
-            $this->_tables[$className] = $table;
-        }
-        return $this->_tables[$className];
     }
     
 }

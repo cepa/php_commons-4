@@ -16,6 +16,7 @@ namespace Commons\Sql;
 
 use Commons\Exception\InvalidArgumentException;
 use Commons\Exception\NotImplementedException;
+use Commons\Sql\Connection\ConnectionInterface;
 use Commons\Sql\Dao\AbstractDao;
 use Commons\Sql\Driver\PdoDriver;
 
@@ -29,9 +30,9 @@ class RecordTable extends AbstractDao
     
     /**
      * Init table.
-     * @param Commons\Sql\Connection $connection
+     * @param Commons\Sql\Connection\ConnectionInterface $connection
      */
-    public function __construct(Connection $connection)
+    public function __construct(ConnectionInterface $connection)
     {
         $this->_connection = $connection;
     }
@@ -58,7 +59,7 @@ class RecordTable extends AbstractDao
     
     /**
      * Get connection.
-     * @return Connection
+     * @return ConnectionInterface
      */
     public function getConnection()
     {
