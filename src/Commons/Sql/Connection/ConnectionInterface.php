@@ -65,9 +65,10 @@ interface ConnectionInterface
     /**
      * Prepare sql statement.
      * @param string $rawSql
+     * @param mixed $options
      * @return StatementInterface
      */
-    public function prepareStatement($rawSql);
+    public function prepareStatement($rawSql, $options = null);
     
     /**
      * Begin transaction.

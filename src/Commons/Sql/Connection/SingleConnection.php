@@ -101,9 +101,10 @@ class SingleConnection extends AbstractConnection
     /**
      * Prepare a statement.
      * @param string $rawSql
+     * @param mixed $options
      * @return Commons\Sql\Statement\StatementInterface
      */
-    public function prepareStatement($rawSql)
+    public function prepareStatement($rawSql, $options = null)
     {
         return $this->getDriver()->prepareStatement($rawSql);
     }
