@@ -15,6 +15,7 @@
 namespace Commons\Sql\Connection;
 
 use Commons\Sql\Driver\DriverInterface;
+use Commons\Sql\Driver\PdoDriver;
 use Commons\Sql\Statement\StatementInterface;
 use Commons\Sql\Query;
 use Commons\Sql\RecordTable;
@@ -23,6 +24,12 @@ use Mock\Sql\RecordTable as MockRecordTable;
 
 class SingleConnectionTest extends \PHPUnit_Framework_TestCase
 {
+    
+    public function testConnectionGetDriverLazyLoad()
+    {
+        $connection = new SingleConnection();
+        $this->assertTrue($connection->getDriver() instanceof PdoDriver);
+    }
     
     public function testConnection()
     {
