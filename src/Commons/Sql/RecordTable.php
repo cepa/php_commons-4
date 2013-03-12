@@ -19,6 +19,7 @@ use Commons\Exception\NotImplementedException;
 use Commons\Sql\Connection\ConnectionInterface;
 use Commons\Sql\Dao\AbstractDao;
 use Commons\Sql\Driver\PdoDriver;
+use Commons\Sql\Sql;
 
 class RecordTable extends AbstractDao
 {
@@ -179,12 +180,6 @@ class RecordTable extends AbstractDao
             $record->preUpdate();
         }
         
-        $driver = $this->getConnection()->getDriver();
-        $driverName = get_class($driver);
-        if ($driver instanceof PdoDriver) {
-            $driverName = strtolower($driver->getPdo()->getAttribute(\PDO::ATTR_DRIVER_NAME));
-        }
-        
         $query = $this->createQuery();
         
         if (!$isNewRecord) {
@@ -202,8 +197,9 @@ class RecordTable extends AbstractDao
         $query->execute();
         
         if ($isNewRecord) {
-            switch ($driverName) {
-                case 'mysql':
+            $databaseType = $this->getConnection()->getDatabaseType();
+            switch ($databaseType) {
+                case Sql::TYPE_MYSQL:
                     $id = $this->createQuery()
                         ->select("LAST_INSERT_ID()")
                         ->execute()
@@ -211,7 +207,7 @@ class RecordTable extends AbstractDao
                     $record->set($primaryKey, $id);
                     break;
                             
-                case 'pgsql':
+                case Sql::TYPE_POSTGRESQL:
                     $id = $this->createQuery()
                         ->select("CURRVAL('{$this->getTableName()}_{$primaryKey}_seq')")
                         ->execute()
@@ -219,7 +215,7 @@ class RecordTable extends AbstractDao
                     $record->set($primaryKey, $id);
                     break;
                             
-                default: throw new NotImplementedException("Unsupported driver '$driverName'!");
+                default: throw new NotImplementedException("Unsupported driver '{$databaseType}'!");
             }
         }
         

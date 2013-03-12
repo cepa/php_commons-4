@@ -22,28 +22,6 @@ interface ConnectionInterface
 {
     
     /**
-     * Set driver.
-     * @param DriverInterface $driver
-     * @param string $id Instance identifier.
-     * @return ConnectionInterface
-     */
-    public function setDriver(DriverInterface $driver, $id = null);
-    
-    /**
-     * Get driver.
-     * @param string $id identifier
-     * @return ConnectionInterface
-     */
-    public function getDriver($id = null);
-    
-    /**
-     * Has driver.
-     * @param string $id ConnectionInterface
-     * @return boolean
-     */
-    public function hasDriver($id = null);
-    
-    /**
      * Connect.
      * @param mixed $options
      * @return ConnectionInterface
@@ -114,5 +92,11 @@ interface ConnectionInterface
      * @return RecordTable
      */
     public function getTable($recordName);
+    
+    /**
+     * Get database type.
+     * @return string
+     */
+    public function getDatabaseType();
     
 }

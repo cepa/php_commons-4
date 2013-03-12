@@ -35,10 +35,9 @@ class SingleConnection extends AbstractConnection
     /**
      * Set driver instance.
      * @param Commons\Sql\Driver\DriverInterface $driver
-     * @param string $id Ignored
      * @return Commons\Sql\Connection
      */
-    public function setDriver(DriverInterface $driver, $id = null)
+    public function setDriver(DriverInterface $driver)
     {
         $this->_driver = $driver;
         return $this;
@@ -46,11 +45,10 @@ class SingleConnection extends AbstractConnection
     
     /**
      * Get driver instance.
-     * @param string $id Ignored
      * @throws Commons\Sql\Exception
      * @return Commons\Sql\Driver\DriverInterface
      */
-    public function getDriver($id = null)
+    public function getDriver()
     {
         if (!$this->_driver) {
             throw new Exception("Driver is not set!");
@@ -60,10 +58,9 @@ class SingleConnection extends AbstractConnection
     
     /**
      * Check if driver is set.
-     * @param string $id Ignored
      * @return boolean
      */
-    public function hasDriver($id = null)
+    public function hasDriver()
     {
         return isset($this->_driver);
     }
@@ -146,6 +143,14 @@ class SingleConnection extends AbstractConnection
     public function inTransaction()
     {
         return $this->getDriver()->inTransaction();
+    }
+    
+    /**
+     * @see \Commons\Sql\Connection\ConnectionInterface::getDatabaseType()
+     */
+    public function getDatabaseType()
+    {
+        return $this->getDriver()->getDatabaseType();
     }
     
 }

@@ -21,7 +21,7 @@ interface DriverInterface
      * Get name of the driver.
      * @return string
      */
-    public function getName();
+    public function getDatabaseType();
     
     /**
      * Connect to the database.

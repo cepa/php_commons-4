@@ -14,12 +14,10 @@
 
 namespace Commons\Sql\Connection;
 
-use Commons\Sql\Driver\DriverInterface;
 use Commons\Sql\Statement\StatementInterface;
 use Commons\Sql\RecordTable;
 use Commons\Sql\Query;
 use Mock\Sql\Connection as MockConnection;
-use Mock\Sql\Driver as MockDriver;
 use Mock\Sql\RecordTable as MockRecordTable;
 
 class AbstractConnectionTest extends \PHPUnit_Framework_TestCase
@@ -27,16 +25,15 @@ class AbstractConnectionTest extends \PHPUnit_Framework_TestCase
         
     public function testCreateQuery()
     {
-        $connection = new MockConnection(new MockDriver());
+        $connection = new MockConnection();
         $query = $connection->createQuery();
         $this->assertTrue($query instanceof Query);
         $this->assertTrue($query->getConnection() instanceof ConnectionInterface);
-        $this->assertTrue($query->getConnection()->getDriver() instanceof MockDriver);
     }
     
     public function testGetTable()
     {
-        $connection = new MockConnection(new MockDriver());
+        $connection = new MockConnection();
         $table = $connection->getTable('SomeRecord');
         $this->assertTrue($table instanceof RecordTable);
         $this->assertNull($table->getTableName());
@@ -46,7 +43,7 @@ class AbstractConnectionTest extends \PHPUnit_Framework_TestCase
         
     public function testGetTable_Custom()
     {
-        $connection = new MockConnection(new MockDriver());
+        $connection = new MockConnection();
         $table = $connection->getTable('\\Mock\\Sql\\Record');
         $this->assertTrue($table instanceof MockRecordTable);
         $this->assertTrue($table instanceof RecordTable);
@@ -57,7 +54,7 @@ class AbstractConnectionTest extends \PHPUnit_Framework_TestCase
     
     public function testSetGetTable()
     {
-        $connection = new MockConnection(new MockDriver());
+        $connection = new MockConnection();
         $table = $connection->getTable('\\Mock\\Sql\\Record');
         $this->assertTrue($table instanceof MockRecordTable);
         
