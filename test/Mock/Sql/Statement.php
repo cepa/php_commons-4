@@ -21,9 +21,11 @@ use Commons\Sql\Sql;
 class Statement implements StatementInterface
 {
     
+    protected $_driver;
+    
     public function __construct(DriverInterface $driver, $rawSql)
     {
-        
+        $this->_driver = $driver;
     }
     
     public function bind($name, $value)
@@ -33,7 +35,9 @@ class Statement implements StatementInterface
     
     public function execute()
     {
-        
+        if ($this->_driver instanceof Driver) {
+            $this->_driver->_incrementNumQueries();
+        }
     }
     
     public function fetch($mode = Sql::FETCH_ARRAY, array $options = array())

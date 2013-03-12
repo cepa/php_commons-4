@@ -22,6 +22,7 @@ class Driver implements DriverInterface
     
     protected $_isConnected = false;
     protected $_inTransaction = false;
+    protected $_numQueries = 0;
     
     public function getDatabaseType()
     {
@@ -66,6 +67,17 @@ class Driver implements DriverInterface
     public function inTransaction()
     {
         return $this->_inTransaction;
+    }
+    
+    public function _incrementNumQueries()
+    {
+        $this->_numQueries++;
+        return $this;
+    }
+    
+    public function _getNumQueries()
+    {
+        return $this->_numQueries;
     }
     
 }
