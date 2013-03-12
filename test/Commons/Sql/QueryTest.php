@@ -83,12 +83,12 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     
     public function testInsert()
     {
-        $query = $this->getQuery()->insertInto('xxx');
+        $query = $this->getQuery()->insert('xxx');
         $this->assertTrue($query instanceof Query);
         $this->assertEquals('INSERT INTO xxx ( ) VALUES ( )', (string) $query);
         $this->assertEquals(Query::TYPE_INSERT, $query->getType());
         
-        $query->insertInto('a')->insertInto('b')->insertInto('c');
+        $query->insert('a')->insert('b')->insert('c');
         $this->assertEquals('INSERT INTO c ( ) VALUES ( )', (string) $query);
     }
     
@@ -281,7 +281,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     public function testToSql_Insert()
     {
         $query = $this->getQuery()
-            ->insertInto('a')
+            ->insert('a')
             ->set('b', 123)
             ->ending('c');
         
@@ -512,19 +512,19 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             $this->executeStatement("CREATE TABLE test ( a int, b varchar(128) )");
             
             $this->getQuery()
-                ->insertInto("test")
+                ->insert("test")
                 ->set('a', 123)
                 ->set('b', 'abc')
                 ->execute();
             
             $this->getQuery()
-                ->insertInto("test")
+                ->insert("test")
                 ->set('a', 456)
                 ->set('b', 'def')
                 ->execute();
             
             $this->getQuery()
-                ->insertInto("test")
+                ->insert("test")
                 ->set('a', 789)
                 ->set('b', 'ghi')
                 ->execute();
