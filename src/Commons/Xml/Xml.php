@@ -22,11 +22,6 @@ class Xml extends TraversableContainer implements \Serializable
     
     protected $_attributes;
     
-    public function __construct($name = 'xml')
-    {
-        parent::__construct($name);
-    }
-    
     /**
      * Clear.
      * @see Commons\Container\TraversableContainer::clear()

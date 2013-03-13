@@ -29,7 +29,6 @@ class XmlViewTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($view->getXml());
         $v = $view->setXml($xml);
         $this->assertTrue($v instanceof ViewInterface);
-        $this->assertEquals('xml', $xml->getName());
         
         $contents = $view->render();
         $this->assertEquals('<?xml version="1.0" encoding="UTF-8"?><xml><a>123</a><b>456</b></xml>', $contents);

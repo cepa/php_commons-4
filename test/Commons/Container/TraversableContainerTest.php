@@ -215,4 +215,52 @@ class TraversableContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('zyx', (string) $trv1->c);
     }
     
+    public function testToArray()
+    {
+        $tree = new TraversableContainer();
+        $tree->xxx->a = 12;
+        $tree->xxx->b = 34;
+        $tree->yyy->a = 56;
+        $tree->yyy->b = 78;
+        $a = $tree->toArray();
+        $this->assertEquals(2, count($tree));
+        $this->assertEquals(12, $a['xxx']['a']);
+        $this->assertEquals(34, $a['xxx']['b']);
+        $this->assertEquals(56, $a['yyy']['a']);
+        $this->assertEquals(78, $a['yyy']['b']);
+    }
+    
+    public function testArrayAccessNullIndex()
+    {
+        $tree = new TraversableContainer();
+        $tree[] = 'aaa';
+        $tree[] = 'bbb';
+        $tree[] = 'ccc';
+        $tree[100] = 'xxx';
+        $a = $tree->toArray();
+        $this->assertEquals(4, count($a));
+        $this->assertEquals('aaa', $a[0]);
+        $this->assertEquals('bbb', $a[1]);
+        $this->assertEquals('ccc', $a[2]);
+        $this->assertEquals('xxx', $a[100]);
+    }
+    
+    public function testArrayConstructor()
+    {
+        $tree = new TraversableContainer(array(
+            'pinky' => array(
+                'size' => 'big', 
+                'iq' => 'small'
+            ),
+            'brain' => array(
+                'size' => 'small',
+                'iq' => 'big'
+            )
+        ));
+        $this->assertEquals('big', (string) $tree->pinky->size);
+        $this->assertEquals('small', (string) $tree->pinky->iq);
+        $this->assertEquals('small', (string) $tree->brain->size);
+        $this->assertEquals('big', (string) $tree->brain->iq);
+    }
+    
 }
