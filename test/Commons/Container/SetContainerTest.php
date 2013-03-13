@@ -63,4 +63,13 @@ class SetContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($set->has(1));
     }
     
+    public function testArrayAccessNullIndex()
+    {
+        $set = new SetContainer();
+        $set[] = 123;
+        $set[] = 456;
+        $set[] = 789;
+        $this->assertEquals(3, count($set));
+    }
+    
 }

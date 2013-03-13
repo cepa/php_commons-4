@@ -38,6 +38,9 @@ class SetContainer extends CollectionContainer
      */
     public function set($index, $element)
     {
+        if (is_null($index)) {
+            return $this->add($element);
+        }
         return parent::set((int) $index, $element);
     }
     
