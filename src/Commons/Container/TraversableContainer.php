@@ -29,10 +29,34 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
      * Init traversable.
      * @param string $name
      */
-    public function __construct($name = null)
+    public function __construct($mixed = null)
     {
         $this->clear();
-        $this->_name = $name;
+        
+        if (is_string($mixed)) {
+            $this->setName($mixed);
+        }
+        
+        if (is_array($mixed)) {
+            foreach ($mixed as $key => $value) {
+                if (is_array($value)) {
+                    $this[$key] = new TraversableContainer($value);
+                } else {
+                    $this[$key] = $value;
+                }
+            }
+        }
+    }
+    
+    protected function _populateFromArray(TraversableContainer $node, array $array)
+    {
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $node[$key] = new TraversableContainer($value);
+            } else {
+                $node[$key] = $value;
+            }
+        }
     }
     
     /**
@@ -163,9 +187,11 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
      */
     public function addChild(TraversableContainer $child)
     {
+        $childName = ($child->getName() != '' ? $child->getName() : (string) $this->_counter);
+        $child->setName($childName);
         $this->_convertDataToArray();
-        if (!$this->hasChild($child->getName())) {
-            $this->_lookup[$child->getName()] = $this->_counter;
+        if (!$this->hasChild($childName)) {
+            $this->_lookup[$childName] = $this->_counter;
         }
         $this->_data[$this->_counter] = $child;
         $this->_counter++;
@@ -250,7 +276,11 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
                 ->setName($childName)
                 ->setData($data);
         }
-        $this->setChild($child);
+        if (is_null($childName)) {
+            $this->addChild($child);
+        } else {
+            $this->setChild($child);
+        }
     }
     
     /**
@@ -352,8 +382,28 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     }
     
     /**
-     * Convert data to array.
+     * Convert to array.
+     * @return array
      */
+    public function toArray()
+    {
+        return $this->_treeToArray($this);
+    }
+    
+    protected function _treeToArray(TraversableContainer $node)
+    {
+        $a = array();
+        $data = $node->getData();
+        if (is_array($data)) {
+            foreach ($node as $child) {
+                $a[$child->getName()] = $this->_treeToArray($child);
+            }
+        } else {
+            return $data;
+        }
+        return $a;
+    } 
+    
     protected function _convertDataToArray()
     {
         if (!is_array($this->_data)) {
