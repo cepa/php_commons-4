@@ -2,7 +2,6 @@
 
 <project name="php_commons" default="build" basedir=".">
 
-    <property file="./build.properties"/>
 
     <!-- Clean -->
     <target name="clean"
