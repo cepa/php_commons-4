@@ -39,7 +39,22 @@
                 checkreturn="true"/>
     </target>
     
-    <!-- Create documentation -->
+    <!-- Examples -->
+    <target name="examples" depends=""
+            description="Execute examples">
+        <foreach param="filename" target="run-example">
+        	<fileset dir="./examples">
+        		<include name="example*.php" />
+        	</fileset>   
+    	</foreach>
+    </target>   
+    <target name="run-example" depends=""
+            description="Run example script">
+    	<echo msg="Run ${filename}" />
+        <exec command="php ${filename}" dir="./examples" checkreturn="true" passthru="true" />
+    </target>
+
+	<!-- Create documentation -->
     <target name="doc" depends=""
             description="Create documentation">
         <exec command="doxygen" dir="./doc" checkreturn="true" />
