@@ -52,7 +52,8 @@ class Writer
     protected function _recursiveGenerateXmlString(Xml $xml)
     {
         $data = $xml->getData();
-        $str = '<'.$xml->getName();
+        $xmlName = ($xml->getName() != '' ? $xml->getName() : 'xml');
+        $str = '<'.$xmlName;
         foreach ($xml->getAttributes() as $name => $value) {
             $str .= ' '.$name.'="'.htmlentities($value).'"';
         }
@@ -69,7 +70,7 @@ class Writer
             $str .= htmlentities((string) $data);
         }
         
-        return $str.'</'.$xml->getName().'>';
+        return $str.'</'.$xmlName.'>';
     }
     
 }
