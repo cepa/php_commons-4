@@ -95,10 +95,16 @@ class PdoDriver implements DriverInterface
         if (!empty($database)) {
             $dsn .= "dbname={$database};";
         }
-        
+
         try {
             $this->_pdo = new \PDO($dsn, $username, $password);
             $this->_pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            
+            // MySQL charset.
+            if (strtolower($driver) == 'mysql' && isset($options['charset'])) {
+                $this->_pdo->exec("SET NAMES ".$options['charset']);
+                $this->_pdo->exec("SET CHARSET ".$options['charset']);
+            }
             
         } catch (\PDOException $e) {
             throw new Exception($e);
