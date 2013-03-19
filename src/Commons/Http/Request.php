@@ -228,7 +228,7 @@ class Request
      * Get header.
      * @param string $name
      * @throws \Commons\Exception\NotFoundException
-     * @return multitype:
+     * @return mixed
      */
     public function getHeader($name)
     {

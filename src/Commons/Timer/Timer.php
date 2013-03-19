@@ -16,8 +16,12 @@ namespace Commons\Timer;
 
 class Timer
 {
-    
-    protected $_startTime = 0;
+
+    const MARKER_START = 'start';
+    const MARKER_END = 'end';
+
+    /** @var float[] */
+    private $_markers = array();
     
     /**
      * Prepare timer.
@@ -29,23 +33,51 @@ class Timer
     
     /**
      * Reset timer.
-     * @return Commons\Timer\Timer
+     * @return Timer
      */
     public function reset()
     {
-        list($x, $y) = explode(' ', microtime());
-        $this->_startTime = $x + $y;
+        $this->_markers = array(
+            'start' => $this->_getMicroTime(),
+        );
         return $this;
     }
-    
+
     /**
-     * Get current uptime.
+     * Get current up time.
+     * @param string $markerFrom
+     * @param string $markerTo
      * @return float
      */
-    public function getValue()
+    public function getValue($markerFrom = self::MARKER_START, $markerTo = self::MARKER_END)
     {
-        list($x, $y) = explode(' ', microtime());
-        return (float)($x + $y - $this->_startTime);
+        $from = ( isset($this->_markers[$markerFrom]) ? $this->_markers[$markerFrom] : $this->_markers[self::MARKER_START]);
+        $to = ( isset($this->_markers[$markerTo]) ? $this->_markers[$markerTo] : $this->_getMicroTime() );
+
+        if (extension_loaded('bcmath')) {
+            return bcsub($to, $from, 6);
+        }
+        else {
+            return (float)($to - $from);
+        }
     }
-    
+
+    /**
+     * Set marker time
+     * @param $name
+     */
+    public function setMarker($name)
+    {
+        if ($name != self::MARKER_START) {
+            $this->_markers[$name] = $this->_getMicroTime();
+        }
+    }
+
+    /**
+     * @return float
+     */
+    private function _getMicroTime()
+    {
+        return (float)microtime(true);
+    }
 }

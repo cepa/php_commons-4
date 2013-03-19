@@ -21,13 +21,17 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
 {
     
     protected $_name;
+    /**
+     * @var TraversableContainer[]|array
+     */
     protected $_data;
     protected $_counter;
     protected $_lookup;
-    
+
     /**
      * Init traversable.
-     * @param string $name
+     * @param mixed $mixed
+     * @internal param string $name
      */
     public function __construct($mixed = null)
     {
@@ -47,7 +51,11 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
             }
         }
     }
-    
+
+    /**
+     * @param TraversableContainer $node
+     * @param array $array
+     */
     protected function _populateFromArray(TraversableContainer $node, array $array)
     {
         foreach ($array as $key => $value) {
@@ -61,7 +69,7 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     
     /**
      * Reset.
-     * @return Commons\Container\TraversableContainer
+     * @return TraversableContainer
      */
     public function clear()
     {
@@ -74,8 +82,8 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     
     /**
      * Merge with another tree.
-     * @param Commons\Container\TraversableContainer $source
-     * @return Commons\Container\TraversableContainer
+     * @param TraversableContainer $source
+     * @return TraversableContainer
      */
     public function merge(TraversableContainer $source)
     {
@@ -86,6 +94,7 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
                 $this->_data = array();
             }
             foreach ($source->_data as $obj) {
+                /** @var $child TraversableContainer */
                 $child = new $className();
                 $child->merge($obj);
                 $this->addChild($child);
@@ -100,8 +109,8 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     
     /**
      * Alter with another tree.
-     * @param Commons\Container\TraversableContainer $source
-     * @return Commons\Container\TraversableContainer
+     * @param TraversableContainer $source
+     * @return TraversableContainer
      */
     public function alter(TraversableContainer $source)
     {
@@ -112,6 +121,7 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
                 $this->_data = array();
             }
             foreach ($source->_data as $obj) {
+                /** @var $obj TraversableContainer */
                 if ($this->hasChild($obj->getName())) {
                     $child = $this->getChild($obj->getName());
                 } else {
@@ -130,8 +140,8 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     
     /**
      * Copy from another traversable.
-     * @param Commons\Container\TraversableContainer $source
-     * @return Commons\Container\TraversableContainer
+     * @param TraversableContainer $source
+     * @return TraversableContainer
      */
     public function copy(TraversableContainer $source)
     {
@@ -143,7 +153,7 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     /**
      * Set name.
      * @param string $name
-     * @return Commons\Container\TraversableContainer
+     * @return TraversableContainer
      */
     public function setName($name)
     {
@@ -163,7 +173,7 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     /**
      * Set data.
      * @param string|array $data
-     * @return Commons\Container\TraversableContainer
+     * @return TraversableContainer
      */
     public function setData($data)
     {
@@ -182,8 +192,8 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     
     /**
      * Set child or add next child.
-     * @param Commons\Container\TraversableContainer $child
-     * @return Commons\Container\TraversableContainer
+     * @param TraversableContainer $child
+     * @return TraversableContainer
      */
     public function addChild(TraversableContainer $child)
     {
@@ -200,8 +210,8 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     
     /**
      * Set child.
-     * @param Commons\Container\TraversableContainer $child
-     * @return Commons\Container\TraversableContainer
+     * @param TraversableContainer $child
+     * @return TraversableContainer
      */
     public function setChild(TraversableContainer $child)
     {
@@ -230,8 +240,8 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     /**
      * Get child.
      * @param string $childName
-     * @throws Commons\Exception\NotFoundException
-     * @return Commons\Container\TraversableContainer
+     * @throws NotFoundException
+     * @return TraversableContainer
      */
     public function getChild($childName)
     {
@@ -247,7 +257,7 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     /**
      * Remove child.
      * @param string $childName
-     * @return Commons\Container\TraversableContainer
+     * @return TraversableContainer
      */
     public function removeChild($childName)
     {
@@ -261,7 +271,7 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     /**
      * Set child.
      * @param string $childName
-     * @param Commons\Container\TraversableContainer $child
+     * @param TraversableContainer $child
      */
     public function __set($childName, $child)
     {
@@ -286,7 +296,7 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     /**
      * Get child.
      * @param string $childName
-     * @return Commons\Container\TraversableContainer
+     * @return TraversableContainer
      */
     public function __get($childName)
     {
@@ -327,7 +337,7 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     /**
      * ArrayAccess
      * @param string $childName
-     * @param Commons\Container\TraversableContainer $child
+     * @param TraversableContainer $child
      */
     public function offsetSet($childName, $child)
     {
@@ -337,7 +347,7 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     /**
      * ArrayAccess
      * @param string $childName
-     * @return Commons\Container\TraversableContainer
+     * @return TraversableContainer
      */
     public function offsetGet($childName)
     {
@@ -356,7 +366,7 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     
     /**
      * ArrayAssocContainer
-     * @param unknown_type $childName
+     * @param string $childName
      */
     public function offsetUnset($childName)
     {
@@ -374,7 +384,7 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     
     /**
      * IteratorAggregate
-     * @return ArrayIterator
+     * @return \ArrayIterator
      */
     public function getIterator()
     {
@@ -396,6 +406,7 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
         $data = $node->getData();
         if (is_array($data)) {
             foreach ($node as $child) {
+                /** @var $child TraversableContainer */
                 $a[$child->getName()] = $this->_treeToArray($child);
             }
         } else {

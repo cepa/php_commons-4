@@ -27,7 +27,7 @@ class Config extends TraversableContainer
     /**
      * Prepare config.
      * @param string $environment
-     * @param Commons\Config\Adapter\AdapterInterface $adapter
+     * @param AdapterInterface $adapter
      */
     public function __construct($environment = null, AdapterInterface $adapter = null)
     {
@@ -39,7 +39,7 @@ class Config extends TraversableContainer
     /**
      * Set environment.
      * @param string $environment
-     * @return Commons\Config\Config
+     * @return Config
      */
     public function setEnvironment($environment)
     {
@@ -58,8 +58,8 @@ class Config extends TraversableContainer
     
     /**
      * Set adapter.
-     * @param Commons\Config\Adapter\AdapterInterface $adapter
-     * @return Commons\Config\Config
+     * @param AdapterInterface $adapter
+     * @return Config
      */
     public function setAdapter(AdapterInterface $adapter)
     {
@@ -69,8 +69,8 @@ class Config extends TraversableContainer
     
     /**
      * Get adapter.
-     * @throws Commons\Exception\NotFoundException
-     * @return Commons\Config\Adapter\AdapterInterface
+     * @throws NotFoundException
+     * @return AdapterInterface
      */
     public function getAdapter()
     {
@@ -83,7 +83,7 @@ class Config extends TraversableContainer
     /**
      * Load config.
      * @param mixed $loadable
-     * @return Commons\Config\Config
+     * @return Config
      */
     public function load($loadable)
     {
@@ -95,7 +95,7 @@ class Config extends TraversableContainer
     /**
      * Load config from file.
      * @param string $filename
-     * @return Commons\Config\Config
+     * @return Config
      */
     public function loadFromFile($filename)
     {

@@ -34,8 +34,8 @@ abstract class AbstractAdapter implements AdapterInterface
     
     /**
      * Get config.
-     * @throws Commons\Exception\NotFoundException
-     * @return Commons\Config\Config
+     * @throws NotFoundException
+     * @return Config
      */
     public function getConfig()
     {

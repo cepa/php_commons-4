@@ -39,7 +39,7 @@ class ActionController extends AbstractController
     
     /**
      * Get view renderer.
-     * @return A\Commons\Light\Controller\LayoutRenderer
+     * @return LayoutRenderer
      */
     public function getViewRenderer()
     {
@@ -62,7 +62,7 @@ class ActionController extends AbstractController
     
     /**
      * Get view.
-     * @return \Commons\Light\View\ViewInterface
+     * @return \Commons\Light\View\ViewInterface|ScriptView
      */
     public function getView()
     {

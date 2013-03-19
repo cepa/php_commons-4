@@ -26,7 +26,11 @@ class Errors
     );
     
     protected function __construct() {}
-    
+
+    /**
+     * @param int $errorCode
+     * @return string
+     */
     public static function translateErrorCode($errorCode)
     {
         return (isset(self::$_errors[$errorCode]) ? self::$_errors[$errorCode] : "Unknown error"); 
