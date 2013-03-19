@@ -22,7 +22,7 @@ class QueryExpression
     /**
      * Add a statement.
      * @param string $sql
-     * @return Commons\Sql\QueryExpression
+     * @return QueryExpression
      */
     public function add($sql)
     {
@@ -32,7 +32,7 @@ class QueryExpression
 
     /**
      * Clear expression.
-     * @return Commons\Sql\QueryExpression
+     * @return QueryExpression
      */
     public function clear()
     {
@@ -43,7 +43,7 @@ class QueryExpression
     /**
      * Reset expression, set one element.
      * @param string $sql
-     * @return Commons\Sql\QueryExpression
+     * @return QueryExpression
      */
     public function set($sql)
     {
@@ -87,6 +87,9 @@ class QueryExpression
         return (empty($sql) ? '' : $sql.' ');
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->toSql();

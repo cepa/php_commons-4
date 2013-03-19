@@ -32,7 +32,7 @@ class CollectionContainer implements \ArrayAccess, \Countable, \Serializable, \I
      * Set collection element.
      * @param mixed $name
      * @param mixed $value
-     * @return Commons\Container\CollectionContainer
+     * @return CollectionContainer
      */
     public function set($name, $value)
     {
@@ -43,7 +43,7 @@ class CollectionContainer implements \ArrayAccess, \Countable, \Serializable, \I
     /**
      * Get collection element.
      * @param mixed $name
-     * @return NULL|multitype:
+     * @return mixed:
      */
     public function get($name)
     {
@@ -66,7 +66,7 @@ class CollectionContainer implements \ArrayAccess, \Countable, \Serializable, \I
     /**
      * Remove an element from the collection.
      * @param mixed $name
-     * @return Commons\Container\CollectionContainer
+     * @return CollectionContainer
      */
     public function remove($name)
     {
@@ -77,7 +77,7 @@ class CollectionContainer implements \ArrayAccess, \Countable, \Serializable, \I
     /**
      * Set collection.
      * @param array $collection
-     * @return Commons\Container\CollectionContainer
+     * @return CollectionContainer
      */
     public function setAll(array $collection)
     {
@@ -105,7 +105,7 @@ class CollectionContainer implements \ArrayAccess, \Countable, \Serializable, \I
     
     /**
      * Clear collection.
-     * @return Commons\Container\CollectionContainer
+     * @return CollectionContainer
      */
     public function clearAll()
     {
@@ -190,7 +190,7 @@ class CollectionContainer implements \ArrayAccess, \Countable, \Serializable, \I
     
     /**
      * IteratorAggregate
-     * @return Commons\Container\CollectionContainer
+     * @return CollectionContainer
      */
     public function getIterator()
     {

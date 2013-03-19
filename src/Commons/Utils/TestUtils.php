@@ -21,7 +21,7 @@ class TestUtils
 
     /**
      * Abort an unit test in a safe way with printing the exception output.
-     * @param Exception $exception
+     * @param \Exception $exception
      */
     public static function abort(\Exception $exception = null)
     {

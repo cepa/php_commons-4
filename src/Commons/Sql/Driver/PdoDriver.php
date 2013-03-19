@@ -44,7 +44,7 @@ class PdoDriver implements DriverInterface
     /**
      * Get pdo driver.
      * @note Don't use pdo references to avoid connection hanging.
-     * @throws Commons\Sql\Exception
+     * @throws Exception
      * @return \PDO
      */
     public function getPdo()

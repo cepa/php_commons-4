@@ -19,7 +19,7 @@ class Writer
     
     /**
      * Write xml to a string.
-     * @param Commons\Xml\Xml $xml
+     * @param Xml $xml
      */
     public function writeToString(Xml $xml, $header = '')
     {
@@ -28,15 +28,15 @@ class Writer
     
     /**
      * Write xml to a file.
-     * @param Commons\Xml\Xml $xml
+     * @param Xml $xml
      * @param string $filename
      * @param string $header
-     * @throws Commons\Xml\Exception
+     * @throws Exception
      */
     public function writeToFile(Xml $xml, $filename, $header = null)
     {
         if (!isset($header)) {
-            $header = '<?xml version="1.0" encoding="UTF-8"?>';
+            $header = '<?xml version="1.0" encoding="UTF-8"?>' .PHP_EOL;
         }
         $str = $this->writeToString($xml, $header);
         if (@file_put_contents($filename, $str, LOCK_EX) === false) {
@@ -46,7 +46,7 @@ class Writer
     
     /**
      * Generate xml.
-     * @param Commons\Xml\Xml $xml
+     * @param Xml $xml
      * @return string
      */
     protected function _recursiveGenerateXmlString(Xml $xml)

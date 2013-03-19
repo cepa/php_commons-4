@@ -18,7 +18,13 @@ use Commons\Exception\MissingDependencyException;
 
 class Decoder
 {
-    
+    /**
+     * @param $data
+     * @param bool $associative
+     * @return mixed
+     * @throws \Commons\Exception\MissingDependencyException
+     * @throws Exception
+     */
     public function decode($data, $associative = true)
     {
         if (!function_exists('json_decode')) {

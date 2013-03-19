@@ -15,6 +15,7 @@
 namespace Commons\Xml;
 
 use Commons\Exception\FileNotFoundException;
+use Commons\Exception\NotFoundException;
 
 class Reader
 {
@@ -24,7 +25,7 @@ class Reader
 	/**
 	 * Set properties.
 	 * @param array $properties
-	 * @return Commons\Xml\Reader
+	 * @return Reader
 	 */
 	public function setProperties(array $properties) 
 	{
@@ -43,7 +44,7 @@ class Reader
 	
 	/**
 	 * Clear properties.
-	 * @return Commons\Xml\Reader
+	 * @return Reader
 	 */
 	public function clearProperties()
 	{
@@ -55,7 +56,7 @@ class Reader
 	 * Set property.
 	 * @param string $name
 	 * @param string $value
-	 * @return Commons\Xml\Reader
+	 * @return Reader
 	 */
 	public function setProperty($name, $value)
 	{
@@ -66,7 +67,7 @@ class Reader
 	/**
 	 * Get property.
 	 * @param string $name
-	 * @throws Commons\Exception\NotFoundException
+	 * @throws NotFoundException
 	 * @return string
 	 */
 	public function getProperty($name)
@@ -90,7 +91,7 @@ class Reader
 	/**
 	 * Remove property.
 	 * @param string $name
-	 * @return Commons\Xml\Reader
+	 * @return Reader
 	 */
 	public function removeProperty($name)
 	{
@@ -101,8 +102,8 @@ class Reader
 	/**
      * Parse XML from string.
      * @param string $str
-     * @throws Commons\Xml\Exception
-     * @return Commons\Xml\Reader
+     * @throws Exception
+     * @return Reader
      */
     public function readFromString($str)
     {
@@ -123,8 +124,8 @@ class Reader
     /**
      * Read xml from file.
      * @param string $filename
-     * @throws Commons\XmlException
-     * @return Commons\Xml\Reader
+     * @throws Exception
+     * @return Reader
      */
     public function readFromFile($filename)
     {
@@ -137,7 +138,7 @@ class Reader
     /**
      * Read xml from url.
      * @param string $url
-     * @return Commons\Xml\Reader
+     * @return Reader
      */
     public function readFromUrl($url)
     {
@@ -150,8 +151,8 @@ class Reader
     
     /**
      * Recursive convert simple xml to commons xml.
-     * @param SimpleXMLElement $simple
-     * @return Commons\Xml\Reader
+     * @param \SimpleXMLElement $simple
+     * @return Reader
      */
     protected function _convertSimpleXmlToCommonsXml(\SimpleXMLElement $simple)
     {

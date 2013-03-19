@@ -14,6 +14,9 @@
 
 namespace Commons\Sql\Driver;
 
+use Commons\Sql\Exception;
+use Commons\Sql\Statement\StatementInterface;
+
 interface DriverInterface
 {
     
@@ -26,13 +29,13 @@ interface DriverInterface
     /**
      * Connect to the database.
      * @param array $options
-     * @throws Commons\Sql\Exception
+     * @throws Exception
      */
     public function connect($options = null);
     
     /**
      * Disconnect from the database.
-     * @throws Commons\Sql\Exception
+     * @throws Exception
      */
     public function disconnect();
     
@@ -45,26 +48,26 @@ interface DriverInterface
     /**
      * Prepare an sql query statement.
      * @param string $rawSql
-     * @throws Commons\Sql\Exception
-     * @return Commons\Sql\Statement\StatementInterface
+     * @throws Exception
+     * @return StatementInterface
      */
     public function prepareStatement($rawSql);
     
     /**
      * Begin transaction.
-     * @throws Commons\Sql\Exception
+     * @throws Exception
      */
     public function begin();
     
     /**
      * Commit transaction.
-     * @throws Commons\Sql\Exception
+     * @throws Exception
      */
     public function commit();
     
     /**
      * Rollback transaction.
-     * @throws Commons\Sql\Exception
+     * @throws Exception
      */
     public function rollback();
     

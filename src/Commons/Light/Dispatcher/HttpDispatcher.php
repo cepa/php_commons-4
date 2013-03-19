@@ -16,17 +16,30 @@ namespace Commons\Light\Dispatcher;
 
 use Commons\Autoloader\Exception as AutoloaderException;
 use Commons\Autoloader\DefaultAutoloader as Autoloader;
+use Commons\Exception\NotFoundException;
 use Commons\Http\Request;
 use Commons\Http\Response;
+use Commons\Light\Controller\AbstractController;
 use Commons\Light\Route\RouteInterface;
 
 
 class HttpDispatcher extends AbstractDispatcher
 {
-    
+    /**
+     * @var string
+     */
     protected $_baseUri;
+    /**
+     * @var string
+     */
     protected $_defaultModule = 'default';
+    /**
+     * @var string
+     */
     protected $_moduleNamespaces;
+    /**
+     * @var RouteInterface[]
+     */
     protected $_routes = array();
 
     /**
@@ -80,11 +93,12 @@ class HttpDispatcher extends AbstractDispatcher
         $this->_moduleNamespaces[$module] = $namespace;
         return $this;
     }
-    
+
     /**
      * Get module namespace.
      * @param string $module
-     * @throws NotFoundException
+     * @throws Exception
+     * @return string
      */
     public function getModuleNamespace($module)
     {
@@ -175,7 +189,7 @@ class HttpDispatcher extends AbstractDispatcher
      * Get route.
      * @param string $name
      * @throws Exception
-     * @return multitype:
+     * @return RouteInterface[]
      */
     public function getRoute($name)
     {
@@ -221,7 +235,7 @@ class HttpDispatcher extends AbstractDispatcher
     
     /**
      * Get routes.
-     * @return array
+     * @return RouteInterface[]
      */
     public function getRoutes()
     {
@@ -237,11 +251,12 @@ class HttpDispatcher extends AbstractDispatcher
         $this->_routes = array();
         return $this;
     }
-    
+
     /**
      * Dispatch controller.
      * @param array $customParams
-     * @returns AbstractDispatcher
+     * @throws Exception
+     * @return AbstractController
      */
     public function dispatch(array $customParams = array())
     {
@@ -275,6 +290,7 @@ class HttpDispatcher extends AbstractDispatcher
         
         try {
             Autoloader::loadClass($controllerClass);
+            /** @var $controller AbstractController */
             $controller = new $controllerClass($this->getRequest(), $this->getResponse());
             $controller->dispatch($params);
         } catch (AutoloaderException $e) {
@@ -285,7 +301,10 @@ class HttpDispatcher extends AbstractDispatcher
         
         return $this;
     }
-    
+
+    /**
+     * @return array|bool
+     */
     protected function _getParamsFromRoutes()
     {
         foreach ($this->getRoutes() as $name => $route) {
@@ -296,7 +315,10 @@ class HttpDispatcher extends AbstractDispatcher
         }
         return false;
     }
-    
+
+    /**
+     * @return $this|array
+     */
     protected function _getParamsFromDefaultRouting()
     {
         $uri = $this->getRequest()->getUri();

@@ -22,7 +22,7 @@ class CurlTest extends \PHPUnit_Framework_TestCase
         $url = 'http://demo.hellworx.com/example.xml';
         $curl = new Curl($url);
         $response = $curl
-            ->setReferer('http://localhost')
+            ->setReferrer('http://localhost')
             ->setUserAgent('some useragent')
             ->setEncoding('gzip')
             ->setTimeout(10)

@@ -26,7 +26,11 @@ class RestRoute extends RegexRoute
     	parent::__construct($matchPattern, $params, $mappings, $assemblyPattern);	
     	$this->_method = $method;
     }
-    
+
+    /**
+     * @param Request $request
+     * @return array|bool
+     */
     public function match(Request $request)
     {
     	if ($request->getMethod() == $this->_method) {

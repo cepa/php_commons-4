@@ -19,13 +19,13 @@ use Commons\Container\TraversableContainer;
 
 class Xml extends TraversableContainer implements \Serializable
 {
-    
+    /** @var AssocContainer */
     protected $_attributes;
     
     /**
      * Clear.
      * @see Commons\Container\TraversableContainer::clear()
-     * @return Commons\Xml\Xml
+     * @return Xml
      */
     public function clear()
     {
@@ -55,7 +55,7 @@ class Xml extends TraversableContainer implements \Serializable
     /**
      * Set text, reset to text data.
      * @param string $text
-     * @return Commons\Xml\Xml
+     * @return Xml
      */
     public function setText($text)
     {
@@ -73,8 +73,8 @@ class Xml extends TraversableContainer implements \Serializable
     
     /**
      * Set attributes.
-     * @param Commons\Container\AssocContainer $attributes
-     * @return Commons\Xml\Xml
+     * @param AssocContainer $attributes
+     * @return Xml
      */
     public function setAttributes(AssocContainer $attributes)
     {
@@ -84,7 +84,7 @@ class Xml extends TraversableContainer implements \Serializable
     
     /**
      * Get attributes.
-     * @return Commons\Container\AssocContainer
+     * @return AssocContainer
      */
     public function getAttributes()
     {
@@ -95,7 +95,7 @@ class Xml extends TraversableContainer implements \Serializable
      * Set attribute.
      * @param string $name
      * @param mixed $value
-     * @return Commons\Container\TraversableContainer
+     * @return TraversableContainer
      */
     public function setAttribute($name, $value)
     {
@@ -126,7 +126,7 @@ class Xml extends TraversableContainer implements \Serializable
     /**
      * Remove attribute.
      * @param string $name
-     * @return Commons\Container\TraversableContainer
+     * @return TraversableContainer
      */
     public function removeAttribute($name)
     {
@@ -137,7 +137,7 @@ class Xml extends TraversableContainer implements \Serializable
     /**
      * Xpath implementation.
      * @param string $path
-     * @return Commons\Xml\Xml
+     * @return Xml
      */
     public function xpath($path)
     {
@@ -161,11 +161,12 @@ class Xml extends TraversableContainer implements \Serializable
         }
         return (string) $this->_data;
     }
-    
+
     /**
      * Write xml to a file.
      * @param string $filename
-     * @return Commons\Xml\Xml
+     * @param string $header
+     * @return Xml
      */
     public function toFile($filename, $header = null)
     {
@@ -194,8 +195,8 @@ class Xml extends TraversableContainer implements \Serializable
     
     /**
      * Serializable
-     * @param unknown_type $serialized
-     * @return Commons\Xml\Xml
+     * @param string $serialized
+     * @return Xml
      */
     public function unserialize($serialized)
     {
@@ -207,7 +208,7 @@ class Xml extends TraversableContainer implements \Serializable
     /**
      * Parse xml from a string.
      * @param string $str
-     * @return Commons\Xml\Xml
+     * @return Xml
      */
     public static function createFromString($str)
     {
@@ -218,7 +219,7 @@ class Xml extends TraversableContainer implements \Serializable
     /**
      * Parse xml from a file.
      * @param string $filename
-     * @return Commons\Xml\Xml
+     * @return Xml
      */
     public static function createFromFile($filename)
     {
@@ -229,7 +230,7 @@ class Xml extends TraversableContainer implements \Serializable
     /**
      * Parse xml from an url.
      * @param string $url
-     * @return Commons\Xml\Xml
+     * @return Xml
      */
     public static function createFromUrl($url)
     {

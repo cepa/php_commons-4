@@ -14,25 +14,29 @@
 
 namespace Commons\Sql\Dao;
 
+use Commons\Exception\NotImplementedException;
+use Commons\Sql\Connection\ConnectionInterface;
 use Commons\Sql\Query;
+use Commons\Sql\Record;
 
 abstract class AbstractDao
 {
     
     protected $_connection;
-    
+
     /**
      * Setup a DAO object.
-     * @param Commons\Sql\Connection $connection
+     * @param ConnectionInterface $connection
+     * @internal param $
      */
-    public function __construct(Connection $connection)
+    public function __construct(ConnectionInterface $connection)
     {
         $this->_connection = $connection;
     }
     
     /**
      * Get database connection.
-     * @return Commons\Sql\Connection
+     * @return ConnectionInterface
      */
     public function getConnection()
     {
@@ -41,7 +45,7 @@ abstract class AbstractDao
     
     /**
      * Create a new query.
-     * @return Commons\Sql\Query
+     * @return Query
      */
     public function createQuery()
     {
@@ -52,8 +56,8 @@ abstract class AbstractDao
      * Find a record by id.
      * @note A record needs to have an 'id' field!
      * @param int $id
-     * @throws Commons\Exception\NotImplementedException
-     * @return Commons\Sql\Record
+     * @throws NotImplementedException
+     * @return Record
      */
     public function find($id)
     {
@@ -62,7 +66,7 @@ abstract class AbstractDao
     
     /**
      * Find all records.
-     * @throws Commons\Exception\NotImplementedException
+     * @throws NotImplementedException
      * @return array
      */
     public function findAll()
@@ -73,9 +77,9 @@ abstract class AbstractDao
     /**
      * Insert or update a record.
      * @note A record needs to have an 'id' field!
-     * @param Commons\Sql\Record $record
-     * @throws Commons\Exception\NotImplementedException
-     * @return Commons\Sql\Dao\AbstractDao
+     * @param Record $record
+     * @throws NotImplementedException
+     * @return AbstractDao
      */
     public function save(Record $record)
     {
@@ -85,9 +89,9 @@ abstract class AbstractDao
     /**
      * Delete a record.
      * @note A record needs to have an 'id' field!
-     * @param Commons\Sql\Record $record
-     * @throws Commons\Exception\NotImplementedException
-     * @return Commons\Sql\Dao\AbstractDao
+     * @param Record $record
+     * @throws NotImplementedException
+     * @return AbstractDao
      */
     public function delete(Record $record)
     {
