@@ -23,7 +23,13 @@ class RegexRoute implements RouteInterface
     protected $_params;
     protected $_mappings;
     protected $_assemblyPattern;
-    
+
+    /**
+     * @param $matchPattern
+     * @param array $params
+     * @param array $mappings
+     * @param string $assemblyPattern
+     */
     public function __construct($matchPattern, array $params = array(), array $mappings = array(), $assemblyPattern = null)
     {
         $this->_matchPattern = $matchPattern;
@@ -59,7 +65,7 @@ class RegexRoute implements RouteInterface
         $args = array();
         foreach ($this->_mappings as $idx => $key) {
             if (!isset($params[$key])) {
-                throw new Exception("Cannot assembly route, missing route key '{$key}'");
+                throw new \Exception("Cannot assembly route, missing route key '{$key}'");
             }
             $args[] = $params[$key];
         }

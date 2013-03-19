@@ -19,7 +19,7 @@ use Commons\Log\Writer\NullWriter;
 
 class Logger
 {
-
+    /** @var AbstractWriter[] */
     protected $_writers = array();
     
     /**
@@ -48,7 +48,7 @@ class Logger
     
     /**
      * Get writers.
-     * @return array
+     * @return AbstractWriter[]
      */
     public function getWriters()
     {
@@ -64,11 +64,11 @@ class Logger
         $this->_writers = array();
         return $this;
     }
-    
+
     /**
      * Log message.
      * @param string $message
-     * @param enum $priority
+     * @param int $priority
      * @return \Commons\Log\Logger
      */
     public function log($message, $priority = Log::DEBUG)
@@ -159,7 +159,7 @@ class Logger
     /**
      * Write raw message.
      * @param string $message
-     * @param enum $priority
+     * @param int $priority
      * @return \Commons\Log\Logger
      */
     public function write($message, $priority)
@@ -169,11 +169,11 @@ class Logger
         }
         return $this;
     }
-    
+
     /**
      * Log a message.
      * @param string $message
-     * @param enum $priority
+     * @param int $priority
      * @return \Commons\Log\Logger
      */
     protected function _log($message, $priority = Log::DEBUG)

@@ -17,6 +17,7 @@ namespace Commons\Sql\Connection;
 use Commons\Sql\Driver\DriverInterface;
 use Commons\Sql\Driver\PdoDriver;
 use Commons\Sql\Exception;
+use Commons\Sql\Statement\StatementInterface;
 use Commons\Utils\StringUtils;
 
 class MasterSlaveConnection extends AbstractConnection
@@ -28,8 +29,8 @@ class MasterSlaveConnection extends AbstractConnection
     
     /**
      * Setup connection object.
-     * @param Commons\Sql\Driver\DriverInterface $masterDriver
-     * @param Commons\Sql\Driver\DriverInterface $slaveDriver
+     * @param DriverInterface $masterDriver
+     * @param DriverInterface $slaveDriver
      */
     public function __construct(DriverInterface $masterDriver = null, DriverInterface $slaveDriver = null)
     {
@@ -106,7 +107,7 @@ class MasterSlaveConnection extends AbstractConnection
     /**
      * Connect to the database.
      * @param array $options
-     * @return Commons\Sql\Connection
+     * @return ConnectionInterface
      */
     public function connect($options = null)
     {
@@ -117,7 +118,7 @@ class MasterSlaveConnection extends AbstractConnection
     
     /**
      * Disconnect from the database.
-     * @return Commons\Sql\Connection
+     * @return ConnectionInterface
      */
     public function disconnect()
     {
@@ -140,7 +141,7 @@ class MasterSlaveConnection extends AbstractConnection
      * @note Automatically detects if a query should be executed on master or on slave server.
      * @param string $rawSql
      * @param mixed $options
-     * @return Commons\Sql\Statement\StatementInterface
+     * @return StatementInterface
      */
     public function prepareStatement($rawSql, $options = null)
     {
@@ -168,7 +169,7 @@ class MasterSlaveConnection extends AbstractConnection
     
     /**
      * Begin transaction.
-     * @return Commons\Sql\Connection
+     * @return ConnectionInterface
      */
     public function begin()
     {
@@ -178,7 +179,7 @@ class MasterSlaveConnection extends AbstractConnection
     
     /**
      * Commit transaction.
-     * @return Commons\Sql\Connection
+     * @return ConnectionInterface
      */
     public function commit()
     {
@@ -188,7 +189,7 @@ class MasterSlaveConnection extends AbstractConnection
     
     /**
      * Rollback transaction.
-     * @return Commons\Sql\Connection
+     * @return ConnectionInterface
      */
     public function rollback()
     {
@@ -204,7 +205,10 @@ class MasterSlaveConnection extends AbstractConnection
     {
         return $this->getMasterDriver()->inTransaction();
     }
-    
+
+    /**
+     * @return string
+     */
     public function getDatabaseType()
     {
         return $this->getMasterDriver()->getDatabaseType();

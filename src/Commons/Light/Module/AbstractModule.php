@@ -15,6 +15,7 @@
 namespace Commons\Light\Module;
 
 use Commons\Exception\NotImplementedException;
+use Commons\Light\Application\AbstractApplication;
 
 abstract class AbstractModule
 {
@@ -24,7 +25,7 @@ abstract class AbstractModule
     /**
      * Set application.
      * @param mixed $application
-     * @return \Commons\Light\Module
+     * @return AbstractModule
      */
     public function setApplication($application)
     {
@@ -34,7 +35,7 @@ abstract class AbstractModule
     
     /**
      * Get application.
-     * @return mixed
+     * @return AbstractApplication
      */
     public function getApplication()
     {

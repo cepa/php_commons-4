@@ -14,6 +14,7 @@
 
 namespace Commons\Light\View\Renderer;
 
+use Commons\Light\View\ScriptView;
 use Commons\Light\View\ViewInterface;
 
 interface RendererInterface
@@ -28,7 +29,7 @@ interface RendererInterface
     
     /**
      * Get view.
-     * @return \Commons\Light\View\ViewInterface
+     * @return \Commons\Light\View\ViewInterface|ScriptView
      */
     public function getView();
     

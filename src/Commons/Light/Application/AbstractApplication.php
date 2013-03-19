@@ -14,6 +14,9 @@
 
 namespace Commons\Light\Application;
 
+use Commons\Light\Exception\Exception;
+use Commons\Log\Logger;
+
 abstract class AbstractApplication
 {
 
@@ -28,7 +31,7 @@ abstract class AbstractApplication
     /**
      * Set environment.
      * @param string $environment
-     * @return instanceof Application\AbstractApplication
+     * @return AbstractApplication
     */
     public function setEnvironment($environment)
     {
@@ -48,7 +51,7 @@ abstract class AbstractApplication
     /**
      * Set version.
      * @param string $version
-     * @return instanceof Application\AbstractApplication
+     * @return AbstractApplication
      */
     public function setVersion($version)
     {
@@ -68,7 +71,7 @@ abstract class AbstractApplication
     /**
      * Set path.
      * @param string $path
-     * @return instanceof Application\AbstractApplication
+     * @return AbstractApplication
      */
     public function setPath($path)
     {
@@ -88,7 +91,7 @@ abstract class AbstractApplication
     /**
      * Set config.
      * @param mixed $config
-     * @return instanceof Application\AbstractApplication
+     * @return AbstractApplication
      */
     public function setConfig($config)
     {
@@ -128,7 +131,7 @@ abstract class AbstractApplication
     /**
      * Set modules.
      * @param array $modules
-     * @return instanceof Application\AbstractApplication
+     * @return AbstractApplication
      */
     public function setModules(array $modules)
     {
@@ -147,7 +150,7 @@ abstract class AbstractApplication
 
     /**
      * Clear modules.
-     * @return instanceof Application\AbstractApplication
+     * @return AbstractApplication
      */
     public function clearModules()
     {
@@ -159,7 +162,7 @@ abstract class AbstractApplication
      * Add module.
      * @param string $name
      * @param mixed $value
-     * @return instanceof Application\AbstractApplication
+     * @return AbstractApplication
      */
     public function addModule($name, $value = null)
     {
@@ -173,7 +176,7 @@ abstract class AbstractApplication
     /**
      * Get module.
      * @param string $name
-     * @throws \Commons\Ligh\Application\Exception
+     * @throws Exception
      * @return mixed
      */
     public function getModule($name)
@@ -197,7 +200,7 @@ abstract class AbstractApplication
     /**
      * Remove module.
      * @param string $name
-     * @return instanceof Application\AbstractApplication
+     * @return AbstractApplication
      */
     public function removeModule($name)
     {
@@ -209,7 +212,7 @@ abstract class AbstractApplication
      * Set property.
      * @param string $name
      * @param mixed $value
-     * @return instanceof Application\AbstractApplication
+     * @return AbstractApplication
      */
     public function setProperty($name, $value)
     {
@@ -220,7 +223,7 @@ abstract class AbstractApplication
     /**
      * Get property.
      * @param string $name
-     * @param midex $defaultValue
+     * @param mixed $defaultValue
      * @return mixed
      */
     public function getProperty($name, $defaultValue = null)
@@ -241,7 +244,7 @@ abstract class AbstractApplication
     /**
      * Remove property.
      * @param string $name
-     * @return instanceof Application\AbstractApplication
+     * @return AbstractApplication
      */
     public function removeProperty($name)
     {
@@ -252,7 +255,7 @@ abstract class AbstractApplication
     /**
      * Set properties.
      * @param array $properties
-     * @return instanceof Application\AbstractApplication
+     * @return AbstractApplication
      */
     public function setProperties(array $properties)
     {
@@ -271,7 +274,7 @@ abstract class AbstractApplication
 
     /**
      * Clear properties.
-     * @return instanceof Application\AbstractApplication
+     * @return AbstractApplication
      */
     public function clearProperties()
     {

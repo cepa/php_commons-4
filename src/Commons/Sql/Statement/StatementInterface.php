@@ -14,6 +14,7 @@
 
 namespace Commons\Sql\Statement;
 
+use Commons\Container\AssocContainer;
 use Commons\Sql\Driver\DriverInterface;
 use Commons\Sql\Sql;
 
@@ -22,7 +23,7 @@ interface StatementInterface
 
     /**
      * Init statement.
-     * @param Commons\Sql\Driver\DriverInterface $driver
+     * @param DriverInterface $driver
      * @param string $rawSql
      */
     public function __construct(DriverInterface $driver, $rawSql);
@@ -31,20 +32,20 @@ interface StatementInterface
      * Bind a parameter.
      * @param string $name
      * @param mixed $value
-     * @return Commons\Sql\Statement\StatementInterface
+     * @return StatementInterface
      */
     public function bind($name, $value);
     
     /**
      * Execute a statement.
-     * @return Commons\Sql\Statement\StatementInterface
+     * @return StatementInterface
      */
     public function execute();
     
     /**
      * Fetch the last record.
      * @param int $mode
-     * @return array|Commons\Container\AssocContainer
+     * @return array|AssocContainer
      */
     public function fetch($mode = Sql::FETCH_ARRAY, array $options = array());
     

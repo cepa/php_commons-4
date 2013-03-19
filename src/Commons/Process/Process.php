@@ -29,6 +29,7 @@ class Process
     /**
      * Constructor
      * @param string $command
+     * @param string $cwd
      */
     public function __construct($command = null, $cwd = './')
     {
@@ -39,7 +40,7 @@ class Process
     /**
      * Set command.
      * @param string $command
-     * @return Commons\Process\Process
+     * @return Process
      */
     public function setCommand($command)
     {
@@ -59,7 +60,7 @@ class Process
     /**
      * Set STDIN value.
      * @param string $stdin
-     * @return Commons\Process\Process
+     * @return Process
      */
     public function setStdin($stdin)
     {
@@ -97,7 +98,7 @@ class Process
     /**
      * Set current working directory.
      * @param string $cwd
-     * @return Commons\Process\Process
+     * @return Process
      */
     public function setCwd($cwd)
     {
@@ -117,7 +118,7 @@ class Process
     /**
      * Set environment variables.
      * @param array $env
-     * @return Commons\Process\Process
+     * @return Process
      */
     public function setEnv(array $env)
     {
@@ -146,7 +147,7 @@ class Process
     /**
      * Set parameters.
      * @param array $params
-     * @return Commons\Process\Process
+     * @return Process
      */
     public function setParams(array $params)
     {
@@ -165,7 +166,7 @@ class Process
 
     /**
      * Clear parameters.
-     * @return Commons\Process\Process
+     * @return Process
      */
     public function clearParams()
     {
@@ -176,7 +177,7 @@ class Process
     /**
      * Add a single parameter.
      * @param string $param
-     * @return Commons\Process\Process
+     * @return Process
      */
     public function addParam($param)
     {
@@ -197,7 +198,7 @@ class Process
     /**
      * Execute a process.
      * Returns an error code from a process.
-     * @throws Commons\Process\Exception
+     * @throws Exception
      * @return int
      */
     public function run()
@@ -238,7 +239,7 @@ class Process
      * Quicker way to execute an external process.
      * @param string $command
      * @param array $params
-     * @throws Commons\Process\Exception
+     * @throws Exception
      * @return string
      */
     public static function execute($command, array $params = array()) 

@@ -34,8 +34,8 @@ abstract class AbstractWriter
     
     /**
      * Set log formatter.
-     * @param Commons\Log\Formatter\FormatterInterface $formatter
-     * @return Commons\Log\Writer\AbstractWriter
+     * @param FormatterInterface $formatter
+     * @return AbstractWriter
      */
     public function setFormatter(FormatterInterface $formatter)
     {
@@ -45,7 +45,7 @@ abstract class AbstractWriter
     
     /**
      * Get log formatter.
-     * @return Commons\Log\Formatter\FormatterInterface
+     * @return FormatterInterface
      */
     public function getFormatter()
     {
@@ -62,14 +62,14 @@ abstract class AbstractWriter
      */
     public function write($message, $priority) 
     {
-        return $this->_write($this->getFormatter()->format($message), $priority);
+        $this->_write($this->getFormatter()->format($message), $priority);
     }
     
     /**
      * Override this method!
      * @param string|array $message
      * @param int $priority
-     * @throws Commons\Exception\NotImplementedException
+     * @throws NotImplementedException
      */
     protected function _write($message, $priority) 
     {

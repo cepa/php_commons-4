@@ -19,7 +19,12 @@ use Commons\Sql\Query;
 
 abstract class AbstractConnection implements ConnectionInterface
 {
-    
+
+    /**
+     * @var RecordTable[]
+     */
+    protected $_tables = array();
+
     /**
      * Create a new query.
      * @return Query
@@ -32,8 +37,8 @@ abstract class AbstractConnection implements ConnectionInterface
     /**
      * Set table.
      * @param string $recordName
-     * @param Commons\Sql\RecordTable $table
-     * @return Commons\Sql\Connection
+     * @param RecordTable $table
+     * @return ConnectionInterface
      */
     public function setTable($recordName, RecordTable $table)
     {
@@ -45,7 +50,7 @@ abstract class AbstractConnection implements ConnectionInterface
     /**
      * Get table.
      * @param string $recordName
-     * @return Commons\Sql\RecordTable
+     * @return RecordTable
      */
     public function getTable($recordName)
     {
