@@ -17,6 +17,7 @@ namespace Commons\Curl;
 use Commons\Xml\Reader as XmlReader;
 use Commons\Json\Decoder as JsonDecoder;
 use Commons\Exception\MissingDependencyException;
+use Commons\Xml\Xml;
 
 class Curl
 {
@@ -32,8 +33,8 @@ class Curl
      * Init.
      * @param string $url
      * @param array $options
-     * @throws Commons\Exception\MissingDependency
-     * @throws Commons\Curl\Exception
+     * @throws MissingDependencyException
+     * @throws Exception
      */
     public function __construct($url, array $options = array())
     {
@@ -87,7 +88,7 @@ class Curl
      * Set curl option.
      * @param int $option
      * @param mixed $value
-     * @return Commons\Curl\Curl
+     * @return Curl
      */
     public function setOption($option, $value)
     {
@@ -98,7 +99,7 @@ class Curl
     /**
      * Set curl options.
      * @param array $options
-     * @return Commons\Curl\Curl
+     * @return Curl
      */
     public function setOptions(array $options)
     {
@@ -118,8 +119,8 @@ class Curl
     
     /**
      * Execute curl call.
-     * @throws Commons\Curl\Exception
-     * @return Commons\Curl\Curl
+     * @throws Exception
+     * @return Curl
      */
     public function execute()
     {
@@ -136,19 +137,19 @@ class Curl
     }
     
     /**
-     * Set referer.
-     * @param string $referer
-     * @return Commons\Curl\Curl
+     * Set referrer.
+     * @param string $referrer
+     * @return Curl
      */
-    public function setReferer($referer)
+    public function setReferrer($referrer)
     {
-        return $this->setOption(CURLOPT_REFERER, $referer);
+        return $this->setOption(CURLOPT_REFERER, $referrer);
     }
     
     /**
      * Set user agent.
      * @param string $userAgent
-     * @return Commons\Curl\Curl
+     * @return Curl
      */
     public function setUserAgent($userAgent)
     {
@@ -158,7 +159,7 @@ class Curl
     /**
      * Set encoding.
      * @param string $encoding
-     * @return Commons\Curl\Curl
+     * @return Curl
      */
     public function setEncoding($encoding)
     {
@@ -168,7 +169,7 @@ class Curl
     /**
      * Set timeout.
      * @param string $timeout
-     * @return Commons\Curl\Curl
+     * @return Curl
      */
     public function setTimeout($timeout)
     {
@@ -223,7 +224,7 @@ class Curl
     
     /**
      * Parse xml response.
-     * @return Commons\Xml\Xml
+     * @return Xml
      */
     public function parseXmlResponse()
     {

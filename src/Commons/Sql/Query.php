@@ -17,6 +17,7 @@ namespace Commons\Sql;
 use Commons\Exception\InvalidArgumentException;
 use Commons\Container\AssocContainer;
 use Commons\Sql\Connection\ConnectionInterface;
+use Commons\Sql\Statement\StatementInterface;
 
 class Query implements \Countable 
 {
@@ -26,26 +27,77 @@ class Query implements \Countable
     const TYPE_UPDATE = 'UPDATE';
     const TYPE_DELETE = 'DELETE';
 
+    /**
+     * @var Connection\ConnectionInterface
+     */
     protected $_connection = null;
     protected $_type = self::TYPE_SELECT;
+    /**
+     * @var StatementInterface
+     */
     protected $_statement = null;
-    
+
+    /**
+     * @var int
+     */
     protected $_paramsCounter = 0;
+    /**
+     * @var AssocContainer
+     */
     protected $_params = null;
+    /**
+     * @var AssocContainer
+     */
     protected $_updates = null;
-    
+
+    /**
+     * @var QueryExpression
+     */
     protected $_beginningExpression = null;
+    /**
+     * @var QueryExpression
+     */
     protected $_fromExpression = null;
+    /**
+     * @var QueryExpression
+     */
     protected $_whereExpression = null;
+    /**
+     * @var QueryExpression
+     */
     protected $_groupByExpression = null;
+    /**
+     * @var QueryExpression
+     */
     protected $_havingExpression = null;
+    /**
+     * @var QueryExpression
+     */
     protected $_unionExpression = null;
+    /**
+     * @var QueryExpression
+     */
     protected $_orderByExpression = null;
+    /**
+     * @var QueryExpression
+     */
     protected $_limitExpression = null;
+    /**
+     * @var QueryExpression
+     */
     protected $_offsetExpression = null;
+    /**
+     * @var QueryExpression
+     */
     protected $_joinExpression = null;
+    /**
+     * @var QueryExpression
+     */
     protected $_endingExpression = null;
-    
+
+    /**
+     * @var string
+     */
     protected $_objectClassName = '\\Commons\\Sql\\Record';
     
     /**
@@ -136,8 +188,8 @@ class Query implements \Countable
     
     /**
      * Set query type.
-     * @param const $type
-     * @return \Query
+     * @param string $type
+     * @return Query
      */
     public function setType($type)
     {
@@ -410,7 +462,7 @@ class Query implements \Countable
 
     /**
      * Append to a FROM statement.
-     * @param unknown_type $sql
+     * @param string $sql
      * @return Query
      */
     public function addFrom($sql)
@@ -746,7 +798,6 @@ class Query implements \Countable
      */
     public function toSql()
     {
-        $sql = '';
 
         switch ($this->_type) {
             case self::TYPE_SELECT:
@@ -946,7 +997,7 @@ class Query implements \Countable
     
     /**
      * Generate sql part for insert query.
-     * @return string
+     * @return QueryExpression
      */
     protected function _generateInsertExpression()
     {
@@ -985,7 +1036,7 @@ class Query implements \Countable
     
     /**
      * Generate sql part for update query.
-     * @return string
+     * @return QueryExpression
      */
     protected function _generateUpdateExpression()
     {

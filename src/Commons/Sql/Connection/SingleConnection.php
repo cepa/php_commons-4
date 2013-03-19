@@ -17,16 +17,19 @@ namespace Commons\Sql\Connection;
 use Commons\Sql\Driver\DriverInterface;
 use Commons\Sql\Driver\PdoDriver;
 use Commons\Sql\Exception;
+use Commons\Sql\Statement\StatementInterface;
 
 class SingleConnection extends AbstractConnection
 {
 
+    /**
+     * @var \Commons\Sql\Driver\DriverInterface
+     */
     protected $_driver;
-    protected $_tables = array();
     
     /**
      * Setup connection object.
-     * @param Commons\Sql\Driver\DriverInterface $driver
+     * @param DriverInterface $driver
      */
     public function __construct(DriverInterface $driver = null)
     {
@@ -35,8 +38,8 @@ class SingleConnection extends AbstractConnection
     
     /**
      * Set driver instance.
-     * @param Commons\Sql\Driver\DriverInterface $driver
-     * @return Commons\Sql\Connection
+     * @param DriverInterface $driver
+     * @return ConnectionInterface
      */
     public function setDriver(DriverInterface $driver)
     {
@@ -46,8 +49,8 @@ class SingleConnection extends AbstractConnection
     
     /**
      * Get driver instance.
-     * @throws Commons\Sql\Exception
-     * @return Commons\Sql\Driver\DriverInterface
+     * @throws Exception
+     * @return DriverInterface
      */
     public function getDriver()
     {
@@ -69,7 +72,7 @@ class SingleConnection extends AbstractConnection
     /**
      * Connect to the database.
      * @param array $options
-     * @return Commons\Sql\Connection
+     * @return ConnectionInterface
      */
     public function connect($options = null)
     {
@@ -79,7 +82,7 @@ class SingleConnection extends AbstractConnection
     
     /**
      * Disconnect from the database.
-     * @return Commons\Sql\Connection
+     * @return ConnectionInterface
      */
     public function disconnect()
     {
@@ -100,7 +103,7 @@ class SingleConnection extends AbstractConnection
      * Prepare a statement.
      * @param string $rawSql
      * @param mixed $options
-     * @return Commons\Sql\Statement\StatementInterface
+     * @return StatementInterface
      */
     public function prepareStatement($rawSql, $options = null)
     {
@@ -109,7 +112,7 @@ class SingleConnection extends AbstractConnection
     
     /**
      * Begin transaction.
-     * @return Commons\Sql\Connection
+     * @return ConnectionInterface
      */
     public function begin()
     {
@@ -119,7 +122,7 @@ class SingleConnection extends AbstractConnection
     
     /**
      * Commit transaction.
-     * @return Commons\Sql\Connection
+     * @return ConnectionInterface
      */
     public function commit()
     {
@@ -129,7 +132,7 @@ class SingleConnection extends AbstractConnection
     
     /**
      * Rollback transaction.
-     * @return Commons\Sql\Connection
+     * @return ConnectionInterface
      */
     public function rollback()
     {

@@ -25,7 +25,7 @@ class DefaultAutoloader
     /**
      * Autoloader.
      * @param string $className
-     * @return string | false
+     * @return string | bool
      */
     public static function autoloader($className)
     {
@@ -41,12 +41,12 @@ class DefaultAutoloader
      * Load class.
      * @param string $className
      * @return string
-     * @throws Commons\Autoloader\Exception
+     * @throws Exception
      */
     public static function loadClass($className)
     {
         if (class_exists($className, false) || interface_exists($className, false)) {
-            return;
+            return '';
         }
         $classPath = $className.'.php';
         $result = @include $classPath;

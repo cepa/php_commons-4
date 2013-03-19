@@ -60,7 +60,7 @@ class CliApplication extends AbstractApplication
     /**
      * Get argv.
      * @param string $index
-     * @return multitype:
+     * @return mixed
      */
     public function getArgv($index = null)
     {

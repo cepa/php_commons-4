@@ -23,7 +23,7 @@ class AssocContainer extends CollectionContainer
      * Set assoc element.
      * @param string $name
      * @param mixed $value
-     * @return Commons\Container\AssocContainer
+     * @return AssocContainer
      */
     public function set($name, $value)
     {
@@ -63,7 +63,7 @@ class AssocContainer extends CollectionContainer
      * Set property.
      * @param string $name
      * @param mixed $value
-     * @return Commons\Container\AssocContainer
+     * @return AssocContainer
      */
     public function __set($name, $value)
     {
@@ -74,7 +74,7 @@ class AssocContainer extends CollectionContainer
      * Get property.
      * @param string $name
      * @return mixed
-     * @throws Commons\Exception\NotFoundException
+     * @throws NotFoundException
      */
     public function __get($name)
     {

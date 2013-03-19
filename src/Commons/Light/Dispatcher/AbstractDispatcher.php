@@ -20,8 +20,14 @@ use Commons\Http\Response;
 
 abstract class AbstractDispatcher
 {
-    
+    /**
+     * @var Request
+     */
     protected $_request;
+
+    /**
+     * @var Response
+     */
     protected $_response;
 
     /**

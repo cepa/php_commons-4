@@ -113,6 +113,7 @@ class Response
     /**
      * Has header.
      * @param boolean $name
+     * @return bool
      */
     public function hasHeader($name)
     {

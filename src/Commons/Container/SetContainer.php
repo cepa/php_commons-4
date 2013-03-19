@@ -22,7 +22,7 @@ class SetContainer extends CollectionContainer
     /**
      * Add an element to the set.
      * @param mixed $element
-     * @return Commons\Container\Set
+     * @return SetContainer
      */
     public function add($element)
     {
@@ -34,7 +34,7 @@ class SetContainer extends CollectionContainer
      * Set an element in the set.
      * @param int $index
      * @param mixed $element
-     * @return Commons\Container\Set
+     * @return SetContainer
      */
     public function set($index, $element)
     {
@@ -47,7 +47,7 @@ class SetContainer extends CollectionContainer
     /**
      * Get an element from the set.
      * @param int $index
-     * @throws Commons\Exception\NotFoundException
+     * @throws NotFoundException
      * @return mixed
      */
     public function get($index)
@@ -71,7 +71,7 @@ class SetContainer extends CollectionContainer
     /**
      * Remove an element from the set.
      * @param int $index
-     * @return Commons\Container\Set
+     * @return SetContainer
      */
     public function remove($index)
     {

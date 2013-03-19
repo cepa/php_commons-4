@@ -18,7 +18,12 @@ use Commons\Exception\MissingDependencyException;
 
 class Encoder
 {
-    
+    /**
+     * @param mixed $data
+     * @return string
+     * @throws \Commons\Exception\MissingDependencyException
+     * @throws Exception
+     */
     public function encode($data)
     {
         if (!function_exists('json_encode')) {

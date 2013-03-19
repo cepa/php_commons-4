@@ -19,14 +19,16 @@ use Commons\Sql\Connection\ConnectionInterface;
 
 class Record extends AssocContainer
 {
-    
+    /**
+     * @var ConnectionInterface
+     */
     protected $_connection;
     protected $_table;
-    
+
     /**
      * Set connection.
-     * @param Commons\Sql\Connection\ConnectionInterface $connection
-     * @return Commons\Sql\Record
+     * @param Connection\ConnectionInterface $connection
+     * @return Record
      */
     public function setConnection(ConnectionInterface $connection)
     {
@@ -36,8 +38,8 @@ class Record extends AssocContainer
     
     /**
      * Get connection.
-     * @throws Commons\Sql\Exception
-     * @return Commons\Sql\Connection\ConnectionInterface
+     * @throws Exception
+     * @return ConnectionInterface
      */
     public function getConnection()
     {
@@ -49,7 +51,7 @@ class Record extends AssocContainer
     
     /**
      * Create query.
-     * @return Commons\Sql\Query
+     * @return Query
      */
     public function createQuery()
     {
@@ -70,7 +72,7 @@ class Record extends AssocContainer
     /**
      * Get table.
      * @param string $recordName
-     * @return Commons\Sql\RecordTable
+     * @return RecordTable
      */
     public function getTable($recordName = null)
     {
@@ -85,7 +87,7 @@ class Record extends AssocContainer
     
     /**
      * Save record.
-     * @return Commons\Sql\RecordTable
+     * @return RecordTable
      */
     public function save()
     {
@@ -94,7 +96,7 @@ class Record extends AssocContainer
     
     /**
      * Delete record.
-     * @return Commons\Sql\RecordTable
+     * @return RecordTable
      */
     public function delete()
     {
@@ -127,7 +129,7 @@ class Record extends AssocContainer
      * @param mixed $localKey
      * @param mixed $table
      * @param mixed $foreignKey
-     * @return multitype:
+     * @return array
      */
     public function findAllRelated($localKey, $table, $foreignKey = 'id')
     {

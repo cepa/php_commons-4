@@ -31,7 +31,7 @@ class RecordTable extends AbstractDao
     
     /**
      * Init table.
-     * @param Commons\Sql\Connection\ConnectionInterface $connection
+     * @param ConnectionInterface $connection
      */
     public function __construct(ConnectionInterface $connection)
     {
@@ -41,7 +41,7 @@ class RecordTable extends AbstractDao
     /**
      * Set table name.
      * @param string $tableName
-     * @return Commons\Sql\RecordTable
+     * @return RecordTable
      */
     public function setTableName($tableName)
     {
@@ -70,7 +70,7 @@ class RecordTable extends AbstractDao
     /**
      * Set model name.
      * @param string $modelName
-     * @return Commons\Sql\RecordTable
+     * @return RecordTable
      */
     public function setModelName($modelName)
     {
@@ -110,7 +110,7 @@ class RecordTable extends AbstractDao
     /**
      * Create a query instance.
      * @see Commons\Sql\Dao\AbstractDao::createQuery()
-     * @return Commons\Sql\RecordTable
+     * @return Query
      */
     public function createQuery()
     {
@@ -134,11 +134,12 @@ class RecordTable extends AbstractDao
             ->setTable($this);
         return $record;
     }
-    
+
     /**
      * Find by id.
      * @see Commons\Sql\Dao\AbstractDao::find()
-     * @return Commons\Sql\Record
+     * @param int $id
+     * @return Record
      */
     public function find($id)
     {
@@ -167,7 +168,7 @@ class RecordTable extends AbstractDao
     /**
      * Save record.
      * @see Commons\Sql\Dao\AbstractDao::save()
-     * @return Commons\Sql\RecordTable
+     * @return RecordTable
      */
     public function save(Record $record)
     {
@@ -231,7 +232,7 @@ class RecordTable extends AbstractDao
     /**
      * Delete record.
      * @see Commons\Sql\Dao\AbstractDao::delete()
-     * @return Commons\Sql\RecordTable
+     * @return RecordTable
      */
     public function delete(Record $record)
     {

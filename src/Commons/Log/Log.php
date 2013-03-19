@@ -59,7 +59,7 @@ class Log
     /**
      * Log message.
      * @param string $message
-     * @param enum $priority
+     * @param int $priority
      */
     public static function log($message, $priority = self::DEBUG)
     {

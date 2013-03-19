@@ -30,9 +30,9 @@ class PdoStatement implements StatementInterface
     
     /**
      * Init statement.
-     * @param Commons\Sql\Driver\DriverInterface $driver
+     * @param DriverInterface $driver
      * @param string $rawSql
-     * @throws Commons\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(DriverInterface $driver, $rawSql)
     {
