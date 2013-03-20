@@ -76,6 +76,9 @@ class Map
         $data = $decoder->decode($this->getKeyStore()->get($unique));
 
         $key = $this->create($unique);
+        if (isset($data['__type'])) {
+            $key->setType($data['__type']);
+        }
         if (isset($data['__value'])) {
             $key->setValue($data['__value']);
         }
@@ -114,7 +117,10 @@ class Map
     public function save(Key $key)
     {
         $data = array();
-        if ($key->getValue()) {
+        if ($key->getType() != null) {
+            $data['__type'] = $key->getType();
+        }
+        if ($key->getValue() != null) {
             $data['__value'] = $key->getValue();
         }
         if (count($key->getLinks()) > 0) {
