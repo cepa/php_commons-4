@@ -41,6 +41,15 @@ class KeyTest extends \PHPUnit_Framework_TestCase
         $key->getMap();
     }
     
+    public function testSetGetType()
+    {
+        $key = new Key();
+        $this->assertNull($key->getType());
+        $k = $key->setType('xxx');
+        $this->assertTrue($k instanceof Key);
+        $this->assertEquals('xxx', $key->getType());
+    }
+    
     public function testSetGetValue()
     {
         $key = new Key();

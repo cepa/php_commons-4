@@ -34,12 +34,15 @@ class MapTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($map->has('c'));
         $this->assertTrue($map->has('d'));
         
-        $map->findOrCreate('x')->setValue('this is keyspace x')
+        $map->findOrCreate('x')
+            ->setType('keyspace')
+            ->setValue('this is keyspace x')
             ->addLink($a->getUnique())
             ->addLink($b->getUnique())
             ->addLink($c->getUnique())
             ->save();
         $this->assertTrue($map->has('x'));
+        $this->assertEquals('keyspace', $map->find('x')->getType());
         
         $links = $map->find('x')->getLinks();
         $this->assertEquals(3, count($links));

@@ -19,6 +19,7 @@ class Key
     
     protected $_unique;
     protected $_map;
+    protected $_type;
     protected $_value;
     protected $_links = array();
     
@@ -69,6 +70,26 @@ class Key
             throw new Exception("There is no Map assigned to this object");
         }
         return $this->_map;
+    }
+    
+    /**
+     * Set type.
+     * @param string|enum $type
+     * @return \Commons\KeyMap\Key
+     */
+    public function setType($type)
+    {
+        $this->_type = $type;
+        return $this;
+    }
+    
+    /**
+     * Get type.
+     * @return string|enum
+     */
+    public function getType()
+    {
+        return $this->_type;
     }
     
     /**
