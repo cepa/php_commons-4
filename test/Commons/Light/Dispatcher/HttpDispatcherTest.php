@@ -16,9 +16,6 @@ namespace Commons\Light\Dispatcher;
 
 use Commons\Buffer\OutputBuffer;
 
-use Commons\Light\Route\RouteInterface;
-use Commons\Light\Route\StaticRoute;
-
 class HttpDispatcherTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -75,42 +72,6 @@ class HttpDispatcherTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\\Commons\\Light\\Dispatcher\\Exception');
         $dispatcher = new HttpDispatcher();
         $dispatcher->getModuleNamespace('xxx');
-    }
-    
-    public function testSetGetHasRemoveRoute()
-    {
-        $dispatcher = new HttpDispatcher();
-        $this->assertFalse($dispatcher->hasRoute('xxx'));
-        $d = $dispatcher->setRoute('xxx', new StaticRoute('test', array()));
-        $this->assertTrue($d instanceof HttpDispatcher);
-        $this->assertTrue($dispatcher->hasRoute('xxx'));
-        $this->assertTrue($dispatcher->getRoute('xxx') instanceof RouteInterface);
-        $d = $dispatcher->removeRoute('xxx');
-        $this->assertTrue($d instanceof HttpDispatcher);
-        $this->assertFalse($dispatcher->hasRoute('xxx'));
-    }
-    
-    public function testAddGetClearRoutes()
-    {
-        $dispatcher = new HttpDispatcher();
-        $this->assertEquals(0, count($dispatcher->getRoutes()));
-        $d = $dispatcher->addRoutes(array(
-            'x' => new StaticRoute('x', array()),
-            'y' => new StaticRoute('y', array())
-        ));
-        $this->assertTrue($d instanceof HttpDispatcher);
-        $this->assertEquals(2, count($dispatcher->getRoutes()));
-        $this->assertTrue($dispatcher->hasRoute('x'));
-        $this->assertTrue($dispatcher->getRoute('y') instanceof RouteInterface);
-        $d = $dispatcher->clearRoutes();
-        $this->assertEquals(0, count($dispatcher->getRoutes()));
-    }
-    
-    public function testGetRouteException()
-    {
-        $this->setExpectedException('\\Commons\\Light\\Dispatcher\\Exception');
-        $dispatcher = new HttpDispatcher();
-        $dispatcher->getRoute('xxx');
     }
     
     public function testDispatch()
