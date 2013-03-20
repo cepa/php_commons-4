@@ -20,8 +20,6 @@ use Commons\Exception\NotFoundException;
 use Commons\Http\Request;
 use Commons\Http\Response;
 use Commons\Light\Controller\AbstractController;
-use Commons\Light\Route\RouteInterface;
-
 
 class HttpDispatcher extends AbstractDispatcher
 {
@@ -37,10 +35,6 @@ class HttpDispatcher extends AbstractDispatcher
      * @var string
      */
     protected $_moduleNamespaces;
-    /**
-     * @var RouteInterface[]
-     */
-    protected $_routes = array();
 
     /**
      * Set base uri.
@@ -173,85 +167,6 @@ class HttpDispatcher extends AbstractDispatcher
         return $this->_request;
     }
     
-    /**
-     * Set route.
-     * @param string $name
-     * @param RouteInterface $route
-     * @return \Commons\Light\Dispatcher\HttpDispatcher
-     */
-    public function setRoute($name, RouteInterface $route)
-    {
-        $this->_routes[$name] = $route;
-        return $this;
-    }
-    
-    /**
-     * Get route.
-     * @param string $name
-     * @throws Exception
-     * @return RouteInterface[]
-     */
-    public function getRoute($name)
-    {
-        if (!isset($this->_routes[$name])) {
-            throw new Exception("Cannot find route '{$name}'");
-        }
-        return $this->_routes[$name];
-    }
-    
-    /**
-     * Has route.
-     * @param string $name
-     * @return boolean
-     */
-    public function hasRoute($name)
-    {
-        return (isset($this->_routes[$name]) ? true : false);
-    }
-    
-    /**
-     * Remove route.
-     * @param string $name
-     * @return \Commons\Light\Dispatcher\HttpDispatcher
-     */
-    public function removeRoute($name)
-    {
-        unset($this->_routes[$name]);
-        return $this;
-    }
-    
-    /**
-     * Add routes.
-     * @param array $routes
-     * @return \Commons\Light\Dispatcher\HttpDispatcher
-     */
-    public function addRoutes(array $routes)
-    {
-        foreach ($routes as $name => $route) {
-            $this->setRoute($name, $route);
-        }
-        return $this;
-    }
-    
-    /**
-     * Get routes.
-     * @return RouteInterface[]
-     */
-    public function getRoutes()
-    {
-        return $this->_routes;
-    }
-    
-    /**
-     * Clear routes.
-     * @return \Commons\Light\Dispatcher\HttpDispatcher
-     */
-    public function clearRoutes()
-    {
-        $this->_routes = array();
-        return $this;
-    }
-
     /**
      * Dispatch controller.
      * @param array $customParams
