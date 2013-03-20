@@ -34,7 +34,7 @@ class Xml extends TraversableContainer implements \Serializable
         return $this;
     }
     
-    public function merge(Xml $source)
+    public function merge($source)
     {
         parent::merge($source);
         foreach ($source->_attributes as $name => $value) {
@@ -43,7 +43,7 @@ class Xml extends TraversableContainer implements \Serializable
         return $this;
     }
     
-    public function alter(Xml $source)
+    public function alter($source)
     {
         parent::alter($source);
         foreach ($source->_attributes as $name => $value) {

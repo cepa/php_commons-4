@@ -85,7 +85,7 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
      * @param TraversableContainer $source
      * @return TraversableContainer
      */
-    public function merge(TraversableContainer $source)
+    public function merge($source)
     {
         $className = get_class($this);
         $this->_name = $source->_name;
@@ -112,7 +112,7 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
      * @param TraversableContainer $source
      * @return TraversableContainer
      */
-    public function alter(TraversableContainer $source)
+    public function alter($source)
     {
         $className = get_class($this);
         $this->_name = $source->_name;
