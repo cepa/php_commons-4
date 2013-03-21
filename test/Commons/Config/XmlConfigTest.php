@@ -21,32 +21,42 @@ class XmlConfigTest extends \PHPUnit_Framework_TestCase
     {
         $filename = ROOT_PATH.'/test/fixtures/test_config_xml.xml';
 
-        $xml = new XmlConfig('a');
-        $xml->loadFromFile($filename);
+        $xml = new XmlConfig();
+        $xml
+            ->setEnvironment('a')
+            ->loadFromFile($filename);
         $this->assertEquals('123', (string) $xml->x);
         $this->assertEquals('456', (string) $xml->y);
         $this->assertEquals('789', (string) $xml->z);
 
-        $xml = new XmlConfig('b');
-        $xml->loadFromFile($filename);
+        $xml = new XmlConfig();
+        $xml
+            ->setEnvironment('b')
+            ->loadFromFile($filename);
         $this->assertEquals('321', (string) $xml->x);
         $this->assertEquals('456', (string) $xml->y);
         $this->assertEquals('789', (string) $xml->z);
 
-        $xml = new XmlConfig('c');
-        $xml->loadFromFile($filename);
+        $xml = new XmlConfig();
+        $xml
+            ->setEnvironment('c')
+            ->loadFromFile($filename);
         $this->assertEquals('321', (string) $xml->x);
         $this->assertEquals('654', (string) $xml->y);
         $this->assertEquals('789', (string) $xml->z);
 
-        $xml = new XmlConfig('d');
-        $xml->loadFromFile($filename);
+        $xml = new XmlConfig();
+        $xml
+            ->setEnvironment('d')
+            ->loadFromFile($filename);
         $this->assertEquals('321', (string) $xml->x);
         $this->assertEquals('654', (string) $xml->y);
         $this->assertEquals('987', (string) $xml->z);
 
-        $xml = new XmlConfig('e');
-        $xml->loadFromFile($filename);
+        $xml = new XmlConfig();
+        $xml
+            ->setEnvironment('e')
+            ->loadFromFile($filename);
         $this->assertEquals('321', (string) $xml->x);
         $this->assertEquals('654', (string) $xml->y);
         $this->assertEquals('987', (string) $xml->z);

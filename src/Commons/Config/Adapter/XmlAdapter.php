@@ -51,6 +51,7 @@ class XmlAdapter extends AbstractAdapter
             throw new InvalidArgumentException();
         }
         $this->_loadXml($xml);
+        return $this;
     }
     
     /**
@@ -60,6 +61,7 @@ class XmlAdapter extends AbstractAdapter
     public function loadFromFile($filename)
     {
         $this->_loadXml($this->getReader()->readFromFile($filename));
+        return $this;
     }
     
     protected function _loadXml(Xml $root)
