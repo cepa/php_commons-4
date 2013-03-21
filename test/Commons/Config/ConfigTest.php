@@ -19,9 +19,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructWithEnvAndAdapter()
     {
-        $config = new Config('testing', new \Mock\Config\Adapter());
-        $this->assertEquals('testing', $config->getEnvironment());
-        $this->assertTrue($config->getAdapter() instanceof \Mock\Config\Adapter);
+        $config = new Config();
+        $this->assertNull($config->getEnvironment());
     }
     
     public function testSetGetEnvironment()
@@ -50,15 +49,21 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     
     public function testLoad()
     {
-        $config = new Config('testing', new \Mock\Config\Adapter());
-        $config->load('test');
+        $config = new Config();
+        $config
+            ->setEnvironment('testing')
+            ->setAdapter(new \Mock\Config\Adapter())
+            ->load('test');
         $this->assertEquals('test', $config->loadable);
     }
     
     public function testLoadFromFile()
     {
-        $config = new Config('testing', new \Mock\Config\Adapter());
-        $config->loadFromFile('test');
+        $config = new Config();
+        $config
+            ->setEnvironment('testing')
+            ->setAdapter(new \Mock\Config\Adapter())
+            ->loadFromFile('test');
         $this->assertEquals('test', $config->filename);
     }
     

@@ -19,9 +19,10 @@ use Commons\Config\Adapter\XmlAdapter;
 class XmlConfig extends Config
 {
     
-    public function __construct($environment = null)
+    public function __construct($mixed = null)
     {
-        parent::__construct($environment, new XmlAdapter());
+        parent::__construct($mixed);
+        $this->setAdapter(new XmlAdapter());
     }
     
 }

@@ -25,18 +25,6 @@ class Config extends TraversableContainer
     protected $_environment;
     
     /**
-     * Prepare config.
-     * @param string $environment
-     * @param AdapterInterface $adapter
-     */
-    public function __construct($environment = null, AdapterInterface $adapter = null)
-    {
-        parent::__construct();
-        $this->_environment = $environment;
-        $this->_adapter = $adapter;
-    }
-    
-    /**
      * Set environment.
      * @param string $environment
      * @return Config
@@ -87,8 +75,8 @@ class Config extends TraversableContainer
      */
     public function load($loadable)
     {
-        $this->_adapter->setConfig($this);
-        $this->_adapter->load($loadable);
+        $this->getAdapter()->setConfig($this);
+        $this->getAdapter()->load($loadable);
         return $this;
     }
     
@@ -99,8 +87,8 @@ class Config extends TraversableContainer
      */
     public function loadFromFile($filename)
     {
-        $this->_adapter->setConfig($this);
-        $this->_adapter->loadFromFile($filename);
+        $this->getAdapter()->setConfig($this);
+        $this->getAdapter()->loadFromFile($filename);
         return $this;
     }
     

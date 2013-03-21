@@ -72,8 +72,10 @@ class XmlAdapterTest extends \PHPUnit_Framework_TestCase
     
     public function testLoadFromFileWithEnv()
     {
-        $config = new XmlConfig('testing');
-        $config->loadFromFile(ROOT_PATH.'/test/fixtures/test_config_adapter_xml_env.xml');
+        $config = new XmlConfig();
+        $config
+            ->setEnvironment('testing')
+            ->loadFromFile(ROOT_PATH.'/test/fixtures/test_config_adapter_xml_env.xml');
 
         $this->assertTrue(isset($config->application));
         $this->assertEquals('12', (string) $config->application->test1);
@@ -86,8 +88,10 @@ class XmlAdapterTest extends \PHPUnit_Framework_TestCase
     
     public function testLoadFromFileWithExtends()
     {
-        $config = new XmlConfig('testing');
-        $config->loadFromFile(ROOT_PATH.'/test/fixtures/test_config_adapter_xml_ext.xml');
+        $config = new XmlConfig();
+        $config
+            ->setEnvironment('testing')
+            ->loadFromFile(ROOT_PATH.'/test/fixtures/test_config_adapter_xml_ext.xml');
         
         $this->assertTrue(isset($config->api));
         $this->assertEquals('http://localhost/testing_php_commons/', $config->api->url);
