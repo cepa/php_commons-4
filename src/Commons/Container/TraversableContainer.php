@@ -407,7 +407,14 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
         if (is_array($data)) {
             foreach ($node as $child) {
                 /** @var $child TraversableContainer */
-                $a[$child->getName()] = $this->_treeToArray($child);
+                $name = $child->getName();
+                if (isset($a[$name])) {
+                    $a[$name] = array($a[$name]);
+                    $a[$name][] = $this->_treeToArray($child);
+                }
+                else {
+                    $a[$child->getName()] = $this->_treeToArray($child);
+                }
             }
         } else {
             return $data;
