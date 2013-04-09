@@ -56,15 +56,6 @@ class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($app->getConfig()));
     }
     
-    public function testSetGetLogger()
-    {
-        $app = new MockApplication();
-        $this->assertNull($app->getLogger());
-        $a = $app->setLogger(new Logger());
-        $this->assertTrue($a instanceof AbstractApplication);
-        $this->assertTrue($app->getLogger() instanceof Logger);
-    }
-    
     public function testSetGetClearModules()
     {
         $app = new MockApplication();

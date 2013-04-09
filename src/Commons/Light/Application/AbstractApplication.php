@@ -24,7 +24,6 @@ abstract class AbstractApplication
     protected $_version;
     protected $_path;
     protected $_config;
-    protected $_logger;
     protected $_modules = array();
     protected $_properties = array();
 
@@ -108,26 +107,6 @@ abstract class AbstractApplication
         return $this->_config;
     }
     
-    /**
-     * Set logger.
-     * @param mixed $logger
-     * @return \Commons\Light\Application\AbstractApplication
-     */
-    public function setLogger($logger)
-    {
-        $this->_logger = $logger;
-        return $this;
-    }
-    
-    /**
-     * Get logger.
-     * @return Logger
-     */
-    public function getLogger()
-    {
-        return $this->_logger;
-    }
-
     /**
      * Set modules.
      * @param array $modules
