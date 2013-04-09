@@ -54,7 +54,7 @@ class MysqlUtils
         $username,
         $password)
     {
-        self::_executeSingleQuery("DROP DATABASE $database", $host, $port, $username, $password);
+        self::_executeSingleQuery("DROP DATABASE IF EXISTS $database", $host, $port, $username, $password);
     }
     
     protected static function _executeSingleQuery(
