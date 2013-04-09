@@ -18,12 +18,15 @@ use Commons\Autoloader\DefaultAutoloader;
 use Commons\Autoloader\Exception as AutoloaderException;
 use Commons\Migration\Versioner\VersionerInterface;
 use Commons\Exception\NotFoundException;
+use Commons\Log\Log;
+use Commons\Log\Logger;
 
 class Migrator
 {
     
     protected $_maps = array();
     protected $_versioner;
+    protected $_logger;
     
     /**
      * Init.
@@ -32,6 +35,29 @@ class Migrator
     public function __construct(array $maps = array())
     {
         $this->setMaps($maps);
+    }
+    
+    /**
+     * Set logger.
+     * @param Logger $logger
+     * @return \Commons\Migration\Migrator
+     */
+    public function setLogger(Logger $logger)
+    {
+        $this->_logger = $logger;
+        return $this;
+    }
+    
+    /**
+     * 
+     * @return Logger
+     */
+    public function getLogger()
+    {
+        if (!isset($this->_logger)) {
+            $this->setLogger(Log::getLogger());
+        }
+        return $this->_logger;
     }
     
     /**
@@ -151,6 +177,7 @@ class Migrator
             foreach ($migrations as $version => $className) {
                 if (isset($max) && $version > $max) break;
                 if ($current < $version) {
+                    $this->getLogger()->debug("Upgrade {$name} from {$current} to {$version} ({$className})");
                     $this->_createMigrationInstance($className)->upgrade();
                     $current = $version;
                     $versioner->setVersion($name, $current);
@@ -174,6 +201,7 @@ class Migrator
             foreach ($migrations as $version => $className) {
                 if ($version <= $min) break;
                 if ($current >= $version) {
+                    $this->getLogger()->debug("Downgrade {$name} from {$current} to ".($version-1)." ({$className})");
                     $this->_createMigrationInstance($className)->downgrade();
                     $current = $version - 1;
                     $versioner->setVersion($name, $current);

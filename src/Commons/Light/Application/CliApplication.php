@@ -85,6 +85,15 @@ class CliApplication extends AbstractApplication
      */
     public function signalHandler($signo)
     {
+        exit($this->shutdown($signo));
+    }
+    
+    /**
+     * Hook for shutting down the app.
+     * @param int $signo
+     */
+    public function shutdown($signo)
+    {
         
     }
     
