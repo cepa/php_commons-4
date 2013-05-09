@@ -14,7 +14,6 @@
 
 namespace Commons\Sql;
 
-use Commons\Exception\InvalidArgumentException;
 use Commons\Container\AssocContainer;
 use Commons\Sql\Connection\ConnectionInterface;
 use Commons\Sql\Statement\StatementInterface;
@@ -98,7 +97,12 @@ class Query implements \Countable
     /**
      * @var string
      */
-    protected $_objectClassName = '\\Commons\\Sql\\Record';
+    protected $_entityClass = '\\Commons\\Entity\\Entity';
+    
+    /**
+     * @var string
+     */
+    protected $_defaultTableName;
     
     /**
      * Init a new query.
@@ -207,23 +211,43 @@ class Query implements \Countable
     }
     
     /**
-     * Set object class name.
-     * @param string $className
+     * Set entity class name.
+     * @param string $entityClass
      * @return Query
      */
-    public function setObjectClassName($className)
+    public function setEntityClass($entityClass)
     {
-        $this->_objectClassName = $className;
+        $this->_entityClass = $entityClass;
         return $this;
     }
     
     /**
-     * Get object class name.
+     * Get entity class name.
      * @return string
      */
-    public function getObjectClassName()
+    public function getEntityClass()
     {
-        return $this->_objectClassName;
+        return $this->_entityClass;
+    }
+    
+    /**
+     * Set default table name.
+     * @param string $tableName
+     * @return \Commons\Sql\Query
+     */
+    public function setDefaultTableName($tableName)
+    {
+        $this->_defaultTableName = $tableName;
+        return $this;
+    }
+    
+    /**
+     * Get default table name.
+     * @return string
+     */
+    public function getDefaultTableName()
+    {
+        return $this->_defaultTableName;
     }
 
     /**
@@ -264,7 +288,9 @@ class Query implements \Countable
         $this->_limitExpression        = clone $this->_limitExpression;
         $this->_offsetExpression       = clone $this->_offsetExpression;
         $this->_joinExpression         = clone $this->_joinExpression;
-        $this->_endingExpression       = clone $this->_endingExpression;       
+        $this->_endingExpression       = clone $this->_endingExpression;      
+        $this->_entityClass = clone $this->_entityClass;
+        $this->_defaultTableName = clone $this->_defaultTableName; 
     }
     
     /**
@@ -371,7 +397,7 @@ class Query implements \Countable
      * @param string $sql
      * @return Query
      */
-    public function select($sql)
+    public function select($sql = '*')
     {
         $args = func_get_args();
         $this->_type = self::TYPE_SELECT;
@@ -404,8 +430,9 @@ class Query implements \Countable
      * @param string $sql
      * @return Query
      */
-    public function insert($sql)
+    public function insert($sql = null)
     {
+        $sql = (isset($sql) ? $sql : $this->getDefaultTableName());
         $args = func_get_args();
         $this->_type = self::TYPE_INSERT;
         $this->_beginningExpression
@@ -420,8 +447,9 @@ class Query implements \Countable
      * @param string $sql
      * @return Query
      */
-    public function update($sql)
+    public function update($sql = null)
     {
+        $sql = (isset($sql) ? $sql : $this->getDefaultTableName());
         $args = func_get_args();
         $this->_type = self::TYPE_UPDATE;
         $this->_beginningExpression
@@ -435,8 +463,9 @@ class Query implements \Countable
      * @param string $sql
      * @return Query
      */
-    public function delete($sql)
+    public function delete($sql = null)
     {
+        $sql = (isset($sql) ? $sql : $this->getDefaultTableName());
         $args = func_get_args();
         $this->_type = self::TYPE_DELETE;
         $this->_beginningExpression
@@ -451,8 +480,9 @@ class Query implements \Countable
      * @param string $sql
      * @return Query
      */
-    public function from($sql)
+    public function from($sql = null)
     {
+        $sql = (isset($sql) ? $sql : $this->getDefaultTableName());
         $args = func_get_args();
         $this->_fromExpression
             ->set('FROM')
@@ -842,8 +872,7 @@ class Query implements \Countable
                 break;
 
             default:
-                throw new InvalidArgumentException(
-                	"Unknown query type '{$this->type}'!");
+                throw new Exception("Unknown query type '{$this->type}'!");
         }
         return trim($sql);
     }
@@ -869,67 +898,40 @@ class Query implements \Countable
     }
     
     /**
-     * Fetch single row.
-     * @param int $mode
-     * @return array|AssocContainer
+     * Fetch row as an entity.
+     * @return \Commons\Entity\Entity
      */
-    public function fetch($mode = Sql::FETCH_ARRAY)
+    public function fetch()
     {
-        return $this->getStatement()->fetch($mode);
+        return $this->getStatement()->fetch($this->getEntityClass());
     }
     
     /**
-     * Fetch single row as object.
-     * @return Record
+     * Fetch all rows as a collection of entities.
+     * @return \Commons\Entity\Collection
      */
-    public function fetchObject()
+    public function fetchCollection()
     {
-        $options = array(
-            'className' => $this->_objectClassName
-        );
-        $object = $this->getStatement()->fetch(Sql::FETCH_OBJECT, $options);
-        if ($object instanceof Record) {
-            $object->setConnection($this->getConnection());
-        }
-        return $object;
+        return $this->getStatement()->fetchCollection($this->getEntityClass());
     }
     
     /**
-     * Fetch all rows.
-     * @param int $mode
+     * Fetch all rows as array.
      * @return array
      */
-    public function fetchAll($mode = Sql::FETCH_ARRAY)
+    public function fetchArray()
     {
-        return $this->getStatement()->fetchAll($mode);
-    }
-    
-    /**
-     * Fetch all rows as array of objects.
-     * @return array
-     */
-    public function fetchAllObjects()
-    {
-        $options = array(
-            'className' => $this->_objectClassName
-        );
-        $collection = $this->getStatement()->fetchAll(Sql::FETCH_OBJECT, $options);
-        foreach ($collection as $object) {
-            if ($object instanceof Record) {
-                $object->setConnection($this->getConnection());
-            }
-        }
-        return $collection;
+        return $this->getStatement()->fetchArray();
     }
     
     /**
      * Fetch single value from a column.
-     * @param string $name
+     * @param string $index
      * @return int|string
      */
-    public function fetchColumn($name = null)
+    public function fetchScalar($index = 0)
     {
-        return $this->getStatement()->fetchColumn($name);
+        return $this->getStatement()->fetchScalar($index);
     }
     
     /**
@@ -963,7 +965,11 @@ class Query implements \Countable
      */
     public function __toString()
     {
-        return $this->toSql();
+        try {
+            return $this->toSql();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -980,9 +986,14 @@ class Query implements \Countable
         
         $n = count($tokens);
         $m = count($params) - 1;
+        /**
+         * @TODO: Keep an eye on the part below!
+         */
+        /*
         if ($m + 1 < $n) {
             throw new Exception("Missing bind parameters!");
         }
+        */
         
         for ($i = 0; $i < $m; $i++) {
             $paramName = '_'.++$this->_paramsCounter;

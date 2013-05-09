@@ -14,7 +14,6 @@
 
 namespace Commons\Sql\Driver;
 
-use Commons\Exception\InvalidArgumentException;
 use Commons\Sql\Exception;
 use Commons\Sql\Statement\PdoStatement;
 use Commons\Sql\Sql;
@@ -78,7 +77,7 @@ class PdoDriver implements DriverInterface
         }
         
         if (!isset($options['driver'])) {
-            throw new InvalidArgumentException("Missing driver option!");
+            throw new Exception("Missing driver option!");
         }
         
         $driver    = $options['driver'];

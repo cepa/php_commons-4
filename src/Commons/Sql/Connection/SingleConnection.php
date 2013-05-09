@@ -16,7 +16,6 @@ namespace Commons\Sql\Connection;
 
 use Commons\Sql\Driver\DriverInterface;
 use Commons\Sql\Driver\PdoDriver;
-use Commons\Sql\Exception;
 use Commons\Sql\Statement\StatementInterface;
 
 class SingleConnection extends AbstractConnection
@@ -49,7 +48,6 @@ class SingleConnection extends AbstractConnection
     
     /**
      * Get driver instance.
-     * @throws Exception
      * @return DriverInterface
      */
     public function getDriver()

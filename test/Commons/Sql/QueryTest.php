@@ -14,6 +14,8 @@
 
 namespace Commons\Sql;
 
+use Commons\Entity\Collection;
+use Commons\Entity\Entity;
 use Commons\Sql\Driver\PdoDriver;
 use Commons\Sql\Connection\ConnectionInterface;
 use Commons\Sql\Connection\SingleConnection;
@@ -30,13 +32,22 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $this->_connection->setDriver(new MockDriver());
     }
     
-    public function testSetGetObjectClassName()
+    public function testSetGetEntityClass()
     {
         $query = $this->getQuery();
-        $this->assertEquals('\\Commons\\Sql\\Record', $query->getObjectClassName());
-        $q = $query->setObjectClassName('xxx');
+        $this->assertEquals('\\Commons\\Entity\\Entity', $query->getEntityClass());
+        $q = $query->setEntityClass('xxx');
         $this->assertTrue($q instanceof Query);
-        $this->assertEquals('xxx', $query->getObjectClassName());
+        $this->assertEquals('xxx', $query->getEntityClass());
+    }
+    
+    public function testSetGetDefaultTableName()
+    {
+        $query = $this->getQuery();
+        $this->assertNull($query->getDefaultTableName());
+        $q = $query->setDefaultTableName('xxx');
+        $this->assertTrue($q instanceof Query);
+        $this->assertEquals('xxx', $query->getDefaultTableName());
     }
     
     public function testCreate()
@@ -341,7 +352,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             $x = $this->getQuery()
                 ->select('123 AS x')
                 ->execute()
-                ->fetchColumn();
+                ->fetchScalar();
             $this->assertEquals(123, $x);
             
             $this->_connection->disconnect();
@@ -364,10 +375,13 @@ class QueryTest extends \PHPUnit_Framework_TestCase
                 ->select('123 AS x, 456 AS y')
                 ->execute()
                 ->fetch();
+            $this->assertTrue($a instanceof Entity);
             $this->assertEquals(2, count($a));
             $this->assertEquals(123, $a['x']);
             $this->assertEquals(456, $a['y']);
-                 
+            $this->assertEquals(123, $a->x);
+            $this->assertEquals(456, $a->y);
+            
             $this->_connection->disconnect();
             \Bootstrap::dropDatabase($database);
             
@@ -376,7 +390,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         }
     }
     
-    public function testExecute_FetchObject()
+    public function testExecute_FetchArray()
     {
         try {
             $database = \Bootstrap::createDatabase();
@@ -387,13 +401,12 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             $a = $this->getQuery()
                 ->select('123 AS x, 456 AS y')
                 ->execute()
-                ->fetchObject();
-            $this->assertEquals(2, count($a));
-            $this->assertEquals(123, $a->x);
-            $this->assertEquals(456, $a->y);
+                ->fetchArray();
+            $this->assertTrue(is_array($a));
+            $this->assertEquals(2, count($a[0]));
+            $this->assertEquals(123, $a[0]['x']);
+            $this->assertEquals(456, $a[0]['y']);
             
-            $this->assertTrue($a->getConnection() instanceof ConnectionInterface);
-                 
             $this->_connection->disconnect();
             \Bootstrap::dropDatabase($database);
             
@@ -402,7 +415,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         }
     }
     
-    public function testExecute_FetchAll()
+    public function testExecute_FetchArray2()
     {
         try {
             $database = \Bootstrap::createDatabase();
@@ -421,7 +434,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
                 ->from('test')
                 ->orderBy('a ASC')
                 ->execute()
-                ->fetchAll();
+                ->fetchArray();
             $this->assertEquals(3, count($a));
                  
             $this->_connection->disconnect();
@@ -432,7 +445,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         }
     }
     
-    public function testExecute_FetchAllObjects()
+    public function testExecute_FetchCollection()
     {
         try {
             $database = \Bootstrap::createDatabase();
@@ -446,17 +459,23 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             $this->executeStatement("INSERT INTO test(a, b) VALUES (456, 'def')");
             $this->executeStatement("INSERT INTO test(a, b) VALUES (789, 'ghi')");
             
-            $a = $this->getQuery()
+            $coll = $this->getQuery()
                 ->select('*')
                 ->from('test')
                 ->orderBy('a ASC')
                 ->execute()
-                ->fetchAllObjects();
-            $this->assertEquals(3, count($a));
+                ->fetchCollection();
+            $this->assertTrue($coll instanceof Collection);
+            $this->assertEquals(3, count($coll));
+            $this->assertEquals(123, $coll[0]->a);
+            $this->assertEquals('abc', $coll[0]->b);
+            $this->assertEquals(456, $coll[1]->a);
+            $this->assertEquals('def', $coll[1]->b);
+            $this->assertEquals(789, $coll[2]->a);
+            $this->assertEquals('ghi', $coll[2]->b);
             
-            foreach ($a as $o) {
-                $this->assertTrue($o instanceof Record);
-                $this->assertTrue($o->getConnection() instanceof ConnectionInterface);
+            foreach ($coll as $o) {
+                $this->assertTrue($o instanceof Entity);
             }
                  
             $this->_connection->disconnect();
@@ -487,7 +506,8 @@ class QueryTest extends \PHPUnit_Framework_TestCase
                 ->orderBy('a ASC')
                 ->where('a = ?', 123)
                 ->execute()
-                ->fetchAll();
+                ->fetchCollection();
+            $this->assertTrue($a instanceof Collection);
             $this->assertEquals(1, count($a));
             
             $this->assertEquals(123, $a[0]['a']);
@@ -536,7 +556,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
                 ->where('a = ?', 123)
                 ->orWhere('b = ?', 'ghi')
                 ->execute()
-                ->fetchAll();
+                ->fetchArray();
             $this->assertEquals(2, count($a));
                  
             $this->assertEquals(789, $a[0]['a']);
@@ -579,7 +599,8 @@ class QueryTest extends \PHPUnit_Framework_TestCase
                 ->from('test')
                 ->orderBy('a ASC')
                 ->execute()
-                ->fetchAll();
+                ->fetchCollection();
+            $this->assertTrue($a instanceof Collection);
             $this->assertEquals(3, count($a));
             
             $this->assertEquals(666, $a[1]['a']);
@@ -617,7 +638,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
                 ->from('test')
                 ->orderBy('a ASC')
                 ->execute()
-                ->fetchAll();
+                ->fetchArray();
             $this->assertEquals(2, count($a));
             
             $this->_connection->disconnect();
@@ -647,8 +668,8 @@ class QueryTest extends \PHPUnit_Framework_TestCase
                 ->from('test')
                 ->where('a = ?', 456)
                 ->execute()
-                ->fetchObject();
-            $this->assertTrue($record instanceof Record);
+                ->fetch();
+            $this->assertTrue($record instanceof Entity);
             $this->assertEquals('456', $record->a);
             $this->assertEquals('def', $record->b);
             
@@ -657,19 +678,19 @@ class QueryTest extends \PHPUnit_Framework_TestCase
                 ->from('test')
                 ->orderBy('a ASC')
                 ->execute()
-                ->fetchAllObjects();
-            $this->assertTrue(is_array($a));
+                ->fetchCollection();
+            $this->assertTrue($a instanceof Collection);
             $this->assertEquals(3, count($a));
             
-            $this->assertTrue($a[0] instanceof Record);
+            $this->assertTrue($a[0] instanceof Entity);
             $this->assertEquals('123', $a[0]->a);
             $this->assertEquals('abc', $a[0]->b);
             
-            $this->assertTrue($a[1] instanceof Record);
+            $this->assertTrue($a[1] instanceof Entity);
             $this->assertEquals('456', $a[1]->a);
             $this->assertEquals('def', $a[1]->b);
             
-            $this->assertTrue($a[2] instanceof Record);
+            $this->assertTrue($a[2] instanceof Entity);
             $this->assertEquals('789', $a[2]->a);
             $this->assertEquals('ghi', $a[2]->b);
             
@@ -679,6 +700,34 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         } catch (Exception $e) {
             \Bootstrap::abort($e);
         }
+    }
+    
+    public function testDefaultInsert()
+    {
+        $query = $this->getQuery()->setDefaultTableName('xxx');
+        $query->insert()->set('x', 123);
+        $this->assertEquals('INSERT INTO xxx ( x ) VALUES ( :_1 )', (string) $query);
+    }
+    
+    public function testDefaultSelect()
+    {
+        $query = $this->getQuery()->setDefaultTableName('xxx');
+        $query->select()->from();
+        $this->assertEquals('SELECT * FROM xxx', (string) $query);
+    }
+    
+    public function testDefaultUpdate()
+    {
+        $query = $this->getQuery()->setDefaultTableName('xxx');
+        $query->update()->set('x', 123)->where('y = ?', 456);
+        $this->assertEquals('UPDATE xxx SET x = :_2 WHERE y = :_1', (string) $query);
+    }
+    
+    public function testDefaultDelete()
+    {
+        $query = $this->getQuery()->setDefaultTableName('xxx');
+        $query->delete()->where('x = ?', 123);
+        $this->assertEquals('DELETE FROM xxx WHERE x = :_1', (string) $query);
     }
     
     public function getQuery()

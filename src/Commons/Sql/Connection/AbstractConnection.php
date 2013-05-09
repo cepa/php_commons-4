@@ -14,16 +14,13 @@
 
 namespace Commons\Sql\Connection;
 
-use Commons\Sql\RecordTable;
+use Commons\Entity\RepositoryInterface;
 use Commons\Sql\Query;
 
 abstract class AbstractConnection implements ConnectionInterface
 {
-
-    /**
-     * @var RecordTable[]
-     */
-    protected $_tables = array();
+    
+    protected $_repositories = array();
 
     /**
      * Create a new query.
@@ -35,35 +32,27 @@ abstract class AbstractConnection implements ConnectionInterface
     }
     
     /**
-     * Set table.
-     * @param string $recordName
-     * @param RecordTable $table
-     * @return ConnectionInterface
+     * Set repository instance.
+     * @param string $repoClass
+     * @param RepositoryInterface $instance
      */
-    public function setTable($recordName, RecordTable $table)
+    public function setRepository($repoClass, RepositoryInterface $instance)
     {
-        $className = $recordName.'Table';
-        $this->_tables[$className] = $table;
+        $this->_repositories[$repoClass] = $instance;
         return $this;
     }
     
     /**
-     * Get table.
-     * @param string $recordName
-     * @return RecordTable
+     * Get repository instance.
+     * @param string $repoClass
+     * @return RepositoryInterface
      */
-    public function getTable($recordName)
+    public function getRepository($repoClass)
     {
-        $className = $recordName.'Table';
-        if (!isset($this->_tables[$className])) {
-            if (class_exists($className)) {
-                $table = new $className($this);
-            } else {
-                $table = new RecordTable($this);
-            }
-            $this->_tables[$className] = $table;
+        if (!isset($this->_repositories[$repoClass])) {
+            $this->setRepository($repoClass, new $repoClass($this));
         }
-        return $this->_tables[$className];
+        return $this->_repositories[$repoClass];
     }
-    
+        
 }

@@ -18,9 +18,7 @@ use Commons\Sql\Driver\DriverInterface;
 use Commons\Sql\Driver\PdoDriver;
 use Commons\Sql\Statement\StatementInterface;
 use Commons\Sql\Query;
-use Commons\Sql\RecordTable;
 use Mock\Sql\Driver as MockDriver;
-use Mock\Sql\RecordTable as MockRecordTable;
 
 class SingleConnectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -78,45 +76,4 @@ class SingleConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($c->inTransaction());
     }
     
-    public function testGetTable()
-    {
-        $connection = new SingleConnection(new MockDriver());
-        $table = $connection->getTable('SomeRecord');
-        $this->assertTrue($table instanceof RecordTable);
-        $this->assertNull($table->getTableName());
-        $this->assertEquals('\\Commons\\Sql\\Record', $table->getModelName());
-        $this->assertTrue($table->getConnection() instanceof ConnectionInterface);
-    }
-        
-    public function testGetTable_Custom()
-    {
-        $connection = new SingleConnection(new MockDriver());
-        $table = $connection->getTable('\\Mock\\Sql\\Record');
-        $this->assertTrue($table instanceof MockRecordTable);
-        $this->assertTrue($table instanceof RecordTable);
-        $this->assertEquals('mock_record', $table->getTableName());
-        $this->assertEquals('\\Mock\\Sql\\Record', $table->getModelName());
-        $this->assertTrue($table->getConnection() instanceof ConnectionInterface);
-    }
-    
-    public function testSetGetTable()
-    {
-        $connection = new SingleConnection(new MockDriver());
-        $table = $connection->getTable('\\Mock\\Sql\\Record');
-        $this->assertTrue($table instanceof MockRecordTable);
-        
-        $table = new RecordTable($connection);
-        $table
-            ->setTableName('SomeTable')
-            ->setModelName('SomeRecord');
-        $c = $connection->setTable('\\Mock\\Sql\\Record', $table);
-        $this->assertTrue($c instanceof ConnectionInterface);
-        
-        $table = $connection->getTable('\\Mock\\Sql\\Record');
-        $this->assertFalse($table instanceof MockRecordTable);
-        $this->assertTrue($table instanceof RecordTable);
-        $this->assertEquals('SomeTable', $table->getTableName());
-        $this->assertEquals('SomeRecord', $table->getModelName());
-    }
-        
 }
