@@ -14,12 +14,12 @@
 
 namespace Commons\Sql\Connection;
 
+use Commons\Entity\RepositoryBrokerInterface;
 use Commons\Sql\Query;
-use Commons\Sql\RecordTable;
 use Commons\Sql\Driver\DriverInterface;
 use Commons\Sql\Statement\StatementInterface;
 
-interface ConnectionInterface
+interface ConnectionInterface extends RepositoryBrokerInterface
 {
     
     /**
@@ -78,21 +78,6 @@ interface ConnectionInterface
      * @return Query
      */
     public function createQuery();
-    
-    /**
-     * Set model table.
-     * @param string $recordName
-     * @param RecordTable $table
-     * @return ConnectionInterface
-     */
-    public function setTable($recordName, RecordTable $table);
-    
-    /**
-     * Get model table.
-     * @param string $recordName
-     * @return RecordTable
-     */
-    public function getTable($recordName);
     
     /**
      * Get database type.

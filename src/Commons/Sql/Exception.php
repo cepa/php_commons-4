@@ -14,4 +14,4 @@
 
 namespace Commons\Sql;
 
-class Exception extends \Commons\Exception\Exception {}
+class Exception extends \RuntimeException {}

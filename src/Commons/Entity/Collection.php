@@ -2,9 +2,9 @@
 
 /**
  * =============================================================================
- * @file        Mock/Sql/RecordTable.php
+ * @file        Commons/Entity/Collection.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
- * 
+ *
  * @copyright  PHP Commons
  *              Copyright (C) 2009-2012 HellWorx Software
  *              All rights reserved.
@@ -12,18 +12,11 @@
  * =============================================================================
  */
 
-namespace Mock\Sql;
+namespace Commons\Entity;
 
-use Commons\Sql\Connection\ConnectionInterface;
+use Commons\Container\SetContainer;
 
-class RecordTable extends \Commons\Sql\RecordTable
+class Collection extends SetContainer
 {
-    
-    public function __construct(ConnectionInterface $connection)
-    {
-        parent::__construct($connection);
-        $this->setTableName('mock_record');
-        $this->setModelName('\\Mock\\Sql\\Record');
-    }
     
 }

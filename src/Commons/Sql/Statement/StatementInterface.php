@@ -43,24 +43,30 @@ interface StatementInterface
     public function execute();
     
     /**
-     * Fetch the last record.
-     * @param int $mode
-     * @return array|AssocContainer
+     * Fetch record as an entity.
+     * @param string $entityClass
+     * @return \Commons\Entity\Entity|null
      */
-    public function fetch($mode = Sql::FETCH_ARRAY, array $options = array());
+    public function fetch($entityClass = '\\Commons\\Entity\\Entity');
     
     /**
-     * Fetch all records.
-     * @param int $mode
+     * Fetch all records as a collection of entities.
+     * @param string $entityClass
+     * @return \Commons\Entity\Collection
+     */
+    public function fetchCollection($entityClass = '\\Commons\\Entity\\Entity');
+    
+    /**
+     * Fetch all rows as array.
      * @return array
      */
-    public function fetchAll($mode = Sql::FETCH_ARRAY, array $options = array());
+    public function fetchArray();
     
     /**
      * Fetch a single column value from the last record.
      * @param string $name
-     * @return mixed
+     * @return mixed|null
      */
-    public function fetchColumn($name = null);
+    public function fetchScalar($index = 0);
     
 }

@@ -14,8 +14,7 @@
 
 namespace Commons\Sql\Statement;
 
-use Commons\Exception\NotImplementedException;
-use Commons\Exception\InvalidArgumentException;
+use Commons\Entity\Collection;
 use Commons\Log\Log;
 use Commons\Sql\Driver\DriverInterface;
 use Commons\Sql\Driver\PdoDriver;
@@ -37,7 +36,7 @@ class PdoStatement implements StatementInterface
     public function __construct(DriverInterface $driver, $rawSql)
     {
         if (!($driver instanceof PdoDriver)) {
-            throw new InvalidArgumentException();
+            throw new Exception("Driver instance has to be the PdoDriver");
         }    
         $this->_rawSql = $rawSql;
         $this->_stmt = $driver->getPdo()->prepare($rawSql);
@@ -83,83 +82,53 @@ class PdoStatement implements StatementInterface
     }
     
     /**
-     * @see Commons\Sql\Statement\StatementInterface::fetch()
+     * @see \Commons\Sql\Statement\StatementInterface::fetch()
      */
-    public function fetch($mode = Sql::FETCH_ARRAY, array $options = array())
-    {
-        switch ($mode) {
-            case Sql::FETCH_ARRAY:
-                $array = $this->_fetchAssoc();
-                if (!$array) {
-                    return null;
-                }
-                return $array;
-                
-            case Sql::FETCH_OBJECT:
-                $array = $this->_fetchAssoc();
-                if (!$array) {
-                    return null;
-                }
-                $className = (isset($options['className']) ? $options['className'] : 'Commons\\Sql\\Record');
-                return new $className($array);
-                
-            default:
-                throw new NotImplementedException();
-        }
-    }
-    
-    /**
-     * @see Commons\Sql\Statement\StatementInterface::fetchAll()
-     */
-    public function fetchAll($mode = Sql::FETCH_ARRAY, array $options = array())
-    {
-        switch ($mode) {
-            case Sql::FETCH_ARRAY:
-                return $this->_fetchAllAssoc();
-                
-            case Sql::FETCH_OBJECT:
-                $collection = array();
-                $className = (isset($options['className']) ? $options['className'] : '\\Commons\\Sql\\Record');
-                $records = $this->_fetchAllAssoc();
-                foreach ($records as $record) {
-                    $collection[] = new $className($record);
-                }
-                return $collection;
-                
-            default:
-                throw new NotImplementedException();
-        }
-    }
-    
-    /**
-     * @see Commons\Sql\Statement\StatementInterface::fetchColumn()
-     */
-    public function fetchColumn($name = null)
-    {
-        $record = $this->_fetchAssoc();
-        if (!is_array($record) || count($record) == 0) {
-            throw new Exception("Missing or empty result!");
-        }
-        if (!isset($name)) {
-            reset($record);
-            return current($record);
-        }
-        return $record[$name];
-    }
-    
-    protected function _fetchAssoc()
+    public function fetch($entityClass = '\\Commons\\Entity\\Entity')
     {
         try {
-            return $this->_stmt->fetch(\PDO::FETCH_ASSOC);
+            $row = $this->_stmt->fetch(\PDO::FETCH_ASSOC);
+            if (!$row) {
+                return null;
+            }
+            return new $entityClass($row);
         } catch (\PDOException $e) {
             throw new Exception($e);
         }
     }
     
-    protected function _fetchAllAssoc()
+    /**
+     * @see \Commons\Sql\Statement\StatementInterface::fetchCollection()
+     */
+    public function fetchCollection($entityClass = '\\Commons\\Entity\\Entity')
+    {
+        $rows = $this->fetchArray();
+        $collection = new Collection();
+        foreach ($rows as $row) {
+            $collection->add(new $entityClass($row));
+        }
+        return $collection;
+    }
+    
+    /**
+     * @see \Commons\Sql\Statement\StatementInterface::fetchArray()
+     */
+    public function fetchArray()
     {
         try {
             return $this->_stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new Exception($e);
+        }
+    }
+    
+    /**
+     * @see \Commons\Sql\Statement\StatementInterface::fetchScalar()
+     */
+    public function fetchScalar($index = 0)
+    {
+        try {
+            return $this->_stmt->fetchColumn($index);
         } catch (\PDOException $e) {
             throw new Exception($e);
         }

@@ -40,17 +40,22 @@ class Statement implements StatementInterface
         }
     }
     
-    public function fetch($mode = Sql::FETCH_ARRAY, array $options = array())
+    public function fetch($entityClass = '\\Commons\\Entity\\Entity')
     {
         
     }
     
-    public function fetchAll($mode = Sql::FETCH_ARRAY, array $options = array())
+    public function fetchCollection($entityClass = '\\Commons\\Entity\\Entity')
     {
         
     }
     
-    public function fetchColumn($name = null)
+    public function fetchArray()
+    {
+        
+    }
+    
+    public function fetchScalar($index = 0)
     {
         
     }
