@@ -62,4 +62,14 @@ class Callback
         return call_user_func_array($this->_callback, $args);
     }
     
+    /**
+     * Call a function or a method with a parameters passed through array.
+     * @param array $params
+     * @return mixed
+     */
+    public function callArray(array $params)
+    {
+        return call_user_func_array($this->_callback, $params);
+    }
+    
 }

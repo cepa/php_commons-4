@@ -21,6 +21,8 @@ function mock_callable_function()
 
 class CallbackTest extends \PHPUnit_Framework_TestCase
 {
+    
+    public $foo = false;
 
     public function testCallback_MissingArgument()
     {
@@ -53,5 +55,21 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($callable->getCallback()));
         $this->assertEquals('ok', $callable->call(array('test' => 'ok')));
     }
+    
+    public function testCallToClosure()
+    {
+        $this->assertFalse($this->foo);
+        $callback = new Callback(function($ctx, $param){ $ctx->foo = $param; });
+        $callback->call($this, 123);
+        $this->assertEquals(123, $this->foo);
+    }    
+    
+    public function testCallArrayToClosure()
+    {
+        $this->assertFalse($this->foo);
+        $callback = new Callback(function($ctx, $param){ $ctx->foo = $param; });
+        $callback->callArray(array($this, 123));
+        $this->assertEquals(123, $this->foo);
+    }    
     
 }
