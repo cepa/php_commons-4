@@ -50,6 +50,7 @@ class RegexRoute implements RouteInterface
                     $this->_params[$key] = $matches[$idx+1];
                 }
             }
+            $this->_params = array_merge($this->_params, $matches);
             return $this->_params;
         }
         return false;
