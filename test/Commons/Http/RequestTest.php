@@ -227,5 +227,12 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('cepa', $request->getAuthUsername());
         $this->assertEquals('s3cret', $request->getAuthPassword());
     }
+    
+    public function testExtractBaseUri()
+    {
+        $_SERVER['SCRIPT_NAME'] = '/php_commons-4-feature-moo/examples/moo/index.php';
+        $baseUri = Request::extractBaseUri();
+        $this->assertEquals('/php_commons-4-feature-moo/examples/moo', $baseUri);
+    }
         
 }
