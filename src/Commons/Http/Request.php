@@ -434,4 +434,16 @@ class Request
         return $request;
     }
     
+    /**
+     * Extract base uri from $_SERVER['SCRIPT_NAME']
+     * @return string|null
+     */
+    public static function extractBaseUri()
+    {
+        if (isset($_SERVER['SCRIPT_NAME'])) {
+            return dirname($_SERVER['SCRIPT_NAME']);
+        }
+        return null;
+    }
+    
 }
