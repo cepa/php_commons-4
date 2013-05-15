@@ -15,16 +15,14 @@
 namespace Commons\Sql;
 
 use Commons\Entity\Entity;
-use Commons\Entity\RepositoryInterface;
+use Commons\Entity\AbstractRepository;
 use Commons\Sql\Connection\ConnectionInterface;
 
-class EntityRepository implements RepositoryInterface
+class EntityRepository extends AbstractRepository
 {
     
     protected $_connection;
     protected $_tableName;
-    protected $_primaryKey = 'id';
-    protected $_entityClass = '\\Commons\\Entity\\Entity';
     
     /**
      * Init.
@@ -76,26 +74,6 @@ class EntityRepository implements RepositoryInterface
     }
     
     /**
-     * Set SQL primary key column.
-     * @param string $primaryKey
-     * @return \Commons\Sql\EntityRepository
-     */
-    public function setPrimaryKey($primaryKey)
-    {
-        $this->_primaryKey = $primaryKey;
-        return $this;
-    }
-    
-    /**
-     * Get SQL primary key column.
-     * @return string
-     */
-    public function getPrimaryKey()
-    {
-        return $this->_primaryKey;
-    }
-    
-    /**
      * Create new query instance assigned to this entity repository.
      * @return\Commons\Sql\Query
      */
@@ -126,33 +104,14 @@ class EntityRepository implements RepositoryInterface
     
     /**
      * 
-     * @see \Commons\Entity\RepositoryInterface::setEntityClass()
-     */
-    public function setEntityClass($entityClass)
-    {
-        $this->_entityClass = $entityClass;
-        return $this;
-    }
-    
-    /**
-     * 
-     * @see \Commons\Entity\RepositoryInterface::getEntityClass()
-     */
-    public function getEntityClass()
-    {
-        return $this->_entityClass;
-    }
-    
-    /**
-     * 
      * @see \Commons\Entity\RepositoryInterface::fetch()
      */
-    public function fetch($id)
+    public function fetch($primaryKey)
     {
         return $this->createQuery()
             ->select()
             ->from()
-            ->where($this->getPrimaryKey().' = ?', $id)
+            ->where($this->getPrimaryKey().' = ?', $primaryKey)
             ->execute()
             ->fetch();
     }
