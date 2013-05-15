@@ -31,11 +31,24 @@ interface RepositoryInterface
     public function getEntityClass();
     
     /**
+     * Set primary key name.
+     * @param string $primaryKey
+     * @return RepositoryInterface
+     */
+    public function setPrimaryKey($primaryKey);
+    
+    /**
+     * Get primary key name.
+     * return string
+     */
+    public function getPrimaryKey();
+    
+    /**
      * Fetch entity by id.
      * @param mixed $id
      * @return Entity
      */
-    public function fetch($id);
+    public function fetch($primaryKey);
     
     /**
      * Fetch collection of entities by given criteria.
