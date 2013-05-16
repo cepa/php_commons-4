@@ -16,38 +16,16 @@ namespace Commons\Light\Controller;
 
 use Commons\Callback\Callback;
 use Commons\Callback\Exception as CallbackException;
-use Commons\Light\View\Renderer\RendererInterface;
-use Commons\Light\View\Renderer\LayoutRenderer;
+use Commons\Light\Renderer\RendererInterface;
+use Commons\Light\Renderer\LayoutRenderer;
 use Commons\Light\View\ScriptView;
 use Commons\Light\View\ViewInterface;
 
 class ActionController extends AbstractController
 {
     
-    protected $_viewRenderer;
-    
-    /**
-     * Set view renderer.
-     * @param RendererInterface $renderer
-     * @return \Commons\Light\Controller\ActionController
-     */
-    public function setViewRenderer(RendererInterface $renderer)
-    {
-        $this->_viewRenderer = $renderer;
-        return $this;
-    }
-    
-    /**
-     * Get view renderer.
-     * @return LayoutRenderer
-     */
-    public function getViewRenderer()
-    {
-        if (!isset($this->_viewRenderer)) {
-            $this->_viewRenderer = new LayoutRenderer();
-        }
-        return $this->_viewRenderer;
-    }
+    protected $_view;
+    protected $_renderer;
     
     /**
      * Set view.
@@ -56,7 +34,7 @@ class ActionController extends AbstractController
      */
     public function setView(ViewInterface $view)
     {
-        $this->getViewRenderer()->setView($view);
+        $this->_view = $view;
         return $this;
     }
     
@@ -66,7 +44,33 @@ class ActionController extends AbstractController
      */
     public function getView()
     {
-        return $this->getViewRenderer()->getView();
+        if (!isset($this->_view)) {
+            $this->setView(new ScriptView());
+        }
+        return $this->_view;
+    }
+    
+    /**
+     * Set renderer.
+     * @param RendererInterface $renderer
+     * @return \Commons\Light\Controller\ActionController
+     */
+    public function setRenderer(RendererInterface $renderer)
+    {
+        $this->_renderer = $renderer;
+        return $this;
+    }
+    
+    /**
+     * Get  renderer.
+     * @return LayoutRenderer
+     */
+    public function getRenderer()
+    {
+        if (!isset($this->_renderer)) {
+            $this->_renderer = new LayoutRenderer();
+        }
+        return $this->_renderer;
     }
     
     /**
@@ -95,16 +99,16 @@ class ActionController extends AbstractController
             $this->getView()->setScriptPath($scriptPath);
         }
         
-        if ($this->getViewRenderer() instanceof LayoutRenderer) {
+        if ($this->getRenderer() instanceof LayoutRenderer) {
             $layoutPath = $this->getResourcesPath().'/views/layout.phtml';
-            $this->getViewRenderer()->setLayoutPath($layoutPath);
+            $this->getRenderer()->getLayout()->setScriptPath($layoutPath);
         }
         
         try {
             $callback = new Callback($this, $actionMethod);
-            $result = $callback->call();
-            if ($result instanceof ViewInterface) {
-                $this->getViewRenderer()->setView($result);
+            $view = $callback->call();
+            if (!($view instanceof ViewInterface)) {
+                $view = $this->getView();
             }
             
         } catch (CallbackException $e) {
@@ -114,10 +118,10 @@ class ActionController extends AbstractController
         
         $this->postDispatch();
         
-        $contents = $this->getViewRenderer()->render();
+        $contents = $this->getRenderer()->render($view);
         $this->getResponse()->appendBody($contents);
         
-        return $result;
+        return $this;
     }
     
     /**

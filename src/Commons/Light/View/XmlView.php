@@ -55,16 +55,10 @@ class XmlView implements ViewInterface
      * Render xml.
      * @return string
      */
-    public function render($xml = null)
+    public function render($content = null)
     {
-        if (!isset($xml)) {
-            $xml = $this->getXml();
-        } 
-        if (!($xml instanceof Xml)) {
-            throw new Exception("Invalid Xml object");
-        }
         $writer = new XmlWriter();
-        return $writer->writeToString($xml, '<?xml version="1.0" encoding="UTF-8"?>');
+        return $writer->writeToString($this->getXml(), '<?xml version="1.0" encoding="UTF-8"?>');
     }
     
 }

@@ -16,20 +16,20 @@ namespace Commons\Light\Controller;
 
 use Commons\Light\View\ScriptView;
 use Commons\Light\View\ViewInterface;
-use Commons\Light\View\Renderer\LayoutRenderer;
-use Commons\Light\View\Renderer\RendererInterface;
+use Commons\Light\Renderer\LayoutRenderer;
+use Commons\Light\Renderer\RendererInterface;
 use Mock\Light\ActionController as MockActionController;
 
 class ActionControllerTest extends \PHPUnit_Framework_TestCase
 {
     
-    public function testSetGetViewRenderer()
+    public function testSetGetRenderer()
     {
         $controller = new MockActionController();
-        $this->assertTrue($controller->getViewRenderer() instanceof RendererInterface);
-        $c = $controller->setViewRenderer(new LayoutRenderer());
+        $this->assertTrue($controller->getRenderer() instanceof RendererInterface);
+        $c = $controller->setRenderer(new LayoutRenderer());
         $this->assertTrue($c instanceof AbstractController);
-        $this->assertTrue($controller->getViewRenderer() instanceof RendererInterface);
+        $this->assertTrue($controller->getRenderer() instanceof RendererInterface);
     }
     
     public function testSetGetView()
@@ -45,7 +45,7 @@ class ActionControllerTest extends \PHPUnit_Framework_TestCase
     {
         $controller = new MockActionController();
         $result = $controller->dispatch(array('action' => 'index'));
-        $this->assertEquals('index', $result);
+        $this->assertTrue($result instanceof ActionController);
         $contents = $controller->getResponse()->getBody();
         $this->assertContains('layout index action', $contents);
     }
@@ -54,7 +54,7 @@ class ActionControllerTest extends \PHPUnit_Framework_TestCase
     {
         $controller = new MockActionController();
         $result = $controller->dispatch(array('action' => 'some-other'));
-        $this->assertEquals('some other', $result);
+        $this->assertTrue($result instanceof ActionController);
         $contents = $controller->getResponse()->getBody();
         $this->assertContains('layout some other action', $contents);
     }

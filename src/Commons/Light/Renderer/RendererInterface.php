@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Light/View/Renderer/RendererInterface.php
+ * @file        Commons/Light/Renderer/RendererInterface.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  *
  * @copyright  PHP Commons
@@ -12,32 +12,18 @@
  * =============================================================================
  */
 
-namespace Commons\Light\View\Renderer;
+namespace Commons\Light\Renderer;
 
-use Commons\Light\View\ScriptView;
 use Commons\Light\View\ViewInterface;
 
 interface RendererInterface
 {
 
     /**
-     * Set view.
+     * Render a view.
      * @param ViewInterface $view
-     * @return RendererInterface
+     * @return mixed
      */
-    public function setView(ViewInterface $view);
-    
-    /**
-     * Get view.
-     * @return \Commons\Light\View\ViewInterface|ScriptView
-     */
-    public function getView();
-    
-    /**
-     * Render.
-     * @param mixed $mixed
-     * @return string
-     */
-    public function render($mixed = null);
+    public function render(ViewInterface $view);
     
 }

@@ -54,13 +54,10 @@ class JsonView implements ViewInterface
      * Render json
      * @return string
      */
-    public function render($json = null)
+    public function render($content = null)
     {
-        if (!isset($json)) {
-            $json = $this->getJson();
-        }
         $encoder = new JsonEncoder();
-        return $encoder->encode($json);
+        return $encoder->encode($this->getJson());
     }
     
 }

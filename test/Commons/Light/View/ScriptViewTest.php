@@ -29,11 +29,17 @@ class ScriptViewTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('hello test', $contents);
     }
     
+    public function testRenderEmptyView()
+    {
+        $view = new ScriptView();
+        $this->assertNull($view->render());
+    }
+    
     public function testViewScriptNotFoundException()
     {
         $this->setExpectedException('Commons\\Light\\View\\Exception');
         $view = new ScriptView();
-        $view->render();
+        $view->setScriptPath('some.file')->render();
     }
     
 }
