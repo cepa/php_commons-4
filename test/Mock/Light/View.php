@@ -14,14 +14,15 @@
 
 namespace Mock\Light;
 
+use Commons\Container\AssocContainer;
 use Commons\Light\View\ViewInterface;
 
-class View implements ViewInterface
+class View extends AssocContainer implements ViewInterface
 {
 
-    public function render($mixed = null)
+    public function render($content = null)
     {
-        return $mixed;
+        return 'test';
     }
     
 }

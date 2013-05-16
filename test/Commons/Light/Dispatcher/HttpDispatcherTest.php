@@ -21,8 +21,9 @@ class HttpDispatcherTest extends \PHPUnit_Framework_TestCase
 
     public function testSetGetBaseUri()
     {
+        $_SERVER['SCRIPT_NAME'] = '/test/foo.php';
         $dispatcher = new HttpDispatcher();
-        $this->assertNull($dispatcher->getBaseUri());
+        $this->assertEquals('/test', $dispatcher->getBaseUri());
         $d = $dispatcher->setBaseUri('test');
         $this->assertTrue($d instanceof HttpDispatcher);
         $this->assertEquals('test', $dispatcher->getBaseUri());

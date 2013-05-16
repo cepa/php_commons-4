@@ -47,21 +47,25 @@ class ScriptView extends AssocContainer implements ViewInterface
      * @throws NotFoundException
      * @return string
      */
-    public function render($scriptPath = null)
+    public function render($content = null)
     {
-        if (!isset($scriptPath)) {
-            $scriptPath = $this->getScriptPath();
+        $scriptPath = $this->getScriptPath();
+        if (empty($scriptPath)) {
+            return $content;
         }
+        
+        // Pass content as a view variable.
+        $this->content = $content;
         
         OutputBuffer::start();
         $result = @include $scriptPath;
-        $contents = OutputBuffer::end();
+        $content = OutputBuffer::end();
         
         if ($result === false) {
             throw new Exception("Cannot load view file '{$scriptPath}'");
         }
         
-        return $contents;
+        return $content;
     }
     
 }

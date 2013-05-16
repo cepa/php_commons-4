@@ -19,9 +19,8 @@ interface ViewInterface
     
     /**
      * Render view.
-     * @param mixed $mixed
      * @return string
      */
-    public function render($mixed = null);
+    public function render($content = null);
     
 }

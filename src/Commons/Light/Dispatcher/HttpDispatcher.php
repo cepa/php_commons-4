@@ -53,6 +53,9 @@ class HttpDispatcher extends AbstractDispatcher
      */
     public function getBaseUri()
     {
+        if (empty($this->_baseUri)) {
+            $this->setBaseUri(Request::extractBaseUri());
+        }
         return $this->_baseUri;
     }
     
@@ -61,9 +64,12 @@ class HttpDispatcher extends AbstractDispatcher
      * @param string $module
      * @return \Commons\Light\Dispatcher\HttpDispatcher
      */
-    public function setDefaultModule($module)
+    public function setDefaultModule($module, $namespace = null)
     {
         $this->_defaultModule = $module;
+        if (isset($namespace)) {
+            $this->setModuleNamespace($module, $namespace);
+        }
         return $this;
     }
     
