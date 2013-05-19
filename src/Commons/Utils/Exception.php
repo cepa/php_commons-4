@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Exception/InvalidArgumentException.php
+ * @file        Commons/Utils/Exception.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,6 +12,6 @@
  * =============================================================================
  */
 
-namespace Commons\Exception;
+namespace Commons\Utils;
 
-class InvalidArgumentException extends Exception {}
+class Exception extends \RuntimeException {}

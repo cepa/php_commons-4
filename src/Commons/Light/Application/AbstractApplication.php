@@ -14,7 +14,6 @@
 
 namespace Commons\Light\Application;
 
-use Commons\Light\Exception\Exception;
 use Commons\Log\Logger;
 
 abstract class AbstractApplication

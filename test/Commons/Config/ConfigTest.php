@@ -42,7 +42,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     
     public function testGetAdapterException()
     {
-        $this->setExpectedException('Commons\\Exception\\NotFoundException');
+        $this->setExpectedException('Commons\\Config\\Exception');
         $config = new Config();
         $config->getAdapter();
     }

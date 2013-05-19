@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Exception/OutOfBoundsException.php
+ * @file        Commons/Config/Adapter/Exception.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,6 +12,7 @@
  * =============================================================================
  */
 
-namespace Commons\Exception;
+namespace Commons\Config\Adapter;
 
-class OutOfBoundsException extends Exception {}
+class Exception extends \RuntimeException {}
+

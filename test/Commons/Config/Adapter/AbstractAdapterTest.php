@@ -29,7 +29,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
     
     public function testGetConfigException()
     {
-        $this->setExpectedException('Commons\\Exception\\NotFoundException');
+        $this->setExpectedException('Commons\\Config\\Adapter\\Exception');
         $adapter = new \Mock\Config\Adapter();
         $adapter->getConfig();
     }

@@ -101,7 +101,7 @@ class Bootstrap
                     DATABASE_USERNAME,
                     DATABASE_PASSWORD);
                 break;
-            default: throw new \Commons\Exception\InvalidArgumentException();
+            default: throw new \RuntimeException();
         }
         return $database;
     }
@@ -125,7 +125,7 @@ class Bootstrap
                     DATABASE_USERNAME,
                     DATABASE_PASSWORD);
                 break;
-            default: throw new \Commons\Exception\InvalidArgumentException();
+            default: throw new \RuntimeException();
         }
     }
 

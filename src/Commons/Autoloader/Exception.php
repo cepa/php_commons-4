@@ -14,4 +14,4 @@
 
 namespace Commons\Autoloader;
 
-class Exception extends \Exception {}
+class Exception extends \RuntimeException {}

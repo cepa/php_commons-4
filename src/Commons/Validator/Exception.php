@@ -14,4 +14,4 @@
 
 namespace Commons\Validator;
 
-class Exception extends \Commons\Exception\Exception {}
+class Exception extends \RuntimeException {}

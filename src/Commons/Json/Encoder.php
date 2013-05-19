@@ -14,20 +14,18 @@
 
 namespace Commons\Json;
 
-use Commons\Exception\MissingDependencyException;
-
 class Encoder
 {
     /**
      * @param mixed $data
      * @return string
-     * @throws \Commons\Exception\MissingDependencyException
+     * @throws \Commons\Json\Exception
      * @throws Exception
      */
     public function encode($data)
     {
         if (!function_exists('json_encode')) {
-            throw new MissingDependencyException("json_encode is missing");
+            throw new Exception("json_encode is missing");
         }
         
         /*

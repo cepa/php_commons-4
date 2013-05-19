@@ -61,7 +61,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     
     public function testGetHeaderException()
     {
-        $this->setExpectedException('\\Commons\\Exception\\NotFoundException');
+        $this->setExpectedException('\\Commons\\Http\\Exception');
         $response = new Response();
         $response->getHeader('test');
     }

@@ -14,10 +14,6 @@
 
 namespace Commons\Light\Application;
 
-use Commons\Autoloader\Exception;
-
-use Commons\Exception\MissingDependencyException;
-
 class CliApplication extends AbstractApplication
 {
     
@@ -37,7 +33,7 @@ class CliApplication extends AbstractApplication
         }
 
         if (!function_exists('pcntl_signal')) {
-            throw new MissingDependencyException("Missing pcntl module");    
+            throw new Exception("Missing pcntl module");    
         }
         pcntl_signal(SIGTERM, array($this, 'signalHandler'));
         pcntl_signal(SIGINT, array($this, 'signalHandler'));

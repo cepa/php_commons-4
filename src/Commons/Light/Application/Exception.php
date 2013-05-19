@@ -14,7 +14,7 @@
 
 namespace Commons\Light\Application;
 
-class Exception extends \Commons\Light\Exception\Exception
+class Exception extends \RuntimeException
 {
     
 }

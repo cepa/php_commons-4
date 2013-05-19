@@ -66,7 +66,7 @@ class EntityRepositoryTest extends \PHPUnit_Framework_TestCase
             } else if ($databaseType == Sql::TYPE_POSTGRESQL) {
                 $this->executeStatement("CREATE TABLE test ( id serial, a int, b varchar(128) )");
             } else {
-                throw new NotImplementedException("Unsupported driver '{$databaseType}'!");
+                throw new Exception("Unsupported driver '{$databaseType}'!");
             }
         
             $this->executeStatement("INSERT INTO test(a, b) VALUES (123, 'abc')");
@@ -162,7 +162,7 @@ class EntityRepositoryTest extends \PHPUnit_Framework_TestCase
             } else if ($databaseType == Sql::TYPE_POSTGRESQL) {
                 $this->executeStatement("CREATE TABLE test2 ( test_id serial, test_a int, test_b varchar(128) )");
             } else {
-                throw new NotImplementedException("Unsupported driver '{$databaseType}'!");
+                throw new Exception("Unsupported driver '{$databaseType}'!");
             }
         
             $this->executeStatement("INSERT INTO test2(test_a, test_b) VALUES (123, 'abc')");

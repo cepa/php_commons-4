@@ -32,7 +32,7 @@ class MapTest extends \PHPUnit_Framework_TestCase
     
     public function testGetMigration_NotFoundException()
     {
-        $this->setExpectedException('\\Commons\\Exception\\NotFoundException');
+        $this->setExpectedException('\\Commons\\Migration\\Exception');
         $map = new Map();
         $map->getMigration(123);
     }

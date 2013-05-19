@@ -14,7 +14,6 @@
 
 namespace Commons\Config\Adapter;
 
-use Commons\Exception\InvalidArgumentException;
 use Commons\Xml\Xml;
 use Commons\Xml\Reader as XmlReader;
 
@@ -48,7 +47,7 @@ class XmlAdapter extends AbstractAdapter
         } else if ($loadable instanceof Xml) {
             $xml = $loadable;
         } else {
-            throw new InvalidArgumentException();
+            throw new Exception("Cannot load config");
         }
         $this->_loadXml($xml);
         return $this;

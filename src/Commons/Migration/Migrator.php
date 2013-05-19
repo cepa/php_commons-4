@@ -17,7 +17,6 @@ namespace Commons\Migration;
 use Commons\Autoloader\DefaultAutoloader;
 use Commons\Autoloader\Exception as AutoloaderException;
 use Commons\Migration\Versioner\VersionerInterface;
-use Commons\Exception\NotFoundException;
 use Commons\Log\Log;
 use Commons\Log\Logger;
 
@@ -152,13 +151,13 @@ class Migrator
     
     /**
      * Get versioner.
-     * @throws NotFoundException
+     * @throws Exception
      * @return VersionerInterface
      */
     public function getVersioner()
     {
         if (!isset($this->_versioner)) {
-            throw new NotFoundException("Please set versioner object first");
+            throw new Exception("Please set versioner object first");
         }
         return $this->_versioner;
     }

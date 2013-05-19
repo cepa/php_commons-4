@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Exception/NotImplementedException.php
+ * @file        Commons/Sql/Driver/Exception.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,6 +12,6 @@
  * =============================================================================
  */
 
-namespace Commons\Exception;
+namespace Commons\Sql\Driver;
 
-class NotImplementedException extends Exception {}
+class Exception extends \RuntimeException {}

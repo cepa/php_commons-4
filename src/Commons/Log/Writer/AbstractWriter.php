@@ -14,7 +14,6 @@
 
 namespace Commons\Log\Writer;
 
-use Commons\Exception\NotImplementedException;
 use Commons\Log\Formatter\FormatterInterface;
 use Commons\Log\Formatter\DefaultFormatter;
 
@@ -69,11 +68,11 @@ abstract class AbstractWriter
      * Override this method!
      * @param string|array $message
      * @param int $priority
-     * @throws NotImplementedException
+     * @throws Exception
      */
     protected function _write($message, $priority) 
     {
-        throw new NotImplementedException();
+        throw new Exception("Not implemented");
     }
     
 }

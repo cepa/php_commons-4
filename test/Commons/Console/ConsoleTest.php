@@ -39,7 +39,7 @@ class ConsoleTask extends \PHPUnit_Framework_TestCase
     
     public function testRunTask_NotFoundException()
     {
-        $this->setExpectedException('Commons\\Exception\\NotFoundException');
+        $this->setExpectedException('Commons\\Console\\Exception');
         $console = new Console();
         $console->runTask('mock');
     }

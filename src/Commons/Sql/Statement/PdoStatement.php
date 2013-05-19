@@ -18,7 +18,6 @@ use Commons\Entity\Collection;
 use Commons\Log\Log;
 use Commons\Sql\Driver\DriverInterface;
 use Commons\Sql\Driver\PdoDriver;
-use Commons\Sql\Exception;
 use Commons\Sql\Sql;
 
 class PdoStatement implements StatementInterface

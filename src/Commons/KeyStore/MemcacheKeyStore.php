@@ -14,8 +14,6 @@
 
 namespace Commons\KeyStore;
 
-use Commons\Exception\MissingDependencyException;
-
 class MemcacheKeyStore implements KeyStoreInterface
 {
     
@@ -28,7 +26,7 @@ class MemcacheKeyStore implements KeyStoreInterface
     public function __construct()
     {
         if (!class_exists('Memcache')) {
-            throw new MissingDependencyException("Missing Memcache extension");
+            throw new Exception("Missing Memcache extension");
         }
     }
     

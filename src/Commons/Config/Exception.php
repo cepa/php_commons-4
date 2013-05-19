@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Exception/FileNotFoundException.php
+ * @file        Commons/Config/Exception.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,6 +12,6 @@
  * =============================================================================
  */
 
-namespace Commons\Exception;
+namespace Commons\Config;
 
-class FileNotFoundException extends Exception {}
+class Exception extends \RuntimeException {}

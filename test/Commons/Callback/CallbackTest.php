@@ -26,19 +26,19 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 
     public function testCallback_MissingArgument()
     {
-        $this->setExpectedException('Commons\\Exception\\Exception');
+        $this->setExpectedException('Commons\\Callback\\Exception');
         $callable = new Callback();
     }
     
     public function testCallback_TooMuchArguments()
     {
-        $this->setExpectedException('Commons\\Exception\\Exception');
+        $this->setExpectedException('Commons\\Callback\\Exception');
         $callable = new Callback(1, 2, 3);
     }
     
     public function testCallback_InvalidArgument()
     {
-        $this->setExpectedException('Commons\\Exception\\Exception');
+        $this->setExpectedException('Commons\\Callback\\Exception');
         $callable = new Callback('NonExistingClass::unknownMethod');
     }
     

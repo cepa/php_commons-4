@@ -14,8 +14,6 @@
 
 namespace Commons\Utils;
 
-use Commons\Exception\MissingDependencyException;
-
 class StringUtils 
 {
 
@@ -136,7 +134,7 @@ class StringUtils
     public static function truncateWords($text, $nWords)
     {
         if (!extension_loaded('mbstring'))
-            throw new MissingDependencyException('mbstring');
+            throw new Exception('mbstring');
             
         $array = mb_split(' ', self::removeWhitespaces(strip_tags($text)), $nWords + 1);
         if (count($array) <= $nWords)
@@ -156,7 +154,7 @@ class StringUtils
     public static function normalize($text, $separator = '-')
     {
         if (!extension_loaded('mbstring'))
-            throw new MissingDependencyException('mbstring');
+            throw new Exception('mbstring');
             
         $text = mb_ereg_replace('[\x00-\x2F\x3A-\x40\x5B-\x60\x7B-\x7F]', $separator, $text);
         $text = mb_ereg_replace('['.$separator.']+', $separator, $text);

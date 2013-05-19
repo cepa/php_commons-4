@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Exception/MismatchException.php
+ * @file        Commons/Console/Task/Exception.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,6 +12,6 @@
  * =============================================================================
  */
 
-namespace Commons\Exception;
+namespace Commons\Console\Task;
 
-class MismatchException extends Exception {}
+class Exception extends \RuntimeException {}

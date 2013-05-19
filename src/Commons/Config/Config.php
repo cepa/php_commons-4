@@ -16,7 +16,6 @@ namespace Commons\Config;
 
 use Commons\Container\TraversableContainer;
 use Commons\Config\Adapter\AdapterInterface;
-use Commons\Exception\NotFoundException;
 
 class Config extends TraversableContainer
 {
@@ -63,7 +62,7 @@ class Config extends TraversableContainer
     public function getAdapter()
     {
         if (!isset($this->_adapter)) {
-            throw new NotFoundException("Missing config adapter!");
+            throw new Exception("Missing config adapter!");
         }
         return $this->_adapter;
     }

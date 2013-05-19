@@ -14,8 +14,6 @@
 
 namespace Commons\Container;
 
-use Commons\Exception\NotFoundException;
-
 class SetContainer extends CollectionContainer
 {
 
@@ -53,7 +51,7 @@ class SetContainer extends CollectionContainer
     public function get($index)
     {
         if (!parent::has((int) $index)) {
-            throw new NotFoundException("Index $index has not been found!");
+            throw new Exception("Index $index has not been found!");
         }
         return parent::get((int) $index);
     }
