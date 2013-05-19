@@ -14,8 +14,6 @@
 
 namespace Commons\Log\Formatter;
 
-use Commons\Exception\InvalidArgumentException;
-
 class DefaultFormatter implements FormatterInterface
 {
     
@@ -75,7 +73,7 @@ class DefaultFormatter implements FormatterInterface
             }
             
         } else {
-            throw new InvalidArgumentException();
+            throw new Exception("Invalid argument");
         }
          
         return $log;

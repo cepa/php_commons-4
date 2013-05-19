@@ -16,7 +16,6 @@ namespace Commons\Light\Dispatcher;
 
 use Commons\Autoloader\Exception as AutoloaderException;
 use Commons\Autoloader\DefaultAutoloader as Autoloader;
-use Commons\Exception\NotFoundException;
 use Commons\Http\Request;
 use Commons\Http\Response;
 use Commons\Light\Controller\AbstractController;

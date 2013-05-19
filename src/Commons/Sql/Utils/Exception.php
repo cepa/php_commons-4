@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Exception/Exception.php
+ * @file        Commons/Sql/Utils/Exception.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,6 +12,6 @@
  * =============================================================================
  */
 
-namespace Commons\Exception;
+namespace Commons\Sql\Utils;
 
-class Exception extends \Exception {}
+class Exception extends \RuntimeException {}

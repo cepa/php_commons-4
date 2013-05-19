@@ -31,12 +31,6 @@ class EventTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('event', (string) $event);
     }
     
-    public function testEvent_InvalidName()
-    {
-        $this->setExpectedException('Commons\\Exception\\InvalidArgumentException');
-        $event = new Event(new \stdClass());
-    }
-    
     public function testSetGetDispatcher()
     {
         $this->assertTrue(Event::getDispatcher() instanceof Dispatcher);

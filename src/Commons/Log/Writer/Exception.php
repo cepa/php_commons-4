@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Exception/IOException.php
+ * @file        Commons/Log/Writer/Exception.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,6 +12,7 @@
  * =============================================================================
  */
 
-namespace Commons\Exception;
+namespace Commons\Log\Writer;
 
-class IOException extends Exception {}
+class Exception extends \RuntimeException {}
+

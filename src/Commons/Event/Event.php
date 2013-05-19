@@ -16,7 +16,6 @@ namespace Commons\Event;
 
 use Commons\Callback\Callback;
 use Commons\Container\AssocContainer;
-use Commons\Exception\InvalidArgumentException;
 
 class Event extends AssocContainer
 {
@@ -33,11 +32,8 @@ class Event extends AssocContainer
      */
     public function __construct($name, array $params = array())
     {
-        if (!is_string($name)) {
-            throw new InvalidArgumentException();
-        }
+        parent::__construct($params);
         $this->_name = $name;
-        $this->setAll($params);
     }
     
     /**

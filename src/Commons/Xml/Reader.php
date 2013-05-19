@@ -14,9 +14,6 @@
 
 namespace Commons\Xml;
 
-use Commons\Exception\FileNotFoundException;
-use Commons\Exception\NotFoundException;
-
 class Reader
 {
     

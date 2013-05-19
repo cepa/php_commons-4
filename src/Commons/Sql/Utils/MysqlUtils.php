@@ -14,8 +14,6 @@
 
 namespace Commons\Sql\Utils;
 
-use Commons\Sql\Exception;
-
 class MysqlUtils
 {
 

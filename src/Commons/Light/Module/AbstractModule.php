@@ -14,7 +14,6 @@
 
 namespace Commons\Light\Module;
 
-use Commons\Exception\NotImplementedException;
 use Commons\Light\Application\AbstractApplication;
 
 abstract class AbstractModule
@@ -44,11 +43,11 @@ abstract class AbstractModule
     
     /**
      * Init module.
-     * @throws NotImplementedException
+     * @throws Exception
      */
     public function bootstrap()
     {
-        throw new NotImplementedException();
+        throw new Exception("Not implemented");
     }
     
     /**

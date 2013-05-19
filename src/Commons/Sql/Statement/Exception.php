@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Exception/InvalidValueException.php
+ * @file        Commons/Sql/Statement/Exception.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,6 +12,6 @@
  * =============================================================================
  */
 
-namespace Commons\Exception;
+namespace Commons\Sql\Statement;
 
-class InvalidValueException extends Exception {}
+class Exception extends \RuntimeException {}

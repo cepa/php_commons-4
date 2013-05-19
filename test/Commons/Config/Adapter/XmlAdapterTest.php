@@ -48,7 +48,7 @@ class XmlAdapterTest extends \PHPUnit_Framework_TestCase
     
     public function testLoadInvalidArgument()
     {
-        $this->setExpectedException('Commons\\Exception\\InvalidArgumentException');
+        $this->setExpectedException('Commons\\Config\\Adapter\\Exception');
         $config = new XmlConfig();
         $config->load(new \stdClass);
     }

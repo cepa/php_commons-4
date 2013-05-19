@@ -2,9 +2,9 @@
 
 /**
  * =============================================================================
- * @file        Commons/Light/Exception/Exception.php
+ * @file        Commons/Container/Exception.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
- *
+ * 
  * @copyright  PHP Commons
  *              Copyright (C) 2009-2012 HellWorx Software
  *              All rights reserved.
@@ -12,9 +12,7 @@
  * =============================================================================
  */
 
-namespace Commons\Light\Exception;
+namespace Commons\Container;
 
-class Exception extends \Commons\Exception\Exception
-{
-    
-}
+class Exception extends \RuntimeException {}
+

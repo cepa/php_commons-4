@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Exception/MissingArgumentException.php
+ * @file        Commons/Log/Formatter/Exception.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,6 +12,7 @@
  * =============================================================================
  */
 
-namespace Commons\Exception;
+namespace Commons\Log\Formatter;
 
-class MissingArgumentException extends Exception {}
+class Exception extends \RuntimeException {}
+

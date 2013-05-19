@@ -14,8 +14,6 @@
 
 namespace Commons\Http;
 
-use Commons\Exception\NotFoundException;
-
 class Response
 {
 
@@ -99,13 +97,13 @@ class Response
     /**
      * Get header.
      * @param string $name
-     * @throws \Commons\Exception\NotFoundException
+     * @throws \Commons\Http\Exception
      * @return string
      */
     public function getHeader($name)
     {
         if (!isset($this->_headers[$name])) {
-            throw new NotFoundException();
+            throw new Exception("Header '{$name}' is not set");
         }
         return $this->_headers[$name];
     }

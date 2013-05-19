@@ -114,7 +114,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     
     public function testGetHeaderException()
     {
-        $this->setExpectedException('\\Commons\\Exception\\NotFoundException');
+        $this->setExpectedException('\\Commons\\Http\\Exception');
         $request = new Request();
         $request->getHeader('test');
     }

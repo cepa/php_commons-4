@@ -16,8 +16,6 @@ namespace Commons\Console;
 
 use Commons\Autoloader\DefaultAutoloader;
 use Commons\Autoloader\Exception as AutoloaderException;
-use Commons\Exception\InvalidArgumentException;
-use Commons\Exception\NotFoundException;
 use Commons\Console\Task\TaskInterface;
 
 class Console
@@ -56,7 +54,7 @@ class Console
     public function getTaskClassName($taskName)
     {
         if (!$this->hasTask($taskName)) {
-            throw new NotFoundException("Task '{$taskName}' is not registered");
+            throw new Exception("Task '{$taskName}' is not registered");
         }
         return $this->_tasks[$taskName];
     }
@@ -85,11 +83,11 @@ class Console
         try {
             DefaultAutoloader::loadClass($className);
         } catch (AutoloaderException $e) {
-            throw new InvalidArgumentException("Cannot load task class '{$className}'");
+            throw new Exception("Cannot load task class '{$className}'");
         }
         $task = new $className($this);
         if (!($task instanceof TaskInterface)) {
-            throw new InvalidArgumentException("Task '{$taskName}' has to implement TaskInterface");
+            throw new Exception("Task '{$taskName}' has to implement TaskInterface");
         }
         return $task->run($params);
     }

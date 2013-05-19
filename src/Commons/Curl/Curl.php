@@ -16,7 +16,6 @@ namespace Commons\Curl;
 
 use Commons\Xml\Reader as XmlReader;
 use Commons\Json\Decoder as JsonDecoder;
-use Commons\Exception\MissingDependencyException;
 use Commons\Xml\Xml;
 
 class Curl
@@ -39,7 +38,7 @@ class Curl
     public function __construct($url, array $options = array())
     {
         if (!function_exists('curl_init')) {
-            throw new MissingDependencyException("Curl module is missing!");
+            throw new Exception("Curl module is missing!");
         }
         
         $this->_url = $url;

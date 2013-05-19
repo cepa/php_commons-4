@@ -15,7 +15,6 @@
 namespace Commons\Console\Task;
 
 use Commons\Console\Console;
-use Commons\Exception\NotImplementedException;
 
 abstract class AbstractTask implements TaskInterface
 {
@@ -46,7 +45,7 @@ abstract class AbstractTask implements TaskInterface
      */
     public function run(array $params = array())
     {
-        throw new NotImplementedException();
+        throw new Exception();
     }
     
 }

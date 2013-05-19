@@ -14,21 +14,19 @@
 
 namespace Commons\Json;
 
-use Commons\Exception\MissingDependencyException;
-
 class Decoder
 {
     /**
      * @param $data
      * @param bool $associative
      * @return mixed
-     * @throws \Commons\Exception\MissingDependencyException
+     * @throws \Commons\Json\Exception
      * @throws Exception
      */
     public function decode($data, $associative = true)
     {
         if (!function_exists('json_decode')) {
-            throw new MissingDependencyException("json_decode is missing");
+            throw new Exception("json_decode is missing");
         }
         
         if ($data === '') { 

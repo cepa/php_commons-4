@@ -14,8 +14,6 @@
 
 namespace Commons\KeyStore;
 
-use Commons\Exception\MissingDependencyException;
-
 class ApcKeyStore implements KeyStoreInterface
 {
     
@@ -28,7 +26,7 @@ class ApcKeyStore implements KeyStoreInterface
     public function __construct()
     {
         if (!extension_loaded('apc')) {
-            throw new MissingDependencyException("Missing APC extension");
+            throw new Exception("Missing APC extension");
         }
         if (!function_exists('apc_exists')) {
             $this->_hasApcExists = false;

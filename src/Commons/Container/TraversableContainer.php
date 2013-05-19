@@ -14,9 +14,6 @@
 
 namespace Commons\Container;
 
-use Commons\Exception\NotFoundException;
-use Commons\Exception\InvalidArgumentException;
-
 class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggregate
 {
     
@@ -240,7 +237,6 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
     /**
      * Get child.
      * @param string $childName
-     * @throws NotFoundException
      * @return TraversableContainer
      */
     public function getChild($childName)

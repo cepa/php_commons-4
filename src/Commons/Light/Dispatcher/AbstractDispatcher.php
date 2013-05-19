@@ -14,7 +14,6 @@
 
 namespace Commons\Light\Dispatcher;
 
-use Commons\Exception\NotImplementedException;
 use Commons\Http\Request;
 use Commons\Http\Response;
 use Commons\Light\Route\RouteInterface;
@@ -164,11 +163,11 @@ abstract class AbstractDispatcher
     /**
      * Dispatch controller.
      * @param array $options
-     * @throws NotImplementedException
+     * @throws Exception
      */
     public function dispatch(array $options = array())
     {
-        throw new NotImplementedException();
+        throw new Exception("Not implemented");
     }
     
 }

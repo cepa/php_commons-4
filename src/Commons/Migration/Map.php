@@ -14,8 +14,6 @@
 
 namespace Commons\Migration;
 
-use Commons\Exception\NotFoundException;
-
 class Map
 {
 
@@ -55,13 +53,13 @@ class Map
     /**
      * Get migration.
      * @param int $version
-     * @throws NotFoundException
+     * @throws Exception
      * @return string
      */
     public function getMigration($version)
     {
         if (!$this->hasMigration($version)) {
-            throw new NotFoundException();
+            throw new Exception();
         }
         return $this->_migrations[$version];
     }

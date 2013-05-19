@@ -14,7 +14,6 @@
 
 namespace Commons\Sql\Driver;
 
-use Commons\Sql\Exception;
 use Commons\Sql\Statement\PdoStatement;
 use Commons\Sql\Sql;
 

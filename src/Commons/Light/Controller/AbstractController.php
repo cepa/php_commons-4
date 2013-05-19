@@ -14,7 +14,6 @@
 
 namespace Commons\Light\Controller;
 
-use Commons\Exception\NotImplementedException;
 use Commons\Http\Request;
 use Commons\Http\Response;
 
@@ -127,7 +126,7 @@ abstract class AbstractController
      */
     public function dispatch(array $params = array())
     {
-        throw NotImplementedException();
+        throw Exception("Not implemented");
     }
     
 }

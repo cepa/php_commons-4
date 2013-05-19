@@ -15,7 +15,6 @@
 namespace Commons\Config\Adapter;
 
 use Commons\Config\Config;
-use Commons\Exception\NotFoundException;
 
 abstract class AbstractAdapter implements AdapterInterface
 {
@@ -40,7 +39,7 @@ abstract class AbstractAdapter implements AdapterInterface
     public function getConfig()
     {
         if (!isset($this->_config)) {
-            throw new NotFoundException("Missing config object!");
+            throw new Exception("Missing config object!");
         }
         return $this->_config;
     }

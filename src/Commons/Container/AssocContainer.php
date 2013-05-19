@@ -14,8 +14,6 @@
 
 namespace Commons\Container;
 
-use Commons\Exception\NotFoundException;
-
 class AssocContainer extends CollectionContainer
 {
 

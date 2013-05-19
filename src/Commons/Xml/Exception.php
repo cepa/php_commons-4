@@ -14,4 +14,4 @@
 
 namespace Commons\Xml;
 
-class Exception extends \Commons\Exception\Exception {}
+class Exception extends \RuntimeException {}
