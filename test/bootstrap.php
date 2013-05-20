@@ -53,12 +53,8 @@ foreach ($config as $name => $value) {
     }
 }
 
-require_once $rootDirPath.'/src/Commons/Autoloader/DefaultAutoloader.php';
-
-Commons\Autoloader\DefaultAutoloader::addIncludePath($rootDirPath.'/src');
+require_once $rootDirPath.'/src/autoload.php';
 Commons\Autoloader\DefaultAutoloader::addIncludePath($rootDirPath.'/test');
-
-Commons\Autoloader\DefaultAutoloader::init();
 
 $logger = new Commons\Log\Logger;
 $logger->addWriter(new Commons\Log\Writer\SyslogWriter());

@@ -1,0 +1,21 @@
+{
+    "name": "cepa/php_commons-4",
+    "description": "PHP Commons Library",
+    "keywords": ["Commons"],
+    "type": "library",
+    "homepage": "https://github.com/cepa/php_commons-4",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Lukasz Cepowski",
+            "homepage": "http://lukasz.cepowski.com"
+        }
+    ],
+    "version": "3",
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "files": ["src/autoload.php"]
+    }
+}
