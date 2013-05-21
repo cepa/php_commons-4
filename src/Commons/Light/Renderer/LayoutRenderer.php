@@ -15,7 +15,7 @@
 namespace Commons\Light\Renderer;
 
 use Commons\Container\AssocContainer;
-use Commons\Light\View\ScriptView;
+use Commons\Light\View\TemplateView;
 use Commons\Light\View\ViewInterface;
 
 class LayoutRenderer implements RendererInterface
@@ -43,7 +43,7 @@ class LayoutRenderer implements RendererInterface
     public function getLayout()
     {
         if (!isset($this->_layout)) {
-            $this->setLayout(new ScriptView());
+            $this->setLayout(new TemplateView());
         }
         return $this->_layout;
     }

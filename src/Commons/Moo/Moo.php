@@ -23,7 +23,7 @@ use Commons\Light\Route\RouteInterface;
 use Commons\Light\Renderer\LayoutRenderer;
 use Commons\Light\Renderer\RendererInterface;
 use Commons\Light\View\ViewInterface;
-use Commons\Light\View\ScriptView;
+use Commons\Light\View\TemplateView;
 use Commons\Utils\DebugUtils;
 
 class Moo
@@ -428,7 +428,7 @@ class Moo
     {
 
         if (!($view instanceof ViewInterface)) {
-            $view = new ScriptView();
+            $view = new TemplateView();
         }
         
         $this->getResponse()
