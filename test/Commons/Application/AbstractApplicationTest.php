@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Light/Application/AbstractApplicationTest.php
+ * @file        Commons/Application/AbstractApplicationTest.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,10 +12,10 @@
  * =============================================================================
  */
 
-namespace Commons\Light\Application;
+namespace Commons\Application;
 
 use Commons\Log\Logger;
-use Mock\Light\Application as MockApplication;
+use Mock\Application as MockApplication;
 
 class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
 {
