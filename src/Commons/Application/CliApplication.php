@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Light/Application/CliApplication.php
+ * @file        Commons/Application/CliApplication.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  *
  * @copyright  PHP Commons
@@ -12,7 +12,7 @@
  * =============================================================================
  */
 
-namespace Commons\Light\Application;
+namespace Commons\Application;
 
 class CliApplication extends AbstractApplication
 {

@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Light/Application/CliApplicationTest.php
+ * @file        Commons/Application/CliApplicationTest.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,7 +12,7 @@
  * =============================================================================
  */
 
-namespace Commons\Light\Application;
+namespace Commons\Application;
 
 use Commons\Config\Adapter\AbstractAdapterTest;
 

@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Mock/Light/Module.php
+ * @file        Mock/Light/Application.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,11 +12,11 @@
  * =============================================================================
  */
 
-namespace Mock\Light;
+namespace Mock;
 
-use Commons\Light\Module\AbstractModule;
+use Commons\Application\AbstractApplication;
 
-class Module extends AbstractModule
+class Application extends AbstractApplication
 {
     
 }

@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Light/Application/AbstractApplication.php
+ * @file        Commons/Application/AbstractApplication.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  *
  * @copyright  PHP Commons
@@ -12,7 +12,7 @@
  * =============================================================================
  */
 
-namespace Commons\Light\Application;
+namespace Commons\Application;
 
 use Commons\Log\Logger;
 
