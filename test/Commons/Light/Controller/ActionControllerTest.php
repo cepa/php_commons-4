@@ -14,7 +14,7 @@
 
 namespace Commons\Light\Controller;
 
-use Commons\Light\View\ScriptView;
+use Commons\Light\View\TemplateView;
 use Commons\Light\View\ViewInterface;
 use Commons\Light\Renderer\LayoutRenderer;
 use Commons\Light\Renderer\RendererInterface;
@@ -36,7 +36,7 @@ class ActionControllerTest extends \PHPUnit_Framework_TestCase
     {
         $controller = new MockActionController();
         $this->assertTrue($controller->getView() instanceof ViewInterface);
-        $c = $controller->setView(new ScriptView());
+        $c = $controller->setView(new TemplateView());
         $this->assertTrue($c instanceof AbstractController);
         $this->assertTrue($controller->getView() instanceof ViewInterface);
     }

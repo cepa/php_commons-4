@@ -50,7 +50,7 @@ class LayoutRendererTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         $renderer = new LayoutRenderer();
-        $renderer->getLayout()->setScriptPath(ROOT_PATH.'/test/fixtures/test_layout_renderer.phtml');
+        $renderer->getLayout()->setTemplatePath(ROOT_PATH.'/test/fixtures/test_layout_renderer.phtml');
         $content = $renderer->render(new MockView());
         $this->assertContains('layout test', $content);
     }
@@ -60,7 +60,7 @@ class LayoutRendererTest extends \PHPUnit_Framework_TestCase
         $renderer = new LayoutRenderer();
         $renderer
             ->enableView(false)
-            ->getLayout()->setScriptPath(ROOT_PATH.'/test/fixtures/test_layout_renderer.phtml');
+            ->getLayout()->setTemplatePath(ROOT_PATH.'/test/fixtures/test_layout_renderer.phtml');
         $content = $renderer->render(new MockView());
         $this->assertContains('layout ', $content);
     }
@@ -70,7 +70,7 @@ class LayoutRendererTest extends \PHPUnit_Framework_TestCase
         $renderer = new LayoutRenderer();
         $renderer
             ->enableLayout(false)
-            ->getLayout()->setScriptPath(ROOT_PATH.'/test/fixtures/test_layout_renderer.phtml');
+            ->getLayout()->setTemplatePath(ROOT_PATH.'/test/fixtures/test_layout_renderer.phtml');
         $content = $renderer->render(new MockView());
         $this->assertContains('test', $content);
     }
@@ -81,7 +81,7 @@ class LayoutRendererTest extends \PHPUnit_Framework_TestCase
         $renderer
             ->enableLayout(false)
             ->enableView(false)
-            ->getLayout()->setScriptPath(ROOT_PATH.'/test/fixtures/test_layout_renderer.phtml');
+            ->getLayout()->setTemplatePath(ROOT_PATH.'/test/fixtures/test_layout_renderer.phtml');
         $content = $renderer->render(new MockView());
         $this->assertEquals('', $content);
     }

@@ -18,7 +18,7 @@ use Commons\Callback\Callback;
 use Commons\Callback\Exception as CallbackException;
 use Commons\Light\Renderer\RendererInterface;
 use Commons\Light\Renderer\LayoutRenderer;
-use Commons\Light\View\ScriptView;
+use Commons\Light\View\TemplateView;
 use Commons\Light\View\ViewInterface;
 
 class ActionController extends AbstractController
@@ -45,7 +45,7 @@ class ActionController extends AbstractController
     public function getView()
     {
         if (!isset($this->_view)) {
-            $this->setView(new ScriptView());
+            $this->setView(new TemplateView());
         }
         return $this->_view;
     }
@@ -92,16 +92,16 @@ class ActionController extends AbstractController
         $actionMethod .= 'Action';
         $actionMethod = strtolower($actionMethod{0}).substr($actionMethod, 1);
 
-        if ($this->getView() instanceof ScriptView) {
+        if ($this->getView() instanceof TemplateView) {
             $controllerClass = basename(str_replace('\\', '/', get_class($this)));
             $controllerName = strtolower(str_replace('Controller', '', $controllerClass));
             $scriptPath = $this->getResourcesPath().'/views/'.$controllerName.'/'.$actionName.'.phtml';
-            $this->getView()->setScriptPath($scriptPath);
+            $this->getView()->setTemplatePath($scriptPath);
         }
         
         if ($this->getRenderer() instanceof LayoutRenderer) {
             $layoutPath = $this->getResourcesPath().'/views/layout.phtml';
-            $this->getRenderer()->getLayout()->setScriptPath($layoutPath);
+            $this->getRenderer()->getLayout()->setTemplatePath($layoutPath);
         }
         
         try {
