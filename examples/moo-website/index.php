@@ -13,9 +13,18 @@ $moo
     })
     
     ->get('/', function(Moo $moo){
-        $view = new TemplateView();
-        $view->setTemplatePath('templates/index.phtml');
+        $view = $moo->createView('templates/index.phtml');
         $view->message = 'Hello World!';
+        return $view;
+    })
+    
+    ->get('/about', function(Moo $moo){
+        return $moo->createView('templates/about.phtml');
+    })
+    
+    ->plugin('createView', function(Moo $moo, $path){
+        $view = new TemplateView();
+        $view->setTemplatePath($path);
         return $view;
     })
     

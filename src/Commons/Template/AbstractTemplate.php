@@ -15,9 +15,13 @@
 namespace Commons\Template;
 
 use Commons\Container\AssocContainer;
+use Commons\Plugin\ExtendableInterface;
+use Commons\Plugin\Broker as PluginBroker;
 
-abstract class AbstractTemplate extends AssocContainer
+abstract class AbstractTemplate extends AssocContainer implements ExtendableInterface
 {
+    
+    protected $_pluginBroker;
     
     /**
      * Render template script.
@@ -25,5 +29,38 @@ abstract class AbstractTemplate extends AssocContainer
      * @return string
      */
     abstract public function render($template);
+    
+    /**
+     * Set plugin broker.
+     * @see \Commons\Plugin\ExtendableInterface::setPluginBroker()
+     */
+    public function setPluginBroker(PluginBroker $pluginBroker)
+    {
+        $this->_pluginBroker = $pluginBroker;
+        return $this;
+    }
+    
+    /**
+     * Get plugin broker.
+     * @see \Commons\Plugin\ExtendableInterface::getPluginBroker()
+     */
+    public function getPluginBroker()
+    {
+        if (!isset($this->_pluginBroker)) {
+            $broker = new PluginBroker();
+            $broker->addNamespace('\\Commons\\Template\\Plugin');
+            $this->setPluginBroker($broker);
+        }
+        return $this->_pluginBroker;
+    }
+    
+    /**
+     * Invoke plugin.
+     * @see \Commons\Plugin\ExtendableInterface::__call()
+     */
+    public function __call($plugin, array $args = array())
+    {
+        return $this->getPluginBroker()->invoke($plugin, $this, $args);
+    }
     
 }
