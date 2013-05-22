@@ -14,7 +14,7 @@
 
 namespace Commons\Template\Plugin;
 
-use Mock\Plugin\Extendable as MockExtendable;
+use Commons\Template\PhpTemplate;
 
 class AssetUrlPluginTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,9 +25,9 @@ class AssetUrlPluginTest extends \PHPUnit_Framework_TestCase
             'HTTP_HOST' => 'example.com',
             'SCRIPT_NAME' => '/some/app/index.php'
         );
-        $extendable = new MockExtendable();
-        $extendable->getPluginBroker()->addNamespace('\\Commons\\Template\\Plugin');
-        $this->assertEquals('http://example.com/some/app/xxx', $extendable->assetUrl('/xxx'));
+        $plugin = new AssetUrlPlugin();
+        $plugin->setInvoker(new PhpTemplate());
+        $this->assertEquals('http://example.com/some/app/xxx', $plugin->assetUrl('/xxx'));
     }
     
 }

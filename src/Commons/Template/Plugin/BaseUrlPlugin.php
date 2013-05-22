@@ -15,10 +15,9 @@
 namespace Commons\Template\Plugin;
 
 use Commons\Http\Request;
-use Commons\Plugin\ExtendableInterface;
-use Commons\Plugin\PluginInterface;
+use Commons\Plugin\AbstractPlugin;
 
-class BaseUrlPlugin implements PluginInterface
+class BaseUrlPlugin extends AbstractPlugin
 {
     
     protected $_baseUrl;
@@ -53,11 +52,7 @@ class BaseUrlPlugin implements PluginInterface
         return $this->_baseUrl;
     }
     
-    /**
-     * 
-     * @see \Commons\Plugin\PluginInterface::invoke()
-     */
-    public function invoke(ExtendableInterface $invoker, array $args = array())
+    public function baseUrl()
     {
         return $this->getBaseUrl();
     }
