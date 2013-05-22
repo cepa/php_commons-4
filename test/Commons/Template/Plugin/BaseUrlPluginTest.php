@@ -14,8 +14,6 @@
 
 namespace Commons\Template\Plugin;
 
-use Mock\Plugin\Extendable as MockExtendable;
-
 class BaseUrlPluginTest extends \PHPUnit_Framework_TestCase
 {
     
@@ -26,7 +24,7 @@ class BaseUrlPluginTest extends \PHPUnit_Framework_TestCase
             'SCRIPT_NAME' => '/some/app/index.php'
         );
         $plugin = new BaseUrlPlugin();
-        $this->assertEquals('http://example.com/some/app', $plugin->invoke(new MockExtendable()));
+        $this->assertEquals('http://example.com/some/app', $plugin->baseUrl());
     }
     
     public function testInvokeHttps()
@@ -37,7 +35,7 @@ class BaseUrlPluginTest extends \PHPUnit_Framework_TestCase
             'HTTPS' => 'on'
         );
         $plugin = new BaseUrlPlugin();
-        $this->assertEquals('https://example.com/some/app', $plugin->invoke(new MockExtendable()));
+        $this->assertEquals('https://example.com/some/app', $plugin->baseUrl());
     }
     
 }

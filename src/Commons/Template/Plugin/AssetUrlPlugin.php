@@ -14,18 +14,14 @@
 
 namespace Commons\Template\Plugin;
 
-use Commons\Plugin\ExtendableInterface;
-use Commons\Plugin\PluginInterface;
+use Commons\Plugin\AbstractPlugin;
 
-class AssetUrlPlugin implements PluginInterface
+class AssetUrlPlugin extends AbstractPlugin
 {
     
-    public function invoke(ExtendableInterface $invoker, array $args = array())
+    public function assetUrl($asset)
     {
-        if (!isset($args[0])) {
-            throw new Exception("Missing argument");
-        }
-        return $invoker->baseUrl().'/'.ltrim($args[0], '/');
+        return $this->getInvoker()->baseUrl().'/'.ltrim($asset, '/');
     }
     
 }

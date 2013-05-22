@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Mock/Plugin/Extendable.php
+ * @file        Mock/Plugin/Invoker.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -15,9 +15,9 @@
 namespace Mock\Plugin;
 
 use Commons\Plugin\Broker;
-use Commons\Plugin\ExtendableInterface;
+use Commons\Plugin\InvokerInterface;
 
-class Extendable implements ExtendableInterface
+class Invoker implements InvokerInterface
 {
     
     protected $_pluginBroker;
@@ -40,7 +40,7 @@ class Extendable implements ExtendableInterface
     
     public function __call($plugin, array $args = array())
     {
-        return $this->getPluginBroker()->invoke($plugin, $this, $args);
+        return $this->getPluginBroker()->invoke($this, $plugin, $args);
     }
     
     

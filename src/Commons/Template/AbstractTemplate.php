@@ -15,10 +15,10 @@
 namespace Commons\Template;
 
 use Commons\Container\AssocContainer;
-use Commons\Plugin\ExtendableInterface;
+use Commons\Plugin\InvokerInterface as PluginInvokerInterface;
 use Commons\Plugin\Broker as PluginBroker;
 
-abstract class AbstractTemplate extends AssocContainer implements ExtendableInterface
+abstract class AbstractTemplate extends AssocContainer implements PluginInvokerInterface
 {
     
     protected $_pluginBroker;
@@ -60,7 +60,7 @@ abstract class AbstractTemplate extends AssocContainer implements ExtendableInte
      */
     public function __call($plugin, array $args = array())
     {
-        return $this->getPluginBroker()->invoke($plugin, $this, $args);
+        return $this->getPluginBroker()->invoke($this, $plugin, $args);
     }
     
 }

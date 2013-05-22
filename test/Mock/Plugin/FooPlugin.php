@@ -14,15 +14,14 @@
 
 namespace Mock\Plugin;
 
-use Commons\Plugin\ExtendableInterface;
-use Commons\Plugin\PluginInterface;
+use Commons\Plugin\AbstractPlugin;
 
-class FooPlugin implements PluginInterface
+class FooPlugin extends AbstractPlugin
 {
     
-    public function invoke(ExtendableInterface $invoker, array $args = array())
+    public function foo($str)
     {
-        return $args[0];
+        return $str;
     }
     
 }
