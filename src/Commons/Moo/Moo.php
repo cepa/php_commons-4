@@ -18,6 +18,8 @@ use Commons\Buffer\OutputBuffer;
 use Commons\Callback\Callback;
 use Commons\Http\Response;
 use Commons\Http\Request;
+use Commons\Plugin\Broker as PluginBroker;
+use Commons\Plugin\InvokerInterface as PluginInvokerInterface;
 use Commons\Light\Route\RestRoute;
 use Commons\Light\Route\RouteInterface;
 use Commons\Light\Renderer\LayoutRenderer;
@@ -26,7 +28,7 @@ use Commons\Light\View\ViewInterface;
 use Commons\Light\View\TemplateView;
 use Commons\Utils\DebugUtils;
 
-class Moo
+class Moo implements PluginInvokerInterface
 {
     
     protected $_baseUri;
@@ -35,6 +37,7 @@ class Moo
     protected $_renderer;
     protected $_callbacks = array();
     protected $_routes = array();
+    protected $_pluginBroker;
     
     /**
      * Set base uri.
@@ -272,6 +275,30 @@ class Moo
     }
     
     /**
+     * Set plugin broker.
+     * @see \Commons\Plugin\InvokerInterface::setPluginBroker()
+     */
+    public function setPluginBroker(PluginBroker $pluginBroker)
+    {
+        $this->_pluginBroker = $pluginBroker;
+        return $this;
+    }
+    
+    /**
+     * Get plugin broker.
+     * @see \Commons\Plugin\InvokerInterface::getPluginBroker()
+     */
+    public function getPluginBroker()
+    {
+        if (!isset($this->_pluginBroker)) {
+            $pluginBroker = new PluginBroker();
+            $pluginBroker->addNamespace('Commons\Http\Plugin');
+            $this->setPluginBroker($pluginBroker);
+        }
+        return $this->_pluginBroker;
+    }
+    
+    /**
      * Set init callback.
      * This callback will be executed at the beginning.
      * @param mixed $callback
@@ -406,22 +433,22 @@ class Moo
     }
     
     /**
-     * Call a plugin.
+     * Invoke a closure or a plugin.
      * @param string $name
      * @param array $arguments
      * @throws Exception
      * @return \Commons\Callback\Callback
      */
-    public function __call($name, $arguments)
+    public function __call($name, array $args = array())
     {
-        if (!$this->hasCallback($name)) {
-            throw new Exception("Unknown plugin '{$name}'");
+        if ($this->hasCallback($name)) {
+            $params = array($this);
+            foreach ($args as $arg) {
+                $params[] = $arg;
+            }
+            return $this->getCallback($name)->callArray($params);
         }
-        $params = array($this);
-        foreach ($arguments as $argument) {
-            $params[] = $argument;
-        }
-        return $this->getCallback($name)->callArray($params);
+        return $this->getPluginBroker()->invoke($this, $name, $args);
     }
     
     protected function _renderView($view)

@@ -19,6 +19,7 @@ use Commons\Http\Response;
 use Commons\Http\Request;
 use Commons\Light\Route\StaticRoute;
 use Commons\Light\Route\RouteInterface;
+use Commons\Plugin\Broker;
 
 class MooTest extends \PHPUnit_Framework_TestCase
 {
@@ -117,6 +118,15 @@ class MooTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($moo->hasRoute('xxx'));
     }
     
+    public function testSetGetPluginBroker()
+    {
+        $moo = new Moo();
+        $this->assertTrue($moo->getPluginBroker() instanceof Broker);
+        $m = $moo->setPluginBroker(new Broker());
+        $this->assertTrue($m instanceof Moo);
+        $this->assertTrue($moo->getPluginBroker() instanceof Broker);
+    }
+    
     public function testInit()
     {
         $moo = new Moo();
@@ -198,6 +208,16 @@ class MooTest extends \PHPUnit_Framework_TestCase
             ->closure('xxx', function($moo, $x){ return $x; })
             ->xxx(666);
         $this->assertEquals(666, $x);
+    }
+    
+    public function testMooPlugin()
+    {
+        $_SERVER = array(
+            'HTTP_HOST' => 'example.com',
+            'SCRIPT_NAME' => '/some/app/index.php'
+        );
+        $moo = new Moo();
+        $this->assertEquals('http://example.com/some/app/xxx', $moo->assetUrl('/xxx'));
     }
     
 }
