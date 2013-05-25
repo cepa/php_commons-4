@@ -191,4 +191,13 @@ class MooTest extends \PHPUnit_Framework_TestCase
             ->moo();
     }
     
+    public function testMooClosures()
+    {
+        $moo = new Moo();
+        $x = $moo
+            ->closure('xxx', function($moo, $x){ return $x; })
+            ->xxx(666);
+        $this->assertEquals(666, $x);
+    }
+    
 }
