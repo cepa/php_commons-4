@@ -395,12 +395,12 @@ class Moo
     }
     
     /**
-     * Register a plugin.
+     * Register a closure callback.
      * @param string $name
      * @param mixed $callback
      * @return \Commons\Moo\Moo
      */
-    public function plugin($name, $callback)
+    public function closure($name, $callback)
     {
         return $this->setCallback($name, $callback);
     }

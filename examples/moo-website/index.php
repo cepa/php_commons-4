@@ -22,7 +22,7 @@ $moo
         return $moo->createView('templates/about.phtml');
     })
     
-    ->plugin('createView', function(Moo $moo, $path){
+    ->closure('createView', function(Moo $moo, $path){
         $view = new TemplateView();
         $view->setTemplatePath($path);
         return $view;
