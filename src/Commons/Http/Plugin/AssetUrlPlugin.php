@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Template/Plugin/AssetUrlPlugin.php
+ * @file        Commons/Http/Plugin/AssetUrlPlugin.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  *
  * @copyright  PHP Commons
@@ -12,7 +12,7 @@
  * =============================================================================
  */
 
-namespace Commons\Template\Plugin;
+namespace Commons\Http\Plugin;
 
 use Commons\Plugin\AbstractPlugin;
 
