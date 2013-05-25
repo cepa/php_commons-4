@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file        Commons/Template/Plugin/BaseUrlPluginTest.php
+ * @file        Commons/Http/Plugin/BaseUrlPluginTest.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,7 +12,7 @@
  * =============================================================================
  */
 
-namespace Commons\Template\Plugin;
+namespace Commons\Http\Plugin;
 
 class BaseUrlPluginTest extends \PHPUnit_Framework_TestCase
 {

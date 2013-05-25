@@ -48,7 +48,9 @@ abstract class AbstractTemplate extends AssocContainer implements PluginInvokerI
     {
         if (!isset($this->_pluginBroker)) {
             $broker = new PluginBroker();
-            $broker->addNamespace('\\Commons\\Template\\Plugin');
+            $broker
+                ->addNamespace('Commons\Template\Plugin')
+                ->addNamespace('Commons\Http\Plugin');
             $this->setPluginBroker($broker);
         }
         return $this->_pluginBroker;
