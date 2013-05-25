@@ -6,6 +6,7 @@ Requires PHP 5.3+
 
 Features
 --------
+-   Commons/Application - Abstract application (Web, CLI)
 -   Commons/Autoloader - Simple SPL autoloader
 -   Commons/Buffer - Output buffer wrapper
 -   Commons/Callback - Callback wrapper with support for closures
@@ -24,8 +25,10 @@ Features
 -   Commons/Log - Logging library (stream, syslog)
 -   Commons/Migration - Migration library (downgrade, upgrade, fixtures)
 -   Commons/Moo - The MOO microframework inspired by Ruby's Sinatra
+-   Commons/Plugin - Abstract plugin implementation
 -   Commons/Process - Utility for executing external processes
 -   Commons/Sql - SQL library based on entities with query builder
+-   Commons/Template - Abstract templates based on associative containers.
 -   Commons/Timer - Timer utility
 -   Commons/Utils - Miscellaneous utilities
 -   Commons/Validator - Validators
