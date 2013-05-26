@@ -1,0 +1,39 @@
+Adjust application url to your local environment.
+--------------------------------------------------------------------------------
+
+# Setup database
+
+echo "DROP DATABASE IF EXISTS moo_restapi" | mysql -u root --password=""
+echo "CREATE DATABASE moo_restapi" | mysql -u root --password=""
+mysql -u root --password="" moo_restapi < database.sql
+
+
+
+# Get list of books 
+
+curl -i "http://localhost/php_commons-4-feature-moo/examples/moo-restapi/books"
+
+
+
+# Create a new book
+
+curl -i -X POST -d '{"title":"Hello World","description":"This is the latest world bestseller!"}' "http://localhost/php_commons-4-feature-moo/examples/moo-restapi/books"
+
+
+
+# Get a book by ID
+
+curl -i "http://localhost/php_commons-4-feature-moo/examples/moo-restapi/books/1"
+
+
+
+# Update a book with given ID
+
+curl -i -X PUT -d '{"title":"Hello World vol2","description":"This is the latest world bestseller!"}' "http://localhost/php_commons-4-feature-moo/examples/moo-restapi/books/2"
+
+
+
+# Delete a book with given ID
+
+curl -i -X DELETE "http://localhost/php_commons-4-feature-moo/examples/moo-restapi/books/2"
+
