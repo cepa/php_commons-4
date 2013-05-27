@@ -14,7 +14,7 @@
 
 namespace Commons\Application;
 
-use Commons\Log\Logger;
+use Commons\Service\Manager as ServiceManager;
 
 abstract class AbstractApplication
 {
@@ -23,6 +23,7 @@ abstract class AbstractApplication
     protected $_version;
     protected $_path;
     protected $_config;
+    protected $_serviceManager;
 
     /**
      * Set environment.
@@ -102,6 +103,29 @@ abstract class AbstractApplication
     public function getConfig()
     {
         return $this->_config;
+    }
+    
+    /**
+     * Set service manager.
+     * @param ServiceManager $manager
+     * @return \Commons\Application\AbstractApplication
+     */
+    public function setServiceManager(ServiceManager $manager)
+    {
+        $this->_serviceManager = $manager;
+        return $this;
+    }
+    
+    /**
+     * Get service manager.
+     * @return ServiceManager
+     */
+    public function getServiceManager()
+    {
+        if (!isset($this->_serviceManager)) {
+            $this->setServiceManager(new ServiceManager());
+        }
+        return $this->_serviceManager;
     }
 
 }
