@@ -14,12 +14,11 @@
 
 namespace Commons\Sql\Connection;
 
-use Commons\Entity\RepositoryBrokerInterface;
 use Commons\Sql\Query;
 use Commons\Sql\Driver\DriverInterface;
 use Commons\Sql\Statement\StatementInterface;
 
-interface ConnectionInterface extends RepositoryBrokerInterface
+interface ConnectionInterface
 {
     
     /**
