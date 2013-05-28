@@ -24,7 +24,7 @@ class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
     public function testSetGetEnvironment()
     {
         $app = new MockApplication();
-        $this->assertEquals('development', $app->getEnvironment());
+        $this->assertNull($app->getEnvironment());
         $a = $app->setEnvironment('testing');
         $this->assertTrue($a instanceof AbstractApplication);
         $this->assertEquals('testing', $app->getEnvironment());
