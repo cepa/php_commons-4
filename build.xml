@@ -6,9 +6,9 @@
     <!-- Clean -->
     <target name="clean"
         description="Clean">
-        <delete dir="./test/results" includeemptydirs="true" verbose="true" failonerror="true" />
-        <delete dir="./test/coverage" includeemptydirs="true" verbose="true" failonerror="true" />
-        <delete dir="./test/tmp" includeemptydirs="true" verbose="true" failonerror="true" />
+        <delete dir="./test/results" includeemptydirs="true" verbose="true" />
+        <delete dir="./test/coverage" includeemptydirs="true" verbose="true" />
+        <delete dir="./test/tmp" includeemptydirs="true" verbose="true" />
     </target>
   
     <!-- Prepare -->
