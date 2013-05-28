@@ -182,7 +182,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     
     public function testReadFromUrl()
     {
-        $url = 'http://demo.hellworx.com/example.xml';
+        $url = 'http://test/example.xml';
         $reader = new Reader();
         $xml = $reader->readFromUrl($url);
         $this->assertEquals('note', $xml->getName());
