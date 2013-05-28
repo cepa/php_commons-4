@@ -221,9 +221,7 @@ class Migrator
      */
     protected function _createMigrationInstance($className)
     {
-        try {
-            DefaultAutoloader::loadClass($className);
-        } catch (AutoloaderException $e) {
+        if (!class_exists($className, true)) {
             throw new Exception("Cannot load migration class '{$className}'");
         }
         $migration = new $className;
