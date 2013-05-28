@@ -19,7 +19,7 @@ class CurlTest extends \PHPUnit_Framework_TestCase
 
     public function testCall()
     {
-        $url = 'http://demo.hellworx.com/example.xml';
+        $url = 'http://test/example.xml';
         $curl = new Curl($url);
         $response = $curl
             ->setReferrer('http://localhost')
@@ -36,7 +36,7 @@ class CurlTest extends \PHPUnit_Framework_TestCase
     
     public function testParseJson()
     {
-        $url = 'http://demo.hellworx.com/example.json';
+        $url = 'http://test/example.json';
         $curl = new Curl($url);
         $json = $curl->execute()->parseJsonResponse();
         $this->assertEquals('Anna', $json['employees'][1]['firstName']);
@@ -44,7 +44,7 @@ class CurlTest extends \PHPUnit_Framework_TestCase
     
     public function testParseXml()
     {
-        $url = 'http://demo.hellworx.com/example.xml';
+        $url = 'http://test/example.xml';
         $curl = new Curl($url);
         $xml = $curl->execute()->parseXmlResponse();
         $this->assertEquals("Don't forget me this weekend!", (string) $xml->body);
