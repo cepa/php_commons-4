@@ -80,9 +80,7 @@ class Console
     public function runTask($taskName, array $params = array())
     {
         $className = $this->getTaskClassName($taskName);
-        try {
-            DefaultAutoloader::loadClass($className);
-        } catch (AutoloaderException $e) {
+        if (!class_exists($className, true)) {
             throw new Exception("Cannot load task class '{$className}'");
         }
         $task = new $className($this);
