@@ -19,7 +19,7 @@ use Commons\Service\Manager as ServiceManager;
 abstract class AbstractApplication
 {
 
-    protected $_environment = 'development';
+    protected $_environment;
     protected $_version;
     protected $_path;
     protected $_config;
