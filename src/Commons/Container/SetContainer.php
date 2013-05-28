@@ -45,7 +45,7 @@ class SetContainer extends CollectionContainer
     /**
      * Get an element from the set.
      * @param int $index
-     * @throws NotFoundException
+     * @throws Exception
      * @return mixed
      */
     public function get($index)

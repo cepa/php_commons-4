@@ -48,7 +48,7 @@ class Console
     /**
      * Get task name.
      * @param string $taskName
-     * @throws NotFoundException
+     * @throws Exception
      * @return string
      */
     public function getTaskClassName($taskName)

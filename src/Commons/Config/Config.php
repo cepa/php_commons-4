@@ -56,7 +56,7 @@ class Config extends TraversableContainer
     
     /**
      * Get adapter.
-     * @throws NotFoundException
+     * @throws Exception
      * @return AdapterInterface
      */
     public function getAdapter()
