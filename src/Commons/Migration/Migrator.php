@@ -84,13 +84,12 @@ class Migrator
     /**
      * Get map.
      * @param string $name
-     * @throws Exception
      * @return array
      */
     public function getMap($name)
     {
         if (!$this->hasMap($name)) {
-            throw new NotFoundException();
+            $this->setMap($name, new Map());
         }
         return $this->_maps[$name];
     }
