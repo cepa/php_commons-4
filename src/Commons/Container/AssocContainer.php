@@ -72,7 +72,6 @@ class AssocContainer extends CollectionContainer
      * Get property.
      * @param string $name
      * @return mixed
-     * @throws NotFoundException
      */
     public function __get($name)
     {

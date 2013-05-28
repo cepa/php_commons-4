@@ -64,7 +64,7 @@ class Reader
 	/**
 	 * Get property.
 	 * @param string $name
-	 * @throws NotFoundException
+	 * @throws Exception
 	 * @return string
 	 */
 	public function getProperty($name)

@@ -84,7 +84,7 @@ class Migrator
     /**
      * Get map.
      * @param string $name
-     * @throws NotFoundException
+     * @throws Exception
      * @return array
      */
     public function getMap($name)

@@ -33,7 +33,7 @@ abstract class AbstractAdapter implements AdapterInterface
     
     /**
      * Get config.
-     * @throws NotFoundException
+     * @throws Exception
      * @return Config
      */
     public function getConfig()
