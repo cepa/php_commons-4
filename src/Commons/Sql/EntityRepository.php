@@ -174,13 +174,22 @@ class EntityRepository extends AbstractRepository
     public function save(Entity $entity)
     {
         $primaryKey = $this->getPrimaryKey();
-        $isNewRecord = ($entity->has($primaryKey) ? false : true);
         $query = $this->createQuery();
         
-        if ($isNewRecord) {
-            $query->insert();
+        if ($entity->has($primaryKey)) {
+            $pk = $this->createQuery()
+                ->select($this->getPrimaryKey())
+                ->from()
+                ->where($this->getPrimaryKey().' = ?', $entity->get($primaryKey))
+                ->execute()
+                ->fetchScalar();
+            if ($pk == $entity->get($primaryKey)) {
+                $query->update()->where($primaryKey.' = ?', $entity->get($primaryKey));
+            } else {
+                $query->insert();
+            }
         } else {
-            $query->update()->where($primaryKey.' = ?', $entity->get($primaryKey));
+            $query->insert();
         }
         
         foreach ($entity as $key => $value) {
@@ -189,7 +198,7 @@ class EntityRepository extends AbstractRepository
 
         $query->execute();
         
-        if ($isNewRecord) {
+        if (!$entity->has($primaryKey)) {
             $databaseType = $this->getConnection()->getDatabaseType();
             switch ($databaseType) {
                 case Sql::TYPE_MYSQL:
