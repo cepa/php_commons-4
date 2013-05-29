@@ -20,6 +20,7 @@ use Commons\Entity\RepositoryInterface;
 use Commons\Sql\Connection\ConnectionInterface;
 use Commons\Sql\Connection\SingleConnection;
 use Commons\Sql\Driver\PdoDriver;
+use Commons\Utils\RandomUtils;
 use Mock\Sql\Driver as MockDriver;
 use Mock\Sql\Connection as MockConnection;
 
@@ -230,6 +231,106 @@ class EntityRepositoryTest extends \PHPUnit_Framework_TestCase
             $collection = $repo->createQuery()
                 ->select('*')
                 ->from('test2')
+                ->orderBy('test_a ASC')
+                ->execute()
+                ->fetchCollection();
+            $this->assertEquals(3, count($collection));
+                    
+            $this->_connection->disconnect();
+            \Bootstrap::dropDatabase($database);
+        
+        } catch (Exception $e) {
+            \Bootstrap::abort($e);
+        }
+    }
+    
+    public function testRepo_UuidKey()
+    {
+        try {
+            $database = \Bootstrap::createDatabase();
+            $this->_connection
+                ->setDriver(new PdoDriver())
+                ->connect(\Bootstrap::getDatabaseOptions($database));
+            
+            $databaseType = $this->_connection->getDatabaseType();
+            if ($databaseType == Sql::TYPE_MYSQL) {
+                $this->executeStatement("CREATE TABLE test3 ( uuid varchar(36) not null unique primary key, test_a int, test_b varchar(128) )");
+            } else if ($databaseType == Sql::TYPE_POSTGRESQL) {
+                $this->executeStatement("CREATE TABLE test3 (  uuid varchar(36) not null unique, test_a int, test_b varchar(128) )");
+            } else {
+                throw new Exception("Unsupported driver '{$databaseType}'!");
+            }
+        
+            $uuid1 = RandomUtils::randomUuid();
+            $this->executeStatement("INSERT INTO test3(uuid, test_a, test_b) VALUES ('{$uuid1}', 123, 'abc')");
+            $uuid2 = RandomUtils::randomUuid();
+            $this->executeStatement("INSERT INTO test3(uuid, test_a, test_b) VALUES ('{$uuid2}', 456, 'def')");
+            $uuid3 = RandomUtils::randomUuid();
+            $this->executeStatement("INSERT INTO test3(uuid, test_a, test_b) VALUES ('{$uuid3}', 789, 'ghi')");
+        
+            $repo = new EntityRepository($this->_connection);
+            $repo->setPrimaryKey('uuid');
+            $this->assertNull($repo->getTableName());
+            $r = $repo->setTableName('test3');
+            $this->assertTrue($r instanceof EntityRepository);
+            $this->assertEquals('test3', $repo->getTableName());
+            
+            $this->assertEquals('\Commons\Entity\Entity', $repo->getEntityClass());
+            $r = $repo->setEntityClass('xxx');
+            $this->assertTrue($r instanceof EntityRepository);
+            $this->assertEquals('xxx', $repo->getEntityClass());
+            $repo->setEntityClass('\Commons\Entity\Entity');
+            
+            $entity = $repo->fetch($uuid1);
+            $this->assertTrue($entity instanceof Entity);
+            $this->assertEquals($uuid1, $entity->uuid);
+            $this->assertEquals('123', $entity->test_a);
+            $this->assertEquals('abc', $entity->test_b);
+            
+            $entity->test_a = '666';
+            $entity->test_b = 'xxx';
+            $r = $repo->save($entity);
+            $this->assertTrue($r instanceof EntityRepository);
+            
+            $entity = $repo->fetch($uuid1);
+            $this->assertTrue($entity instanceof Entity);
+            $this->assertEquals($uuid1, $entity->uuid);
+            $this->assertEquals('666', $entity->test_a);
+            $this->assertEquals('xxx', $entity->test_b);
+            
+            $collection = $repo->fetchCollection();
+            $this->assertTrue($collection instanceof Collection);
+            $this->assertEquals(3, count($collection));
+            foreach ($collection as $r) {
+                $this->assertTrue($r instanceof Entity);
+            }
+            
+            $r = $repo->delete($entity);
+            $this->assertTrue($r instanceof EntityRepository);
+            
+            $this->assertNull($repo->fetch(1));
+            
+            $uuid4 = RandomUtils::randomUuid();
+            $entity = new Entity();
+            $entity->uuid = $uuid4;
+            $entity->test_a = '999';
+            $entity->test_b = 'yyy';
+            $r = $repo->save($entity);
+            $this->assertTrue($r instanceof EntityRepository);
+            $this->assertEquals($uuid4, $entity->uuid);
+            
+            $entity->test_a = '888';
+            $entity->test_b = 'zzz';
+            $repo->save($entity);
+            
+            $entity = $repo->fetch($uuid4);
+            $this->assertTrue($entity instanceof Entity);
+            $this->assertEquals('888', $entity->test_a);
+            $this->assertEquals('zzz', $entity->test_b);
+            
+            $collection = $repo->createQuery()
+                ->select('*')
+                ->from('test3')
                 ->orderBy('test_a ASC')
                 ->execute()
                 ->fetchCollection();
