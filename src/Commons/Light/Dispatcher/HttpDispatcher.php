@@ -16,6 +16,7 @@ namespace Commons\Light\Dispatcher;
 
 use Commons\Autoloader\Exception as AutoloaderException;
 use Commons\Autoloader\DefaultAutoloader as Autoloader;
+use Commons\Buffer\OutputBuffer;
 use Commons\Http\Request;
 use Commons\Http\Response;
 use Commons\Light\Controller\AbstractController;
@@ -209,10 +210,12 @@ class HttpDispatcher extends AbstractDispatcher
         $controllerClass = $namespace.$controllerClass;
         
         try {
+            OutputBuffer::start();
             Autoloader::loadClass($controllerClass);
             /** @var $controller AbstractController */
             $controller = new $controllerClass($this->getRequest(), $this->getResponse());
             $controller->dispatch($params);
+            $this->getResponse()->prependBody(OutputBuffer::end());
         } catch (AutoloaderException $e) {
             throw new Exception("Cannot find controller '{$controllerClass}'");
         }

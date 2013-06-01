@@ -34,6 +34,17 @@ class Response
     }
     
     /**
+     * Prepend body.
+     * @param string $body
+     * @return \Commons\Http\Response
+     */
+    public function prependBody($body)
+    {
+        $this->_body = $body.$this->_body;
+        return $this;
+    }
+    
+    /**
      * Get body.
      * @return string
      */
