@@ -111,7 +111,7 @@ class ActionController extends AbstractController
                 $view = $this->getView();
             }
             
-        } catch (CallbackException $e) {
+        } catch (Exception $e) {
             $class = get_class($this);
             throw new Exception("Action '{$actionName}' was not found in controller '{$class}'");
         }
