@@ -28,10 +28,16 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#">PHP Commons</a>
+          <a class="brand" href="<?= $this->assetUrl('/') ?>">PHP Commons</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
+              <li class="active"><a href="<?= $this->assetUrl('/') ?>">Home</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Help <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="<?= $this->assetUrl('/help/about') ?>">About</a></li>
+                </ul>
+              </li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>

@@ -16,13 +16,17 @@ namespace Commons\Light\Controller;
 
 use Commons\Http\Request;
 use Commons\Http\Response;
+use Commons\Plugin\Broker as PluginBroker;
+use Commons\Plugin\Exception as PluginException;
+use Commons\Plugin\InvokerInterface as PluginInvokerInterface;
 
-abstract class AbstractController
+abstract class AbstractController implements PluginInvokerInterface
 {
     
     protected $_request;
     protected $_response;
     protected $_resourcesPath;
+    protected $_pluginBroker;
     
     /**
      * Init constructor.
@@ -120,6 +124,30 @@ abstract class AbstractController
     }
     
     /**
+     * Set plugin broker.
+     * @see \Commons\Plugin\InvokerInterface::setPluginBroker()
+     */
+    public function setPluginBroker(PluginBroker $pluginBroker)
+    {
+        $this->_pluginBroker = $pluginBroker;
+        return $this;
+    }
+    
+    /**
+     * Get plugin broker.
+     * @see \Commons\Plugin\InvokerInterface::getPluginBroker()
+     */
+    public function getPluginBroker()
+    {
+        if (!isset($this->_pluginBroker)) {
+            $pluginBroker = new PluginBroker();
+            $pluginBroker->addNamespace('Commons\Http\Plugin');
+            $this->setPluginBroker($pluginBroker);
+        }
+        return $this->_pluginBroker;
+    }
+    
+    /**
      * Dispatch method.
      * @param array $params
      * @return \Commons\Light\View\ViewInterface
@@ -127,6 +155,21 @@ abstract class AbstractController
     public function dispatch(array $params = array())
     {
         throw Exception("Not implemented");
+    }
+    
+    /**
+     * Invoke plugin.
+     * @param string $name
+     * @param array $args
+     * @return mixed
+     */
+    public function __call($name, array $args = array())
+    {
+        try {
+            return $this->getPluginBroker()->invoke($this, $name, $args);
+        } catch (PluginException $e) {
+            throw new Exception($e);
+        }
     }
     
 }
