@@ -14,8 +14,6 @@
 
 namespace Commons\Light\Dispatcher;
 
-use Commons\Autoloader\Exception as AutoloaderException;
-use Commons\Autoloader\DefaultAutoloader as Autoloader;
 use Commons\Buffer\OutputBuffer;
 use Commons\Http\Request;
 use Commons\Http\Response;
@@ -90,6 +88,7 @@ class HttpDispatcher extends AbstractDispatcher
      */
     public function setModuleNamespace($module, $namespace)
     {
+        $namespace = trim($namespace, '\\');
         $this->_moduleNamespaces[$module] = $namespace;
         return $this;
     }
@@ -207,19 +206,18 @@ class HttpDispatcher extends AbstractDispatcher
         $controllerClass = str_replace('-', ' ', $controllerName);
         $controllerClass = str_replace(' ', '', ucwords($controllerClass));
         $controllerClass .= 'Controller';
-        $controllerClass = $namespace.$controllerClass;
+        $controllerClass = '\\'.$namespace.'\\'.$controllerClass;
         
-        try {
-            OutputBuffer::start();
-            Autoloader::loadClass($controllerClass);
-            /** @var $controller AbstractController */
-            $controller = new $controllerClass($this->getRequest(), $this->getResponse());
-            $controller->dispatch($params);
-            $this->getResponse()->prependBody(OutputBuffer::end());
-        } catch (AutoloaderException $e) {
+        if (!class_exists($controllerClass, true)) {
             throw new Exception("Cannot find controller '{$controllerClass}'");
         }
+        OutputBuffer::start();
+
+        /** @var $controller AbstractController */
+        $controller = new $controllerClass($this->getRequest(), $this->getResponse());
+        $controller->dispatch($params);
         
+        $this->getResponse()->prependBody(OutputBuffer::end());
         $this->getResponse()->send();
         
         return $this;
