@@ -32,7 +32,7 @@ class RegexRoute implements RouteInterface
      */
     public function __construct($matchPattern, array $params = array(), array $mappings = array(), $assemblyPattern = null)
     {
-        $this->_matchPattern = $matchPattern;
+        $this->_matchPattern = trim($matchPattern, '/');
         $this->_params = $params;
         $this->_mappings = $mappings;
         $this->_assemblyPattern = (isset($assemblyPattern) ? $assemblyPattern : $matchPattern);

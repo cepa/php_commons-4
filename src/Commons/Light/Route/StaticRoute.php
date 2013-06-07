@@ -29,7 +29,7 @@ class StaticRoute implements RouteInterface
      */
     public function __construct($pattern, array $params = array())
     {
-        $this->_pattern = $pattern;
+        $this->_pattern = trim($pattern, '/');
         $this->_params = $params;
     }
     
