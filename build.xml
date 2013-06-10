@@ -58,7 +58,7 @@
     <target name="test" depends="prepare"
             description="Unit testing">
         <exec 
-                command="bash -c 'phpunit --debug --bootstrap bootstrap.php --verbose --process-isolation --log-junit results/unittests.xml .'" 
+                command="phpunit --debug --bootstrap bootstrap.php --verbose --process-isolation --log-junit results/unittests.xml ." 
                 dir="./test/"  
                 passthru="true"
                 checkreturn="true"/>
@@ -68,7 +68,7 @@
     <target name="coverage" depends="prepare"
             description="Unit testing">
         <exec 
-                command="bash -c 'phpunit --debug --bootstrap bootstrap.php --verbose --process-isolation --coverage-html coverage/ --log-junit results/unittests.xml .'" 
+                command="phpunit --debug --bootstrap bootstrap.php --verbose --process-isolation --coverage-html coverage/ --log-junit results/unittests.xml ." 
                 dir="./test/"  
                 passthru="true"
                 checkreturn="true"/>
