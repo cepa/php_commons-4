@@ -15,6 +15,8 @@
 namespace Commons\KeyStore;
 
 use Predis\Client as PredisClient;
+use Commons\Json\Encoder as JsonEncoder;
+use Commons\Json\Decoder as JsonDecoder;
 
 class RedisKeyStore implements KeyStoreInterface
 {
@@ -74,7 +76,7 @@ class RedisKeyStore implements KeyStoreInterface
      */
     public function set($name, $value, $ttl = null)
     {
-        $this->getPredisClient()->set($name, $value);
+        $this->getPredisClient()->set($name, $this->_serialize($value));
         if (isset($ttl)) $this->getPredisClient()->expire($name, $ttl);
         return $this;
     }
@@ -85,7 +87,7 @@ class RedisKeyStore implements KeyStoreInterface
      */
     public function get($name, $defaultValue = null)
     {
-        return ($this->has($name) ? $this->getPredisClient()->get($name) : $defaultValue);
+        return ($this->has($name) ? $this->_unserialize($this->getPredisClient()->get($name)) : $defaultValue);
     }
     
     /**
@@ -125,6 +127,18 @@ class RedisKeyStore implements KeyStoreInterface
     {
         $this->getPredisClient()->del($name);
         return $this;
+    }
+    
+    protected function _serialize($data)
+    {
+        $encoder = new JsonEncoder();
+        return $encoder->encode($data);
+    }
+    
+    protected function _unserialize($data)
+    {
+        $decoder = new JsonDecoder();
+        return $decoder->decode($data);
     }
     
 }

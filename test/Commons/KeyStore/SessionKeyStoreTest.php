@@ -14,6 +14,9 @@
 
 namespace Commons\KeyStore;
 
+use Commons\Entity\Entity;
+use Commons\Utils\RandomUtils;
+
 class SessionKeyStoreTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -78,6 +81,35 @@ class SessionKeyStoreTest extends \PHPUnit_Framework_TestCase
         $a = $keyStore->get('xxx');
         $this->assertTrue(is_array($a));
         $this->assertEquals(3, count($a));
+    }
+    
+    public function testEntityRepository()
+    {
+        $_SESSION = array();
+        
+        $keyStore = new SessionKeyStore();
+        $keyStore->remove('xxx');
+        $this->assertFalse($keyStore->has('xxx'));
+                
+        $uuid = RandomUtils::randomUuid();
+        $entity = new Entity();
+        $entity->uuid = $uuid;
+        $entity->first_name = 'Johnny';
+        $entity->last_name = 'Walker';
+        $entity->email = 'johnny@walker.com';
+        
+        $repo = new EntityRepository($keyStore);
+        $repo->setPrimaryKey('uuid');
+        
+        $this->assertNull($repo->fetch($uuid));
+        $repo->save($entity);
+        
+        $entity = $repo->fetch($uuid);
+        $this->assertTrue($entity instanceof Entity);
+        $this->assertEquals($uuid, $entity->uuid);
+        
+        $repo->delete($entity);
+        $this->assertNull($repo->fetch($uuid));
     }
     
 }
