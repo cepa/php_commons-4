@@ -16,13 +16,16 @@ namespace Commons\KeyStore;
 
 use Commons\Entity\Entity;
 use Commons\Entity\AbstractRepository;
-use Commons\Json\Encoder as JsonEncoder;
-use Commons\Json\Decoder as JsonDecoder;
 
 class EntityRepository extends AbstractRepository
 {
     
     protected $_keyStore;
+    
+    public function __construct(KeyStoreInterface $keyStore = null)
+    {
+        $this->_keyStore = $keyStore;
+    }
     
     /**
      * Set key store.
@@ -53,8 +56,10 @@ class EntityRepository extends AbstractRepository
         if (!$this->getKeyStore()->has($primaryKey)) {
             return null;
         }
-        $decoder = new JsonDecoder();
-        $array = $decoder->decode($this->getKeyStore()->get($primaryKey));
+        $array = $this->getKeyStore()->get($primaryKey);
+        if (!is_array($array)) {
+            throw new Exception("Invalid value for key {$primaryKey}");
+        }
         $entityClass = $this->getEntityClass();
         return new $entityClass($array);
     }
@@ -65,7 +70,7 @@ class EntityRepository extends AbstractRepository
      */
     public function fetchCollection($criteria = null)
     {
-        throw new Exception("Not supported");    
+        throw new Exception("Not implemented");    
     }
     
     /**
@@ -74,9 +79,7 @@ class EntityRepository extends AbstractRepository
      */
     public function save(Entity $entity)
     {
-        $encoder = new JsonEncoder();
-        $json = $encoder->encode($entity->toArray());
-        $this->getKeyStore()->set($entity->get($this->getPrimaryKey()), $json);
+        $this->getKeyStore()->set($entity->get($this->getPrimaryKey()), $entity->toArray());
         return $this;
     }
     
