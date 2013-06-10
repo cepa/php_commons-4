@@ -2,6 +2,41 @@
 
 <project name="php_commons" default="build" basedir=".">
 
+    <!-- Download composer -->
+    <target name="download-composer"
+        description="Download composer">
+        <if>
+            <available file="composer.phar" type="file" />
+            <then>
+                <echo msg="File composer.phar already exists, skipping."/>
+            </then>
+            <else>
+                <exec 
+                        command="curl -s http://getcomposer.org/installer | php" 
+                        dir="."  
+                        passthru="true"
+                        checkreturn="true"/>
+            </else>
+        </if>
+    </target>
+  
+    <!-- Composer update-->
+    <target name="composer-update" depends="download-composer"
+        description="Run composer update">
+        <exec 
+                command="php composer.phar update" 
+                dir="."  
+                passthru="true"
+                checkreturn="true"/>
+    </target>
+  
+    <target name="exec-console-task">
+        <exec 
+                command="vendor/hellworx/php_commons-4/bin/console --bootstrap src/bootstrap.php ${task}" 
+                dir="."  
+                passthru="true"
+                checkreturn="true"/>
+    </target>
 
     <!-- Clean -->
     <target name="clean"
@@ -12,7 +47,7 @@
     </target>
   
     <!-- Prepare -->
-    <target name="prepare"
+    <target name="prepare" depends="composer-update"
             description="Prepare">
         <mkdir dir="./test/results"/>
         <mkdir dir="./test/coverage"/>
