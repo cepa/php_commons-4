@@ -41,7 +41,7 @@ class EntityRepositoryTest extends \PHPUnit_Framework_TestCase
         $repo->setEntityClass('\Commons\Entity\Entity');
         
         $_SESSION = array(
-            'abc' => '{"id":"abc","a":123,"b":"abc"}'
+            'abc' => array('id' => 'abc', 'a' => 123, 'b' => 'abc')
         );
         
         $entity = $repo->fetch('abc');
@@ -89,6 +89,15 @@ class EntityRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\Commons\KeyStore\Exception');
         $repo = new EntityRepository();
         $repo->fetchCollection();
+    }
+    
+    public function testRepoInvalidKeyValue()
+    {
+        $_SESSION = array('xxx' => 'abc');
+        $this->setExpectedException('\Commons\KeyStore\Exception');
+        $repo = new EntityRepository();
+        $repo->setKeyStore(new SessionKeyStore());
+        $repo->fetch('xxx');
     }
     
 }
