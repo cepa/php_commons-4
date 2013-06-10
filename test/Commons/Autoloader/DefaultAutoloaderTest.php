@@ -31,11 +31,4 @@ class DefaultAutoloaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Mock_OldAutoloadMethod', (string) $obj);
     }
 
-    public function testAutoloader_CustomAutoloadMethod()
-    {
-        $obj = new \Mock_Custom_Autoload_Method();
-        $this->assertTrue($obj instanceof \Mock_Custom_Autoload_Method);
-        $this->assertEquals('Mock_Custom_Autoload_Method', (string) $obj);
-    }
-
 }
