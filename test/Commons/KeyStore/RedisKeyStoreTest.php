@@ -14,6 +14,9 @@
 
 namespace Commons\KeyStore;
 
+use Commons\Entity\Entity;
+use Commons\Utils\RandomUtils;
+
 class RedisKeyStoreTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -79,19 +82,17 @@ class RedisKeyStoreTest extends \PHPUnit_Framework_TestCase
         }
         
         $keyStore = new RedisKeyStore();
-        $ks = $keyStore->connect(array(
+        $keyStore->connect(array(
             'servers' => array('scheme' => 'tcp', 'host' => 'localhost', 'port' => 6379)
         ));
+        $keyStore->remove('xxx');
+        $this->assertFalse($keyStore->has('xxx'));
         
         $array = array(
             'first_name' => 'Johnny',
             'last_name'  => 'Walker',
             'email'      => 'johnny@walker.com' 
         );
-        
-        $keyStore = new ApcKeyStore();
-        $keyStore->remove('xxx');
-        $this->assertFalse($keyStore->has('xxx'));
         
         $ks = $keyStore->set('xxx', $array);
         $this->assertTrue($ks instanceof KeyStoreInterface);
@@ -100,6 +101,46 @@ class RedisKeyStoreTest extends \PHPUnit_Framework_TestCase
         $a = $keyStore->get('xxx');
         $this->assertTrue(is_array($a));
         $this->assertEquals(3, count($a));
+    }
+    
+    public function testEntityRepository()
+    {
+        if (getenv('DISABLE_REDIS') == 1) {
+            $this->markTestIncomplete('Redis tests are disabled');
+            return;
+        }
+        
+        if (!class_exists('\Predis\Client')) {
+            $this->markTestIncomplete('Please install Predis library');
+            return;
+        }
+        
+        $keyStore = new RedisKeyStore();
+        $keyStore->connect(array(
+            'servers' => array('scheme' => 'tcp', 'host' => 'localhost', 'port' => 6379)
+        ));
+        $keyStore->remove('xxx');
+        $this->assertFalse($keyStore->has('xxx'));
+                
+        $uuid = RandomUtils::randomUuid();
+        $entity = new Entity();
+        $entity->uuid = $uuid;
+        $entity->first_name = 'Johnny';
+        $entity->last_name = 'Walker';
+        $entity->email = 'johnny@walker.com';
+        
+        $repo = new EntityRepository($keyStore);
+        $repo->setPrimaryKey('uuid');
+        
+        $this->assertNull($repo->fetch($uuid));
+        $repo->save($entity);
+        
+        $entity = $repo->fetch($uuid);
+        $this->assertTrue($entity instanceof Entity);
+        $this->assertEquals($uuid, $entity->uuid);
+        
+        $repo->delete($entity);
+        $this->assertNull($repo->fetch($uuid));
     }
     
 }
