@@ -27,6 +27,11 @@ class MemcacheKeyStoreTest extends \PHPUnit_Framework_TestCase
         $keyStore = new MemcacheKeyStore();
         $ks = $keyStore->connect(array('host' => 'localhost'));
         $this->assertTrue($ks instanceof KeyStoreInterface);
+        
+        $keyStore
+            ->remove('xxx')
+            ->remove('yyy');
+        
         $this->assertFalse($keyStore->has('xxx'));
         $this->assertFalse($keyStore->has('yyy'));
         $this->assertEquals(666, $keyStore->get('yyy', 666));
@@ -51,6 +56,34 @@ class MemcacheKeyStoreTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($keyStore->get('xxx'));
         $ks = $keyStore->close();
         $this->assertTrue($ks instanceof KeyStoreInterface);
+    }
+    
+    public function testStoreArray()
+    {
+        if (!class_exists('Memcache')) {
+            $this->markTestIncomplete('Please install Memcache extenstion');
+            return;
+        }
+                
+        $array = array(
+            'first_name' => 'Johnny',
+            'last_name'  => 'Walker',
+            'email'      => 'johnny@walker.com' 
+        );
+        
+        $keyStore = new MemcacheKeyStore();
+        $keyStore->connect(array('host' => 'localhost'));
+        
+        $keyStore->remove('xxx');
+        $this->assertFalse($keyStore->has('xxx'));
+        
+        $ks = $keyStore->set('xxx', $array);
+        $this->assertTrue($ks instanceof KeyStoreInterface);
+        $this->assertTrue($keyStore->has('xxx'));
+        
+        $a = $keyStore->get('xxx');
+        $this->assertTrue(is_array($a));
+        $this->assertEquals(3, count($a));
     }
     
 }

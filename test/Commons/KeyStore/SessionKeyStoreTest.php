@@ -57,4 +57,27 @@ class SessionKeyStoreTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $_SESSION['xxx']);
     }
     
+    public function testStoreArray()
+    {
+        $_SESSION = array();
+        
+        $array = array(
+            'first_name' => 'Johnny',
+            'last_name'  => 'Walker',
+            'email'      => 'johnny@walker.com' 
+        );
+        
+        $keyStore = new SessionKeyStore();
+        $keyStore->remove('xxx');
+        $this->assertFalse($keyStore->has('xxx'));
+        
+        $ks = $keyStore->set('xxx', $array);
+        $this->assertTrue($ks instanceof KeyStoreInterface);
+        $this->assertTrue($keyStore->has('xxx'));
+        
+        $a = $keyStore->get('xxx');
+        $this->assertTrue(is_array($a));
+        $this->assertEquals(3, count($a));
+    }
+    
 }

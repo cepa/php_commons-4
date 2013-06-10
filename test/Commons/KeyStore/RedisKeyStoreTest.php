@@ -66,4 +66,40 @@ class RedisKeyStoreTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($ks instanceof KeyStoreInterface);
     }
     
+    public function testStoreArray()
+    {
+        if (getenv('DISABLE_REDIS') == 1) {
+            $this->markTestIncomplete('Redis tests are disabled');
+            return;
+        }
+        
+        if (!class_exists('\Predis\Client')) {
+            $this->markTestIncomplete('Please install Predis library');
+            return;
+        }
+        
+        $keyStore = new RedisKeyStore();
+        $ks = $keyStore->connect(array(
+            'servers' => array('scheme' => 'tcp', 'host' => 'localhost', 'port' => 6379)
+        ));
+        
+        $array = array(
+            'first_name' => 'Johnny',
+            'last_name'  => 'Walker',
+            'email'      => 'johnny@walker.com' 
+        );
+        
+        $keyStore = new ApcKeyStore();
+        $keyStore->remove('xxx');
+        $this->assertFalse($keyStore->has('xxx'));
+        
+        $ks = $keyStore->set('xxx', $array);
+        $this->assertTrue($ks instanceof KeyStoreInterface);
+        $this->assertTrue($keyStore->has('xxx'));
+        
+        $a = $keyStore->get('xxx');
+        $this->assertTrue(is_array($a));
+        $this->assertEquals(3, count($a));
+    }
+    
 }
