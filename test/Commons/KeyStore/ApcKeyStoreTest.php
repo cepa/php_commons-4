@@ -49,4 +49,30 @@ class ApcKeyStoreTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($keyStore->get('xxx'));
     }
     
+    public function testStoreArray()
+    {
+        if (ini_get('apc.enable_cli') != 1) {
+            $this->markTestIncomplete('Please set ini apc.enable_cli=1');
+            return;
+        }
+        
+        $array = array(
+            'first_name' => 'Johnny',
+            'last_name'  => 'Walker',
+            'email'      => 'johnny@walker.com' 
+        );
+        
+        $keyStore = new ApcKeyStore();
+        $keyStore->remove('xxx');
+        $this->assertFalse($keyStore->has('xxx'));
+        
+        $ks = $keyStore->set('xxx', $array);
+        $this->assertTrue($ks instanceof KeyStoreInterface);
+        $this->assertTrue($keyStore->has('xxx'));
+        
+        $a = $keyStore->get('xxx');
+        $this->assertTrue(is_array($a));
+        $this->assertEquals(3, count($a));
+    }
+    
 }
