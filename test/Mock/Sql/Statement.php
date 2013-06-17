@@ -2,13 +2,13 @@
 
 /**
  * =============================================================================
- * @file        Mock/Sql/Statement.php
+ * @file       Mock/Sql/Statement.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
- *              Copyright (C) 2009-2012 HellWorx Software
- *              All rights reserved.
- *              www.hellworx.com
+ *             Copyright (C) 2009-2013 PHP Commons Contributors
+ *             All rights reserved.
+ *             www.phpcommons.com
  * =============================================================================
  */
 
