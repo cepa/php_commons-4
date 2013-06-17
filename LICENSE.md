@@ -1,6 +1,6 @@
-Copyright (c) 2009-2013, HellWorx Software
+Copyright (c) 2009-2013 PHP Commons Contributors
 All rights reserved.
-http://phpcommons.hellworx.com
+http://www.phpcommons.com
 
 Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
