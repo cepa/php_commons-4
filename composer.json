@@ -7,6 +7,10 @@
     "license": "BSD",
     "authors": [
         {
+            "name": "PHP Commons Contributors",
+            "homepage": "http://www.phpcommons.com"
+        },
+        {
             "name": "Lukasz Cepowski",
             "homepage": "http://lukasz.cepowski.com"
         }
