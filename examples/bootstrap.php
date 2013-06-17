@@ -14,7 +14,3 @@ define('DATABASE_NAME', 'php_commons_examples');
 $rootDir = dirname(dirname(__FILE__));
 require_once $rootDir.'/vendor/autoload.php';
 
-Commons\Autoloader\DefaultAutoloader::addIncludePath($rootDir.'/src');
-Commons\Autoloader\DefaultAutoloader::addIncludePath($rootDir.'/test');
-Commons\Autoloader\DefaultAutoloader::init();
-
