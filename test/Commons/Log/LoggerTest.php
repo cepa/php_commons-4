@@ -39,7 +39,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         $logger = new Logger();
         $logger->addWriter(new SyslogWriter());
-        $logger->log('test log');
+        $logger->log(Log::DEBUG, 'test log');
         $logger->emergency('test emergency');
         $logger->alert('test alert');
         $logger->critical('test critical');

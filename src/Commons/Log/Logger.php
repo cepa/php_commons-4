@@ -14,10 +14,11 @@
 
 namespace Commons\Log;
 
+use Psr\Log\LoggerInterface;
 use Commons\Log\Writer\AbstractWriter;
 use Commons\Log\Writer\NullWriter;
 
-class Logger
+class Logger implements LoggerInterface
 {
     /** @var AbstractWriter[] */
     protected $_writers = array();
@@ -68,12 +69,12 @@ class Logger
     /**
      * Log message.
      * @param string $message
-     * @param int $priority
+     * @param int $level
      * @return \Commons\Log\Logger
      */
-    public function log($message, $priority = Log::DEBUG)
+    public function log($level, $message, array $context = array())
     {
-        return $this->_log($message, $priority);
+        return $this->_log($level, $message);
     }
     
     /**
@@ -81,9 +82,9 @@ class Logger
      * @param string $message
      * @return \Commons\Log\Logger
      */
-    public function emergency($message)
+    public function emergency($message, array $context = array())
     {
-        return $this->_log($message, Log::EMERGENCY);
+        return $this->_log(Log::EMERGENCY, $message);
     }
     
     /**
@@ -91,9 +92,9 @@ class Logger
      * @param string $message
      * @return \Commons\Log\Logger
      */
-    public function alert($message)
+    public function alert($message, array $context = array())
     {
-        return $this->_log($message, Log::ALERT);
+        return $this->_log(Log::ALERT, $message);
     }
     
     /**
@@ -101,9 +102,9 @@ class Logger
      * @param string $message
      * @return \Commons\Log\Logger
      */
-    public function critical($message)
+    public function critical($message, array $context = array())
     {
-        return $this->_log($message, Log::CRITICAL);
+        return $this->_log(Log::CRITICAL, $message);
     }
     
     /**
@@ -111,9 +112,9 @@ class Logger
      * @param string $message
      * @return \Commons\Log\Logger
      */
-    public function error($message)
+    public function error($message, array $context = array())
     {
-        return $this->_log($message, Log::ERROR);
+        return $this->_log(Log::ERROR, $message);
     }
     
     /**
@@ -121,9 +122,9 @@ class Logger
      * @param string $message
      * @return \Commons\Log\Logger
      */
-    public function warning($message)
+    public function warning($message, array $context = array())
     {
-        return $this->_log($message, Log::WARNING);
+        return $this->_log(Log::WARNING, $message);
     }
     
     /**
@@ -131,9 +132,9 @@ class Logger
      * @param string $message
      * @return \Commons\Log\Logger
      */
-    public function notice($message)
+    public function notice($message, array $context = array())
     {
-        return $this->_log($message, Log::NOTICE);
+        return $this->_log(Log::NOTICE, $message);
     }
     
     /**
@@ -141,9 +142,9 @@ class Logger
      * @param string $message
      * @return \Commons\Log\Logger
      */
-    public function info($message)
+    public function info($message, array $context = array())
     {
-        return $this->_log($message, Log::INFO);
+        return $this->_log(Log::INFO, $message);
     }
     
     /**
@@ -151,21 +152,21 @@ class Logger
      * @param string $message
      * @return \Commons\Log\Logger
      */
-    public function debug($message)
+    public function debug($message, array $context = array())
     {
-        return $this->_log($message, Log::DEBUG);
+        return $this->_log(Log::DEBUG, $message);
     }
     
     /**
      * Write raw message.
      * @param string $message
-     * @param int $priority
+     * @param int $level
      * @return \Commons\Log\Logger
      */
-    public function write($message, $priority)
+    public function write($message, $level)
     {
         foreach ($this->getWriters() as $writer) {
-            $writer->write($message, $priority);
+            $writer->write($message, $level);
         }
         return $this;
     }
@@ -173,10 +174,10 @@ class Logger
     /**
      * Log a message.
      * @param string $message
-     * @param int $priority
+     * @param int $level
      * @return \Commons\Log\Logger
      */
-    protected function _log($message, $priority = Log::DEBUG)
+    protected function _log($level, $message)
     {
     	if (is_array($message) || (is_object($message) && !method_exists($message, '__toString'))) {
     		$message = var_export($message, true);
@@ -184,12 +185,12 @@ class Logger
         
     	$trace = debug_backtrace();
         $message = array(
-            'priority'	=> $priority,
+            'priority'	=> $level,
             'file'		=> $trace[1]['file'],
             'line'		=> $trace[1]['line'],
             'message'   => (string) $message
         );
-        return $this->write($message, $priority);
+        return $this->write($message, $level);
     }
 
 }

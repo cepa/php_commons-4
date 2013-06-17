@@ -14,6 +14,7 @@
     "version": "3",
     "require": {
         "php": ">=5.3.0",
+        "psr/log": "~1.0",
         "nrk/predis": "v0.8.3",
         "thobbs/phpcassa": "v1.0.a.6"
     },
