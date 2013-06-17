@@ -14,14 +14,16 @@
     "version": "3",
     "require": {
         "php": ">=5.3.0",
-        "nrk/predis": "v0.8.3"
+        "nrk/predis": "v0.8.3",
+        "thobbs/phpcassa": "v1.0.a.6"
     },
     "autoload": {
         "psr-0": {
             "Commons": ["src/", "test/"],
             "Mock": "test/",
             "Predis": "vendor/nrk/predis/lib/"
-        }
+        },
+        "files": ["vendor/thobbs/phpcassa/lib/autoload.php"]
     },
     "repositories": {
         "nrk/predis": {
@@ -33,6 +35,18 @@
                     "url": "https://github.com/nrk/predis.git",
                     "type": "git",
                     "reference": "v0.8.3"
+                }
+            }
+        },
+        "thobbs/phpcassa": {
+            "type": "package",
+            "package": {
+                "name": "thobbs/phpcassa",
+                "version": "v1.0.a.6",
+                "source": {
+                    "url": "https://github.com/thobbs/phpcassa",
+                    "type": "git",
+                    "reference": "v1.0.a.6"
                 }
             }
         }
