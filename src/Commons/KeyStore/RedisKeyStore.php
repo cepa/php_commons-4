@@ -18,7 +18,7 @@ use Predis\Client as PredisClient;
 use Commons\Json\Encoder as JsonEncoder;
 use Commons\Json\Decoder as JsonDecoder;
 
-class RedisKeyStore implements KeyStoreInterface
+class RedisKeyStore extends AbstractKeyStore
 {
     
     private $_predis;
