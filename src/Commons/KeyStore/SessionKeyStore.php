@@ -14,7 +14,7 @@
 
 namespace Commons\KeyStore;
 
-class SessionKeyStore implements KeyStoreInterface
+class SessionKeyStore extends AbstractKeyStore
 {
     
     /**

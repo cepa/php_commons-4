@@ -14,7 +14,7 @@
 
 namespace Commons\KeyStore;
 
-class MemcacheKeyStore implements KeyStoreInterface
+class MemcacheKeyStore extends AbstractKeyStore
 {
     
     private $_memcache;

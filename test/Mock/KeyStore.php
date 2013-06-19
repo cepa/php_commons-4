@@ -14,9 +14,9 @@
 
 namespace Mock;
 
-use Commons\KeyStore\KeyStoreInterface;
+use Commons\KeyStore\AbstractKeyStore;
 
-class KeyStore implements KeyStoreInterface 
+class KeyStore extends AbstractKeyStore
 {
     
     protected $_storage = array();

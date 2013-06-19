@@ -14,7 +14,7 @@
 
 namespace Commons\KeyStore;
 
-class ApcKeyStore implements KeyStoreInterface
+class ApcKeyStore extends AbstractKeyStore
 {
     
     private $_hasApcExists = true;
