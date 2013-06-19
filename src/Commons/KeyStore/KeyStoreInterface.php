@@ -28,7 +28,7 @@ interface KeyStoreInterface
      * Close connection to a key store.
      * @return KeyStoreInterface
      */
-    public function close();
+    public function disconnect();
     
     /**
      * Set key value.

@@ -62,9 +62,9 @@ class RedisKeyStore extends AbstractKeyStore
     
     /**
      * Close connection.
-     * @see \Commons\KeyStore\KeyStoreInterface::close()
+     * @see \Commons\KeyStore\KeyStoreInterface::disconnect()
      */
-    public function close()
+    public function disconnect()
     {
         $this->getPredisClient()->disconnect();
         return $this;
