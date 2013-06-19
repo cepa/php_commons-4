@@ -29,9 +29,9 @@ class SessionKeyStore extends AbstractKeyStore
     
     /**
      * Fake close.
-     * @see \Commons\KeyStore\KeyStoreInterface::close()
+     * @see \Commons\KeyStore\KeyStoreInterface::disconnect()
      */
-    public function close()
+    public function disconnect()
     {
         // Dummy.
         return $this;

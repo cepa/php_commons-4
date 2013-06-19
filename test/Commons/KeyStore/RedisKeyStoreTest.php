@@ -65,7 +65,7 @@ class RedisKeyStoreTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($ks instanceof KeyStoreInterface);
         $this->assertFalse($keyStore->has('xxx'));
         $this->assertNull($keyStore->get('xxx'));
-        $ks = $keyStore->close();
+        $ks = $keyStore->disconnect();
         $this->assertTrue($ks instanceof KeyStoreInterface);
     }
     

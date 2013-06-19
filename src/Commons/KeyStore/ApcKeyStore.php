@@ -44,9 +44,9 @@ class ApcKeyStore extends AbstractKeyStore
     
     /**
      * Not used.
-     * @see \Commons\KeyStore\KeyStoreInterface::close()
+     * @see \Commons\KeyStore\KeyStoreInterface::disconnect()
      */
-    public function close()
+    public function disconnect()
     {
         return $this;
     }

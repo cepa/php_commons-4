@@ -26,7 +26,7 @@ class KeyStore extends AbstractKeyStore
         return $this;
     }
     
-    public function close()
+    public function disconnect()
     {
         return $this;
     }
