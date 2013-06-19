@@ -19,8 +19,9 @@
 
 require_once 'bootstrap.php';
 
-use phpcassa\Connection\ConnectionPool;
 use Commons\Entity\Entity;
+use Commons\NoSql\Cassandra\Connection\Connection;
+use Commons\NoSql\Cassandra\Connection\ConnectionInterface;
 use Commons\NoSql\Cassandra\EntityRepository;
 use Commons\Utils\RandomUtils;
 
@@ -65,7 +66,7 @@ class Customer extends Entity
 class CustomerRepository extends EntityRepository
 {
     
-    public function __construct(ConnectionPool $connection)
+    public function __construct(ConnectionInterface $connection)
     {
         parent::__construct($connection);
         $this
@@ -79,9 +80,12 @@ class CustomerRepository extends EntityRepository
 /*
  * Connect to Apache Cassandra.
  */
-$conn = new ConnectionPool('phpcommons', array('localhost:9160'));
-$repo = new CustomerRepository($conn);
-
+$conn = new Connection();
+$conn->connect(array(
+    'keyspace' => 'phpcommons',
+    'servers'  => array('localhost:9160')
+));
+$repo = $conn->getRepository('CustomerRepository');
 /*
  * Check if customer already exists.
  */
@@ -122,4 +126,4 @@ $repo->delete($customer);
 $customer = $repo->fetch($uuid);
 var_dump($customer);
 
-$conn->close();
+$conn->disconnect();

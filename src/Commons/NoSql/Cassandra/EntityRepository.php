@@ -14,47 +14,45 @@
 
 namespace Commons\NoSql\Cassandra;
 
-use phpcassa\Connection\ConnectionPool;
-use phpcassa\ColumnFamily;
 use cassandra\NotFoundException;
 use Commons\Entity\AbstractRepository;
 use Commons\Entity\Collection;
 use Commons\Entity\Entity;
+use Commons\NoSql\Cassandra\Connection\ConnectionInterface;
 
 class EntityRepository extends AbstractRepository
 {
     
-    protected $_connectionPool;
+    protected $_connection;
     protected $_columnFamilyName;
-    private $_columnFamily;
     
     /**
-     * Init cassandra repository.
-     * @param ConnectionPool $cp
+     * Init entity repository.
+     * @param ConnectionInterface $connection
      */
-    public function __construct(ConnectionPool $cp = null)
+    public function __construct(ConnectionInterface $connection = null)
     {
-        $this->_connectionPool = $cp;
+        $this->_connection = $connection;
     }
     
     /**
-     * Set connection pool.
-     * @param ConnectionPool $cp
+     * Set connection.
+     * @param ConnectionInterface $connection
      * @return \Commons\NoSql\Cassandra\EntityRepository
      */
-    public function setConnectionPool(ConnectionPool $cp)
+    public function setConnection(ConnectionInterface $connection)
     {
-        $this->_connectionPool = $cp;
+        $this->_connection = $connection;
         return $this;
     }
     
     /**
-     * Get connection pool.
-     * @return ConnectionPool
+     * Get connection.
+     * @return ConnectionInterface
      */
-    public function getConnectionPool()
+    public function getConnection()
     {
-        return $this->_connectionPool;
+        return $this->_connection;
     }
     
     /**
@@ -81,8 +79,9 @@ class EntityRepository extends AbstractRepository
     public function fetch($primaryKey)
     {
         try {
+            $cf = $this->getConnection()->getColumnFamily($this->getColumnFamilyName());
             $entityClass = $this->getEntityClass();
-            return new $entityClass($this->_getColumnFamily()->get($primaryKey));
+            return new $entityClass($cf->get($primaryKey));
         } catch (NotFoundException $e) {
             return null;
         }
@@ -104,7 +103,8 @@ class EntityRepository extends AbstractRepository
     public function save(Entity $entity)
     {
         try {
-            $this->_getColumnFamily()->insert($entity->get($this->getPrimaryKey()), $entity->toArray());
+            $cf = $this->getConnection()->getColumnFamily($this->getColumnFamilyName());
+            $cf->insert($entity->get($this->getPrimaryKey()), $entity->toArray());
         } catch (\Exception $e) {
             throw new Exception($e);
         }
@@ -117,24 +117,11 @@ class EntityRepository extends AbstractRepository
     public function delete(Entity $entity)
     {
         try {
-            $this->_getColumnFamily()->remove($entity->get($this->getPrimaryKey()));
+            $cf = $this->getConnection()->getColumnFamily($this->getColumnFamilyName());
+            $cf->remove($entity->get($this->getPrimaryKey()));
         } catch (\Exception $e) {
             throw new Exception($e);
         }
-    }
-    
-    /**
-     * Get or create column family instance.
-     * @return \phpcassa\ColumnFamily
-     */
-    protected function _getColumnFamily()
-    {
-        if (!isset($this->_columnFamily)) {
-            $this->_columnFamily = new ColumnFamily(
-                $this->getConnectionPool(),
-                $this->getColumnFamilyName());
-        }
-        return $this->_columnFamily;
     }
     
 } 
