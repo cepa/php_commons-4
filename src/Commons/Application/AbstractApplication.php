@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 use Commons\Config\ConfigAwareInterface;
 use Commons\Log\Log;
 use Commons\Log\LoggerAwareInterface;
-use Commons\Service\Manager as ServiceManager;
+use Commons\Service\ServiceManager;
 
 abstract class AbstractApplication implements LoggerAwareInterface, ConfigAwareInterface
 {

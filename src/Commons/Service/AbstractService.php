@@ -14,8 +14,6 @@
 
 namespace Commons\Service;
 
-use Commons\Container\TraversableContainer;
-
 abstract class AbstractService implements ServiceInterface
 {
     
@@ -25,7 +23,7 @@ abstract class AbstractService implements ServiceInterface
      * Set service config.
      * @see \Commons\Service\ServiceInterface::setConfig()
      */
-    public function setConfig(TraversableContainer $config)
+    public function setConfig($config)
     {
         $this->_config = $config;
         return $this;
