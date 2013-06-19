@@ -14,10 +14,11 @@
 
 namespace Commons\Sql\Connection;
 
+use Commons\Entity\RepositoryAwareInterface;
 use Commons\Entity\RepositoryInterface;
 use Commons\Sql\Query;
 
-abstract class AbstractConnection implements ConnectionInterface
+abstract class AbstractConnection implements ConnectionInterface, RepositoryAwareInterface
 {
     
     protected $_repositories = array();
