@@ -19,7 +19,7 @@ use Commons\Callback\Callback;
 use Commons\Http\Response;
 use Commons\Http\Request;
 use Commons\Plugin\Broker as PluginBroker;
-use Commons\Plugin\InvokerInterface as PluginInvokerInterface;
+use Commons\Plugin\PluginAwareInterface;
 use Commons\Light\Route\RestRoute;
 use Commons\Light\Route\RouteInterface;
 use Commons\Light\Renderer\LayoutRenderer;
@@ -28,7 +28,7 @@ use Commons\Light\View\ViewInterface;
 use Commons\Light\View\TemplateView;
 use Commons\Utils\DebugUtils;
 
-class Moo implements PluginInvokerInterface
+class Moo implements PluginAwareInterface
 {
     
     protected $_baseUri;
@@ -276,7 +276,7 @@ class Moo implements PluginInvokerInterface
     
     /**
      * Set plugin broker.
-     * @see \Commons\Plugin\InvokerInterface::setPluginBroker()
+     * @see \Commons\Plugin\PluginAwareInterface::setPluginBroker()
      */
     public function setPluginBroker(PluginBroker $pluginBroker)
     {
@@ -286,7 +286,7 @@ class Moo implements PluginInvokerInterface
     
     /**
      * Get plugin broker.
-     * @see \Commons\Plugin\InvokerInterface::getPluginBroker()
+     * @see \Commons\Plugin\PluginAwareInterface::getPluginBroker()
      */
     public function getPluginBroker()
     {

@@ -18,9 +18,9 @@ use Commons\Http\Request;
 use Commons\Http\Response;
 use Commons\Plugin\Broker as PluginBroker;
 use Commons\Plugin\Exception as PluginException;
-use Commons\Plugin\InvokerInterface as PluginInvokerInterface;
+use Commons\Plugin\PluginAwareInterface;
 
-abstract class AbstractController implements PluginInvokerInterface
+abstract class AbstractController implements PluginAwareInterface
 {
     
     protected $_request;
@@ -125,7 +125,7 @@ abstract class AbstractController implements PluginInvokerInterface
     
     /**
      * Set plugin broker.
-     * @see \Commons\Plugin\InvokerInterface::setPluginBroker()
+     * @see \Commons\Plugin\PluginAwareInterface::setPluginBroker()
      */
     public function setPluginBroker(PluginBroker $pluginBroker)
     {
@@ -135,7 +135,7 @@ abstract class AbstractController implements PluginInvokerInterface
     
     /**
      * Get plugin broker.
-     * @see \Commons\Plugin\InvokerInterface::getPluginBroker()
+     * @see \Commons\Plugin\PluginAwareInterface::getPluginBroker()
      */
     public function getPluginBroker()
     {

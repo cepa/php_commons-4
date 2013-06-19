@@ -21,10 +21,10 @@ abstract class AbstractPlugin implements PluginInterface
 
     /**
      * Set invoker.
-     * @param InvokerInterface $invoker
+     * @param PluginAwareInterface $invoker
      * @return PluginInterface
      */
-    public function setInvoker(InvokerInterface $invoker)
+    public function setInvoker(PluginAwareInterface $invoker)
     {
         $this->_invoker = $invoker;
         return $this;
@@ -32,7 +32,7 @@ abstract class AbstractPlugin implements PluginInterface
     
     /**
      * Get invoker.
-     * @return InvokerInterface
+     * @return PluginAwareInterface
      */
     public function getInvoker()
     {
