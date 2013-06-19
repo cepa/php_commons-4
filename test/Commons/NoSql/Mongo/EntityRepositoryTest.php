@@ -14,8 +14,8 @@
 
 namespace Commons\NoSql\Mongo;
 
-use \MongoClient;
 use Commons\Entity\Entity;
+use Commons\NoSql\Mongo\Connection\Connection;
 use Commons\Utils\RandomUtils;
 
 class EntityRepositoryTest extends \PHPUnit_Framework_TestCase
@@ -28,6 +28,12 @@ class EntityRepositoryTest extends \PHPUnit_Framework_TestCase
             return;
         }
         
+        $conn = new Connection();
+        $conn->connect(array(
+            'dsn'      => 'mongodb://localhost:27017',
+            'database' => 'phpcommons' 
+        ));
+        
         $uuid = RandomUtils::randomUuid();
         $entity = new Entity();
         $entity->uuid = $uuid;
@@ -35,7 +41,7 @@ class EntityRepositoryTest extends \PHPUnit_Framework_TestCase
         $entity->last_name = 'Walker';
         $entity->email = 'johnny@walker.com';
         
-        $repo = new EntityRepository($this->getMongoDb());
+        $repo = new EntityRepository($conn);
         $repo
             ->setCollectionName('Test')
             ->setPrimaryKey('uuid');
@@ -49,15 +55,8 @@ class EntityRepositoryTest extends \PHPUnit_Framework_TestCase
         
         $repo->delete($entity);
         $this->assertNull($repo->fetch($uuid));
-    }
-    
-    public function getMongoDb()
-    {
-        static $client;
-        if (!isset($client)) {
-            $client = new MongoClient('mongodb://localhost:27017');
-        }   
-        return $client->phpcommons; 
+        
+        $conn->disconnect();
     }
     
 }

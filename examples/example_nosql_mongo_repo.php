@@ -2,9 +2,9 @@
 
 require_once 'bootstrap.php';
 
-use \MongoClient;
-use \MongoDB;
 use Commons\Entity\Entity;
+use Commons\NoSql\Mongo\Connection\Connection;
+use Commons\NoSql\Mongo\Connection\ConnectionInterface;
 use Commons\NoSql\Mongo\EntityRepository;
 use Commons\Utils\RandomUtils;
 
@@ -49,9 +49,9 @@ class Customer extends Entity
 class CustomerRepository extends EntityRepository
 {
     
-    public function __construct(MongoDB $db)
+    public function __construct(ConnectionInterface $connection)
     {
-        parent::__construct($db);
+        parent::__construct($connection);
         $this
             ->setEntityClass('Customer')
             ->setCollectionName('Customer')
@@ -63,8 +63,12 @@ class CustomerRepository extends EntityRepository
 /*
  * Connect to Mongo.
  */
-$client = new MongoClient('mongodb://localhost:27017');
-$repo = new CustomerRepository($client->selectDB('phpcommons'));
+$conn = new Connection();
+$conn->connect(array(
+    'dsn'      => 'mongodb://localhost:27017',
+    'database' => 'phpcommons'
+));
+$repo = new CustomerRepository($conn);
 
 /*
  * Check if customer already exists.
@@ -106,4 +110,4 @@ $repo->delete($customer);
 $customer = $repo->fetch($uuid);
 var_dump($customer);
 
-$client->close();
+$conn->disconnect();
