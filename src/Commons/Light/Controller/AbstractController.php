@@ -16,7 +16,7 @@ namespace Commons\Light\Controller;
 
 use Commons\Http\Request;
 use Commons\Http\Response;
-use Commons\Plugin\Broker as PluginBroker;
+use Commons\Plugin\PluginBroker;
 use Commons\Plugin\Exception as PluginException;
 use Commons\Plugin\PluginAwareInterface;
 

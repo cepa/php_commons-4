@@ -19,7 +19,7 @@ use Commons\Http\Response;
 use Commons\Http\Request;
 use Commons\Light\Route\StaticRoute;
 use Commons\Light\Route\RouteInterface;
-use Commons\Plugin\Broker;
+use Commons\Plugin\PluginBroker;
 
 class MooTest extends \PHPUnit_Framework_TestCase
 {
@@ -121,10 +121,10 @@ class MooTest extends \PHPUnit_Framework_TestCase
     public function testSetGetPluginBroker()
     {
         $moo = new Moo();
-        $this->assertTrue($moo->getPluginBroker() instanceof Broker);
-        $m = $moo->setPluginBroker(new Broker());
+        $this->assertTrue($moo->getPluginBroker() instanceof PluginBroker);
+        $m = $moo->setPluginBroker(new PluginBroker());
         $this->assertTrue($m instanceof Moo);
-        $this->assertTrue($moo->getPluginBroker() instanceof Broker);
+        $this->assertTrue($moo->getPluginBroker() instanceof PluginBroker);
     }
     
     public function testInit()

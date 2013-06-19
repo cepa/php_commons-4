@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file       Commons/Plugin/Broker.php
+ * @file       Commons/Plugin/PluginBroker.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -17,7 +17,7 @@ namespace Commons\Plugin;
 use Commons\Callback\Callback;
 use Commons\Http\Request;
 
-class Broker
+class PluginBroker
 {
     
     protected $_namespaces = array();
@@ -26,7 +26,7 @@ class Broker
     /**
      * Add namespace.
      * @param string $namespace
-     * @return \Commons\Plugin\Broker
+     * @return \Commons\Plugin\PluginBroker
      */
     public function addNamespace($namespace)
     {
@@ -48,7 +48,7 @@ class Broker
     /**
      * Remove namespace.
      * @param string $namespace
-     * @return \Commons\Plugin\Broker
+     * @return \Commons\Plugin\PluginBroker
      */
     public function removeNamespace($namespace)
     {
@@ -59,7 +59,7 @@ class Broker
     /**
      * Set namespaces.
      * @param array<string> $namespaces
-     * @return \Commons\Plugin\Broker
+     * @return \Commons\Plugin\PluginBroker
      */
     public function setNamespaces(array $namespaces)
     {
@@ -83,7 +83,7 @@ class Broker
      * Add plugin instance.
      * @param string $name
      * @param PluginInterface $instance
-     * @return \Commons\Plugin\Broker
+     * @return \Commons\Plugin\PluginBroker
      */
     public function addPlugin($name, PluginInterface $instance)
     {
@@ -126,7 +126,7 @@ class Broker
     /**
      * Remove plugin instance.
      * @param string $name
-     * @return \Commons\Plugin\Broker
+     * @return \Commons\Plugin\PluginBroker
      */
     public function removePlugin($name)
     {
