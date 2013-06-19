@@ -14,14 +14,18 @@
 
 namespace Commons\Application;
 
+use Psr\Log\LoggerInterface;
+use Commons\Log\Log;
+use Commons\Log\LoggerAwareInterface;
 use Commons\Service\Manager as ServiceManager;
 
-abstract class AbstractApplication
+abstract class AbstractApplication implements LoggerAwareInterface
 {
 
     protected $_environment;
     protected $_version;
     protected $_path;
+    protected $_logger;
     protected $_config;
     protected $_serviceManager;
 
@@ -83,6 +87,29 @@ abstract class AbstractApplication
     public function getPath()
     {
         return $this->_path;
+    }
+    
+    /**
+     * Set logger.
+     * @param LoggerInterface $logger
+     * @return \Commons\Application\AbstractApplication
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->_logger = $logger;
+        return $this;
+    }
+    
+    /**
+     * Get logger.
+     * @return LoggerInterface
+     */
+    public function getLogger()
+    {
+        if (!isset($this->_logger)) {
+            $this->setLogger(Log::getLogger());
+        }
+        return $this->_logger;
     }
 
     /**
