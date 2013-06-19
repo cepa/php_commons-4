@@ -31,8 +31,8 @@
 
 namespace Commons\NoSql\Cassandra;
 
-use phpcassa\Connection\ConnectionPool;
 use Commons\Entity\Entity;
+use Commons\NoSql\Cassandra\Connection\Connection;
 use Commons\Utils\RandomUtils;
 
 class EntityRepositoryTest extends \PHPUnit_Framework_TestCase
@@ -45,6 +45,12 @@ class EntityRepositoryTest extends \PHPUnit_Framework_TestCase
             return;
         }
         
+        $conn = new Connection();
+        $conn->connect(array(
+            'keyspace' => 'phpcommons',
+            'servers'  => array('localhost:9160')
+        ));
+        
         $uuid = RandomUtils::randomUuid();
         $entity = new Entity();
         $entity->uuid = $uuid;
@@ -52,7 +58,7 @@ class EntityRepositoryTest extends \PHPUnit_Framework_TestCase
         $entity->last_name = 'Walker';
         $entity->email = 'johnny@walker.com';
         
-        $repo = new EntityRepository($this->getConnection());
+        $repo = new EntityRepository($conn);
         $repo
             ->setColumnFamilyName('Test')
             ->setPrimaryKey('uuid');
@@ -66,15 +72,8 @@ class EntityRepositoryTest extends \PHPUnit_Framework_TestCase
         
         $repo->delete($entity);
         $this->assertNull($repo->fetch($uuid));
-    }
-    
-    public function getConnection()
-    {
-        static $connection;
-        if (!isset($connection)) {
-            $connection = new ConnectionPool('phpcommons', array('localhost:9160'));
-        }   
-        return $connection; 
+        
+        $conn->disconnect();
     }
     
 }
