@@ -136,12 +136,12 @@ class Broker
 
     /**
      * Invoke plugin.
-     * @param InvokerInterface $invoker
+     * @param PluginAwareInterface $invoker
      * @param string $name
      * @param array $args
      * @return mixed
      */
-    public function invoke(InvokerInterface $invoker, $name, array $args = array())
+    public function invoke(PluginAwareInterface $invoker, $name, array $args = array())
     {
         $plugin = $this->getPlugin($name);
         $plugin->setInvoker($invoker);

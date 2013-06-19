@@ -15,9 +15,9 @@
 namespace Mock\Plugin;
 
 use Commons\Plugin\Broker;
-use Commons\Plugin\InvokerInterface;
+use Commons\Plugin\PluginAwareInterface;
 
-class Invoker implements InvokerInterface
+class Invoker implements PluginAwareInterface
 {
     
     protected $_pluginBroker;

@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file       Commons/Plugin/InvokerInterface.php
+ * @file       Commons/Plugin/PluginAwareInterface.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -14,13 +14,13 @@
 
 namespace Commons\Plugin;
 
-interface InvokerInterface
+interface PluginAwareInterface
 {
     
     /**
      * Set plugin broker.
      * @param Broker $pluginBroker
-     * @return InvokerInterface
+     * @return PluginAwareInterface
      */
     public function setPluginBroker(Broker $pluginBroker);
     

@@ -15,10 +15,10 @@
 namespace Commons\Template;
 
 use Commons\Container\AssocContainer;
-use Commons\Plugin\InvokerInterface as PluginInvokerInterface;
+use Commons\Plugin\PluginAwareInterface;
 use Commons\Plugin\Broker as PluginBroker;
 
-abstract class AbstractTemplate extends AssocContainer implements PluginInvokerInterface
+abstract class AbstractTemplate extends AssocContainer implements PluginAwareInterface
 {
     
     protected $_pluginBroker;
@@ -32,7 +32,7 @@ abstract class AbstractTemplate extends AssocContainer implements PluginInvokerI
     
     /**
      * Set plugin broker.
-     * @see \Commons\Plugin\ExtendableInterface::setPluginBroker()
+     * @see \Commons\Plugin\PluginAwareInterface::setPluginBroker()
      */
     public function setPluginBroker(PluginBroker $pluginBroker)
     {
@@ -42,7 +42,7 @@ abstract class AbstractTemplate extends AssocContainer implements PluginInvokerI
     
     /**
      * Get plugin broker.
-     * @see \Commons\Plugin\ExtendableInterface::getPluginBroker()
+     * @see \Commons\Plugin\PluginAwareInterface::getPluginBroker()
      */
     public function getPluginBroker()
     {
@@ -58,7 +58,7 @@ abstract class AbstractTemplate extends AssocContainer implements PluginInvokerI
     
     /**
      * Invoke plugin.
-     * @see \Commons\Plugin\ExtendableInterface::__call()
+     * @see \Commons\Plugin\PluginAwareInterface::__call()
      */
     public function __call($plugin, array $args = array())
     {

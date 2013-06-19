@@ -19,14 +19,14 @@ interface PluginInterface
 
     /**
      * Set invoker.
-     * @param InvokerInterface $invoker
+     * @param PluginAwareInterface $invoker
      * @return PluginInterface
      */
-    public function setInvoker(InvokerInterface $invoker);
+    public function setInvoker(PluginAwareInterface $invoker);
     
     /**
      * Get invoker.
-     * @return InvokerInterface
+     * @return PluginAwareInterface
      */
     public function getInvoker();
     
