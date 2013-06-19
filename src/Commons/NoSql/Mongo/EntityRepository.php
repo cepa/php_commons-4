@@ -14,31 +14,31 @@
 
 namespace Commons\NoSql\Mongo;
 
-use MongoDB;
 use Commons\Entity\AbstractRepository;
 use Commons\Entity\Collection;
 use Commons\Entity\Entity;
+use Commons\NoSql\Mongo\Connection\ConnectionInterface;
 
 class EntityRepository extends AbstractRepository
 {
     
-    protected $_mongoDb;
+    protected $_connection;
     protected $_collectionName;
-    
-    public function __construct(MongoDB $db = null)
-    {
-        $this->_mongoDb = $db;
-    }
 
-    public function setMongoDb(MongoDB $db)
+    public function __construct(ConnectionInterface $connection = null)
     {
-        $this->_mongoDb = $db;
+        $this->_connection = $connection;
+    }
+    
+    public function setConnection(ConnectionInterface $connection)
+    {
+        $this->_connection = $connection;
         return $this;
     }
     
-    public function getMongoDb()
+    public function getConnection()
     {
-        return $this->_mongoDb;
+        return $this->_connection;
     }
     
     public function setCollectionName($collectionName)
@@ -54,7 +54,7 @@ class EntityRepository extends AbstractRepository
     
     public function fetch($primaryKey)
     {
-        $item = $this->getMongoDb()
+        $item = $this->getConnection()
             ->selectCollection($this->getCollectionName())
             ->findOne(array('_id' => $primaryKey));
         if (!$item) {
@@ -72,7 +72,7 @@ class EntityRepository extends AbstractRepository
     
     public function save(Entity $entity)
     {
-        $this->getMongoDb()
+        $this->getConnection()
             ->selectCollection($this->getCollectionName())
             ->save(array_merge(array('_id' => $entity->get($this->getPrimaryKey())), $entity->toArray()));
         return $this;
@@ -80,7 +80,7 @@ class EntityRepository extends AbstractRepository
     
     public function delete(Entity $entity)
     {
-        $this->getMongoDb()
+        $this->getConnection()
             ->selectCollection($this->getCollectionName())
             ->remove(array('_id' => $entity->get($this->getPrimaryKey())));
         return $this;
