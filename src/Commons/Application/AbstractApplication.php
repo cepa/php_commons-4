@@ -19,8 +19,12 @@ use Commons\Config\ConfigAwareInterface;
 use Commons\Log\Log;
 use Commons\Log\LoggerAwareInterface;
 use Commons\Service\ServiceManager;
+use Commons\Service\ServiceManagerAwareInterface;
 
-abstract class AbstractApplication implements LoggerAwareInterface, ConfigAwareInterface
+abstract class AbstractApplication implements 
+        LoggerAwareInterface, 
+        ConfigAwareInterface, 
+        ServiceManagerAwareInterface
 {
 
     protected $_environment;
