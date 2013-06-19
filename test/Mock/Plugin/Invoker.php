@@ -14,7 +14,7 @@
 
 namespace Mock\Plugin;
 
-use Commons\Plugin\Broker;
+use Commons\Plugin\PluginBroker;
 use Commons\Plugin\PluginAwareInterface;
 
 class Invoker implements PluginAwareInterface
@@ -22,7 +22,7 @@ class Invoker implements PluginAwareInterface
     
     protected $_pluginBroker;
 
-    public function setPluginBroker(Broker $pluginBroker)
+    public function setPluginBroker(PluginBroker $pluginBroker)
     {
         $this->_pluginBroker = $pluginBroker;
         return $this;
@@ -31,7 +31,7 @@ class Invoker implements PluginAwareInterface
     public function getPluginBroker()
     {
         if (!isset($this->_pluginBroker)) {
-            $broker = new Broker();
+            $broker = new PluginBroker();
             $broker->addNamespace('Mock\\Plugin');
             $this->setPluginBroker($broker);
         }

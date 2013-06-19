@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file       Commons/Plugin/BrokerTest.php
+ * @file       Commons/Plugin/PluginPluginBrokerTest.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -17,27 +17,27 @@ namespace Commons\Plugin;
 use Mock\Plugin\Invoker as MockInvoker;
 use Mock\Plugin\FooPlugin as MockFooPlugin;
 
-class BrokerTest extends \PHPUnit_Framework_TestCase
+class PluginBrokerTest extends \PHPUnit_Framework_TestCase
 {
     
     public function testAddHasRemoveNamespace()
     {
-        $broker = new Broker();
+        $broker = new PluginBroker();
         $this->assertFalse($broker->hasNamespace('xxx'));
         $b = $broker->addNamespace('xxx');
-        $this->assertTrue($b instanceof Broker);
+        $this->assertTrue($b instanceof PluginBroker);
         $this->assertTrue($b->hasNamespace('xxx'));
         $b = $broker->removeNamespace('xxx');
-        $this->assertTrue($b instanceof Broker);
+        $this->assertTrue($b instanceof PluginBroker);
         $this->assertFalse($broker->hasNamespace('xxx'));
     }
     
     public function testSetGetNamespaces()
     {
-        $broker = new Broker();
+        $broker = new PluginBroker();
         $this->assertEquals(0, count($broker->getNamespaces()));
         $b = $broker->setNamespaces(array('xxx', 'yyy'));
-        $this->assertTrue($b instanceof Broker);
+        $this->assertTrue($b instanceof PluginBroker);
         $this->assertEquals(2, count($broker->getNamespaces()));
         $this->assertTrue($broker->hasNamespace('xxx'));
         $this->assertTrue($broker->hasNamespace('yyy'));
@@ -46,15 +46,15 @@ class BrokerTest extends \PHPUnit_Framework_TestCase
     
     public function testAddHasGetRemovePlugin()
     {
-        $broker = new Broker();
+        $broker = new PluginBroker();
         $this->assertFalse($broker->hasPlugin('foo'));
         $b = $broker->addPlugin('foo', new MockFooPlugin());
-        $this->assertTrue($b instanceof Broker);
+        $this->assertTrue($b instanceof PluginBroker);
         $this->assertTrue($broker->hasPlugin('foo'));
         $this->assertTrue($broker->getPlugin('foo') instanceof PluginInterface);
         $this->assertEquals('test', $broker->invoke(new MockInvoker(), 'foo', array('test')));
         $b = $broker->removePlugin('foo');
-        $this->assertTrue($b instanceof Broker);
+        $this->assertTrue($b instanceof PluginBroker);
         $this->assertFalse($broker->hasPlugin('foo'));
     }
     

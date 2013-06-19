@@ -19,14 +19,14 @@ interface PluginAwareInterface
     
     /**
      * Set plugin broker.
-     * @param Broker $pluginBroker
+     * @param PluginBroker $broker
      * @return PluginAwareInterface
      */
-    public function setPluginBroker(Broker $pluginBroker);
+    public function setPluginBroker(PluginBroker $broker);
     
     /**
      * Get plugin broker.
-     * @return Broker
+     * @return PluginBroker
      */
     public function getPluginBroker();
     

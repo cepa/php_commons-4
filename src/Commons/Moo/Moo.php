@@ -18,7 +18,7 @@ use Commons\Buffer\OutputBuffer;
 use Commons\Callback\Callback;
 use Commons\Http\Response;
 use Commons\Http\Request;
-use Commons\Plugin\Broker as PluginBroker;
+use Commons\Plugin\PluginBroker;
 use Commons\Plugin\PluginAwareInterface;
 use Commons\Light\Route\RestRoute;
 use Commons\Light\Route\RouteInterface;

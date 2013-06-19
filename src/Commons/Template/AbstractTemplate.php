@@ -16,7 +16,7 @@ namespace Commons\Template;
 
 use Commons\Container\AssocContainer;
 use Commons\Plugin\PluginAwareInterface;
-use Commons\Plugin\Broker as PluginBroker;
+use Commons\Plugin\PluginBroker;
 
 abstract class AbstractTemplate extends AssocContainer implements PluginAwareInterface
 {
