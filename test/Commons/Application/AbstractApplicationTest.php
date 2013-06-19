@@ -15,7 +15,7 @@
 namespace Commons\Application;
 
 use Commons\Log\Logger;
-use Commons\Service\Manager as ServiceManager;
+use Commons\Service\ServiceManager;
 use Mock\Application as MockApplication;
 
 class AbstractApplicationTest extends \PHPUnit_Framework_TestCase

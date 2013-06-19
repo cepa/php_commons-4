@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file       Commons/Service/Manager.php
+ * @file       Commons/Service/ServiceManager.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -14,7 +14,7 @@
 
 namespace Commons\Service;
 
-class Manager
+class ServiceManager
 {
     
     protected $_namespaces = array();
@@ -23,7 +23,7 @@ class Manager
     /**
      * Add namespace.
      * @param string $namespace
-     * @return \Commons\Service\Manager
+     * @return \Commons\Service\ServiceManager
      */
     public function addNamespace($namespace)
     {
@@ -45,7 +45,7 @@ class Manager
     /**
      * Remove namespace.
      * @param string $namespace
-     * @return \Commons\Service\Manager
+     * @return \Commons\Service\ServiceManager
      */
     public function removeNamespace($namespace)
     {
@@ -56,7 +56,7 @@ class Manager
     /**
      * Set namespaces.
      * @param array<string> $namespaces
-     * @return \Commons\Service\Manager
+     * @return \Commons\Service\ServiceManager
      */
     public function setNamespaces(array $namespaces)
     {
@@ -80,7 +80,7 @@ class Manager
      * Add service instance.
      * @param string $name
      * @param ServiceInterface $instance
-     * @return \Commons\Service\Manager
+     * @return \Commons\Service\ServiceManager
      */
     public function addService($name, ServiceInterface $instance)
     {
@@ -123,7 +123,7 @@ class Manager
     /**
      * Remove plugin instance.
      * @param string $name
-     * @return \Commons\Service\Manager
+     * @return \Commons\Service\ServiceManager
      */
     public function removeService($name)
     {

@@ -14,22 +14,9 @@
 
 namespace Commons\Service;
 
-use Commons\Container\TraversableContainer;
+use Commons\Config\ConfigAwareInterface;
 
-interface ServiceInterface
+interface ServiceInterface extends ConfigAwareInterface
 {
-    
-    /**
-     * Set service config.
-     * @param TraversableContainer $config
-     * @return ServiceInterface
-     */
-    public function setConfig(TraversableContainer $config);
-    
-    /**
-     * Get serivce config.
-     * @return TraversableContainer
-     */
-    public function getConfig();
     
 }
