@@ -2,13 +2,13 @@
 
 require_once 'bootstrap.php';
 
-use Commons\Sql\Connection\SingleConnection;
+use Commons\Sql\Connection\Connection;
 use Commons\Sql\Driver\PdoDriver;
 
 /*
  * Connect to database.
  */
-$conn = new SingleConnection(new PdoDriver());
+$conn = new Connection(new PdoDriver());
 $conn->connect(array(
     'driver'   => 'mysql',
     'host'     => DATABASE_HOST,
