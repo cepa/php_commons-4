@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file       Commons/Sql/Connection/SingleConnectionTest.php
+ * @file       Commons/Sql/Connection/ConnectionTest.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -20,18 +20,18 @@ use Commons\Sql\Statement\StatementInterface;
 use Commons\Sql\Query;
 use Mock\Sql\Driver as MockDriver;
 
-class SingleConnectionTest extends \PHPUnit_Framework_TestCase
+class ConnectionTest extends \PHPUnit_Framework_TestCase
 {
     
     public function testConnectionGetDriverLazyLoad()
     {
-        $connection = new SingleConnection();
+        $connection = new Connection();
         $this->assertTrue($connection->getDriver() instanceof PdoDriver);
     }
     
     public function testConnection()
     {
-        $connection = new SingleConnection();
+        $connection = new Connection();
         $c = $connection
             ->setDriver(new MockDriver())
             ->connect();
@@ -49,14 +49,14 @@ class SingleConnectionTest extends \PHPUnit_Framework_TestCase
     
     public function testStatement()
     {
-        $connection = new SingleConnection(new MockDriver());
+        $connection = new Connection(new MockDriver());
         $statement = $connection->prepareStatement('test');
         $this->assertTrue($statement instanceof StatementInterface);
     }
     
     public function testBeginCommit()
     {
-        $connection = new SingleConnection(new MockDriver());
+        $connection = new Connection(new MockDriver());
         $c = $connection->begin();
         $this->assertTrue($c instanceof ConnectionInterface);
         $this->assertTrue($c->inTransaction());
@@ -67,7 +67,7 @@ class SingleConnectionTest extends \PHPUnit_Framework_TestCase
     
     public function testBeginRollback()
     {
-        $connection = new SingleConnection(new MockDriver());
+        $connection = new Connection(new MockDriver());
         $c = $connection->begin();
         $this->assertTrue($c instanceof ConnectionInterface);
         $this->assertTrue($c->inTransaction());

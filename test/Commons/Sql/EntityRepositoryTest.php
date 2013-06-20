@@ -18,7 +18,7 @@ use Commons\Entity\Collection;
 use Commons\Entity\Entity;
 use Commons\Entity\RepositoryInterface;
 use Commons\Sql\Connection\ConnectionInterface;
-use Commons\Sql\Connection\SingleConnection;
+use Commons\Sql\Connection\Connection;
 use Commons\Sql\Driver\PdoDriver;
 use Commons\Utils\RandomUtils;
 use Mock\Sql\Driver as MockDriver;
@@ -31,7 +31,7 @@ class EntityRepositoryTest extends \PHPUnit_Framework_TestCase
        
     public function setUp()
     {
-        $this->_connection = new SingleConnection();
+        $this->_connection = new Connection();
         $this->_connection->setDriver(new MockDriver());
     }
     

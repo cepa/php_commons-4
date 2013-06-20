@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file       Commons/Sql/Connection/SingleConnection.php
+ * @file       Commons/Sql/Connection/Connection.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -18,7 +18,7 @@ use Commons\Sql\Driver\DriverInterface;
 use Commons\Sql\Driver\PdoDriver;
 use Commons\Sql\Statement\StatementInterface;
 
-class SingleConnection extends AbstractConnection
+class Connection extends AbstractConnection
 {
 
     /**

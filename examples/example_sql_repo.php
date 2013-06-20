@@ -4,7 +4,7 @@ require_once 'bootstrap.php';
 
 use Commons\Entity\Entity;
 use Commons\Sql\Connection\ConnectionInterface;
-use Commons\Sql\Connection\SingleConnection;
+use Commons\Sql\Connection\Connection;
 use Commons\Sql\Driver\PdoDriver;
 use Commons\Sql\EntityRepository;
 
@@ -58,7 +58,7 @@ class IdentityRepository extends EntityRepository
 /*
  * Connect to database.
  */
-$conn = new SingleConnection(new PdoDriver());
+$conn = new Connection(new PdoDriver());
 $conn->connect(array(
     'driver'   => 'mysql',
     'host'     => DATABASE_HOST,

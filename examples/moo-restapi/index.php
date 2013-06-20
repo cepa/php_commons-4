@@ -9,7 +9,7 @@ use Commons\Http\StatusCode;
 use Commons\Json\Decoder as JsonDecoder;
 use Commons\Light\View\JsonView;
 use Commons\Moo\Moo;
-use Commons\Sql\Connection\SingleConnection;
+use Commons\Sql\Connection\Connection;
 use Commons\Sql\Driver\PdoDriver;
 
 $moo = new Moo();
@@ -149,7 +149,7 @@ $moo
         static $connection;
         if (!isset($connection)) {
             $config = $moo->getConfig();
-            $connection = new SingleConnection(new PdoDriver());
+            $connection = new Connection(new PdoDriver());
             $connection->connect(array(
                 'driver'   => $config->database->driver,
                 'host'     => $config->database->host,
