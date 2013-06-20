@@ -24,4 +24,4 @@ var_dump($keyStore->get('a value'));
 $keyStore->remove('a value');
 var_dump($keyStore->has('a value'));
 
-$keyStore->close();
+$keyStore->disconnect();
