@@ -15,7 +15,7 @@
 namespace Commons\Light\Renderer;
 
 use Commons\Container\AssocContainer;
-use Commons\Light\View\TemplateView;
+use Commons\Light\View\PhtmlView;
 use Commons\Light\View\ViewInterface;
 
 class LayoutRenderer implements RendererInterface
@@ -43,7 +43,7 @@ class LayoutRenderer implements RendererInterface
     public function getLayout()
     {
         if (!isset($this->_layout)) {
-            $this->setLayout(new TemplateView());
+            $this->setLayout(new PhtmlView());
         }
         return $this->_layout;
     }

@@ -25,7 +25,7 @@ use Commons\Light\Route\RouteInterface;
 use Commons\Light\Renderer\LayoutRenderer;
 use Commons\Light\Renderer\RendererInterface;
 use Commons\Light\View\ViewInterface;
-use Commons\Light\View\TemplateView;
+use Commons\Light\View\PhtmlView;
 use Commons\Utils\DebugUtils;
 
 class Moo implements PluginAwareInterface
@@ -455,7 +455,7 @@ class Moo implements PluginAwareInterface
     {
 
         if (!($view instanceof ViewInterface)) {
-            $view = new TemplateView();
+            $view = new PhtmlView();
         }
         
         $this->getResponse()

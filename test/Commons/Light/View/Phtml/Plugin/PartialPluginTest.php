@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file       Commons/Template/Plugin/PartialPluginTest.php
+ * @file       Commons/Light/View/Phtml/Plugin/PartialPluginTest.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,18 +12,20 @@
  * =============================================================================
  */
 
-namespace Commons\Template\Plugin;
+namespace Commons\Light\View\Phtml\Plugin;
 
-use Commons\Template\PhpTemplate;
+use Commons\Light\View\Phtml\Script;
 
 class PartialPluginTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testPartial()
     {
+        $script = new Script();
+        $script->getTemplateLocator()->addLocation(ROOT_PATH.'/test/fixtures');
         $plugin = new PartialPlugin();
-        $plugin->setInvoker(new PhpTemplate());
-        $content = $plugin->partial(ROOT_PATH.'/test/fixtures/test_script_view.phtml', array('xxx' => 123));
+        $plugin->setInvoker($script);
+        $content = $plugin->partial('test_script_view', array('xxx' => 123));
         $this->assertEquals($content, 'hello 123');
     }
     

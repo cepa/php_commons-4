@@ -18,7 +18,9 @@ use Commons\Callback\Callback;
 use Commons\Callback\Exception as CallbackException;
 use Commons\Light\Renderer\RendererInterface;
 use Commons\Light\Renderer\LayoutRenderer;
-use Commons\Light\View\TemplateView;
+use Commons\Light\View\PhtmlView;
+use Commons\Light\View\Template\TemplateLocatorAwareInterface;
+use Commons\Light\View\Template\TemplateAwareInterface;
 use Commons\Light\View\ViewInterface;
 
 class ActionController extends AbstractController
@@ -45,7 +47,7 @@ class ActionController extends AbstractController
     public function getView()
     {
         if (!isset($this->_view)) {
-            $this->setView(new TemplateView());
+            $this->setView(new PhtmlView());
         }
         return $this->_view;
     }
@@ -92,16 +94,25 @@ class ActionController extends AbstractController
         $actionMethod .= 'Action';
         $actionMethod = strtolower($actionMethod{0}).substr($actionMethod, 1);
 
-        if ($this->getView() instanceof TemplateView) {
+        if ($this->getView() instanceof TemplateAwareInterface) {
             $controllerClass = basename(str_replace('\\', '/', get_class($this)));
             $controllerName = strtolower(str_replace('Controller', '', $controllerClass));
-            $scriptPath = $this->getResourcesPath().'/views/'.$controllerName.'/'.$actionName.'.phtml';
-            $this->getView()->setTemplatePath($scriptPath);
+            $template = $controllerName.'/'.$actionName;
+            $this->getView()->setTemplate($template);
+        }
+        
+        if ($this->getView() instanceof TemplateLocatorAwareInterface) {
+            $this->getView()->getTemplateLocator()->addLocation($this->getResourcesPath().'/views');
         }
         
         if ($this->getRenderer() instanceof LayoutRenderer) {
-            $layoutPath = $this->getResourcesPath().'/views/layout.phtml';
-            $this->getRenderer()->getLayout()->setTemplatePath($layoutPath);
+            $layout = $this->getRenderer()->getLayout();
+            if ($layout instanceof TemplateAwareInterface) {
+                $layout->setTemplate('layout');
+            }
+            if ($layout instanceof TemplateLocatorAwareInterface) {
+                $layout->getTemplateLocator()->addLocation($this->getResourcesPath().'/views');
+            }
         }
         
         try {

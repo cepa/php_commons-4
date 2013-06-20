@@ -7,6 +7,7 @@ use Commons\Light\Dispatcher\HttpDispatcher;
 use Commons\Utils\DebugUtils;
 
 $appDir = dirname(dirname(__FILE__));
+DefaultAutoloader::init();
 DefaultAutoloader::addIncludePath($appDir.'/src');
 
 try {

@@ -14,7 +14,7 @@
 
 namespace Commons\Http\Plugin;
 
-use Commons\Template\PhpTemplate;
+use Commons\Light\View\Phtml\Script;
 
 class AssetUrlPluginTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class AssetUrlPluginTest extends \PHPUnit_Framework_TestCase
             'SCRIPT_NAME' => '/some/app/index.php'
         );
         $plugin = new AssetUrlPlugin();
-        $plugin->setInvoker(new PhpTemplate());
+        $plugin->setInvoker(new Script());
         $this->assertEquals('http://example.com/some/app/xxx', $plugin->assetUrl('/xxx'));
     }
     
