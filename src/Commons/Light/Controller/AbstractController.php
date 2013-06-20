@@ -118,7 +118,7 @@ abstract class AbstractController implements PluginAwareInterface
     {
         if (!isset($this->_resourcesPath)) {
             $controllerClass = str_replace('\\', '/', get_class($this));
-            $this->_resourcesPath = dirname(dirname($controllerClass)).'/Resources';
+            $this->_resourcesPath = stream_resolve_include_path(dirname(dirname($controllerClass)).'/Resources');
         }
         return $this->_resourcesPath;
     }

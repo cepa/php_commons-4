@@ -2,29 +2,30 @@
 
 require_once '../bootstrap.php';
 
-use Commons\Light\View\TemplateView;
+use Commons\Light\View\PhtmlView;
 use Commons\Moo\Moo;
 
 $moo = new Moo();
 $moo
 
     ->init(function(Moo $moo){
-        $moo->getRenderer()->getLayout()->setTemplatePath('templates/layout.phtml');
+        $moo->getRenderer()->setLayout($moo->createView('layout'));
     })
     
     ->get('/', function(Moo $moo){
-        $view = $moo->createView('templates/index.phtml');
+        $view = $moo->createView('index');
         $view->message = 'Hello World!';
         return $view;
     })
     
     ->get('/about', function(Moo $moo){
-        return $moo->createView('templates/about.phtml');
+        return $moo->createView('about');
     })
     
-    ->closure('createView', function(Moo $moo, $path){
-        $view = new TemplateView();
-        $view->setTemplatePath($path);
+    ->closure('createView', function(Moo $moo, $template){
+        $view = new PhtmlView();
+        $view->setTemplate($template);
+        $view->getTemplateLocator()->addLocation(dirname(__FILE__).'/templates');
         return $view;
     })
     

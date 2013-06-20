@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file       Commons/Light/View/TemplateViewTest.php
+ * @file       Commons/Light/View/PhtmlViewTest.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -14,16 +14,17 @@
 
 namespace Commons\Light\View;
 
-class TemplateViewTest extends \PHPUnit_Framework_TestCase
+class PhtmlViewTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testView()
     {
-        $view = new TemplateView();
-        $this->assertNull($view->getTemplatePath());
+        $view = new PhtmlView();
+        $this->assertNull($view->getTemplate());
         
         $view->xxx = 'test';
-        $view->setTemplatePath(ROOT_PATH.'/test/fixtures/test_script_view.phtml');
+        $view->setTemplate('test_script_view');
+        $view->getTemplateLocator()->addLocation(ROOT_PATH.'/test/fixtures');
         
         $contents = $view->render();
         $this->assertContains('hello test', $contents);
@@ -31,15 +32,15 @@ class TemplateViewTest extends \PHPUnit_Framework_TestCase
     
     public function testRenderEmptyView()
     {
-        $view = new TemplateView();
+        $view = new PhtmlView();
         $this->assertNull($view->render());
     }
     
     public function testViewTemplateNotFoundException()
     {
-        $this->setExpectedException('Commons\\Template\\Exception');
-        $view = new TemplateView();
-        $view->setTemplatePath('some.file')->render();
+        $this->setExpectedException('Commons\Light\View\Phtml\Exception');
+        $view = new PhtmlView();
+        $view->setTemplate('some.file')->render();
     }
     
 }

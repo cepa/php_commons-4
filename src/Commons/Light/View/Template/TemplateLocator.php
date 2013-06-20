@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file       Commons/Template/Exception.php
+ * @file       Commons/Light/View/Template/TemplateLocator.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,6 +12,11 @@
  * =============================================================================
  */
 
-namespace Commons\Template;
+namespace Commons\Light\View\Template;
 
-class Exception extends \RuntimeException {}
+use Commons\FileSystem\FileLocator;
+
+class TemplateLocator extends FileLocator
+{
+    
+}

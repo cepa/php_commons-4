@@ -42,7 +42,7 @@ class AbstractControllerTest extends \PHPUnit_Framework_TestCase
     public function testSetGetResourcesPath()
     {
         $controller = new MockController();
-        $this->assertEquals('Mock/Resources', $controller->getResourcesPath());
+        $this->assertEquals(ROOT_PATH.'/test/Mock/Resources', $controller->getResourcesPath());
         $c = $controller->setResourcesPath('xxx');
         $this->assertTrue($c instanceof AbstractController);
         $this->assertEquals('xxx', $controller->getResourcesPath());

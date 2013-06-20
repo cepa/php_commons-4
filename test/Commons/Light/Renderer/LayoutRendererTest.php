@@ -50,7 +50,8 @@ class LayoutRendererTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         $renderer = new LayoutRenderer();
-        $renderer->getLayout()->setTemplatePath(ROOT_PATH.'/test/fixtures/test_layout_renderer.phtml');
+        $renderer->getLayout()->getTemplateLocator()->addLocation(ROOT_PATH.'/test/fixtures');
+        $renderer->getLayout()->setTemplate('test_layout_renderer');
         $content = $renderer->render(new MockView());
         $this->assertContains('layout test', $content);
     }
@@ -58,9 +59,10 @@ class LayoutRendererTest extends \PHPUnit_Framework_TestCase
     public function testRenderWithDisabledView()
     {
         $renderer = new LayoutRenderer();
+        $renderer->getLayout()->getTemplateLocator()->addLocation(ROOT_PATH.'/test/fixtures');
         $renderer
             ->enableView(false)
-            ->getLayout()->setTemplatePath(ROOT_PATH.'/test/fixtures/test_layout_renderer.phtml');
+            ->getLayout()->setTemplate('test_layout_renderer');
         $content = $renderer->render(new MockView());
         $this->assertContains('layout ', $content);
     }
@@ -68,9 +70,10 @@ class LayoutRendererTest extends \PHPUnit_Framework_TestCase
     public function testRenderWithDisabledLayout()
     {
         $renderer = new LayoutRenderer();
+        $renderer->getLayout()->getTemplateLocator()->addLocation(ROOT_PATH.'/test/fixtures');
         $renderer
             ->enableLayout(false)
-            ->getLayout()->setTemplatePath(ROOT_PATH.'/test/fixtures/test_layout_renderer.phtml');
+            ->getLayout()->setTemplate('test_layout_renderer');
         $content = $renderer->render(new MockView());
         $this->assertContains('test', $content);
     }
@@ -78,10 +81,11 @@ class LayoutRendererTest extends \PHPUnit_Framework_TestCase
     public function testRenderWithDisabledLayoutAndView()
     {
         $renderer = new LayoutRenderer();
+        $renderer->getLayout()->getTemplateLocator()->addLocation(ROOT_PATH.'/test/fixtures');
         $renderer
             ->enableLayout(false)
             ->enableView(false)
-            ->getLayout()->setTemplatePath(ROOT_PATH.'/test/fixtures/test_layout_renderer.phtml');
+            ->getLayout()->setTemplate('test_layout_renderer');
         $content = $renderer->render(new MockView());
         $this->assertEquals('', $content);
     }
