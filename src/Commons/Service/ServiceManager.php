@@ -16,120 +16,164 @@ namespace Commons\Service;
 
 class ServiceManager
 {
-    
-    protected $_namespaces = array();
-    protected $_instances = array();
+
+    protected $_factories = array();
+    protected $_services = array();
     
     /**
-     * Add namespace.
-     * @param string $namespace
-     * @return \Commons\Service\ServiceManager
-     */
-    public function addNamespace($namespace)
+     * Add a service factory.
+     * @param string $name
+     * @param string|callable $factory
+     * @return ServiceManager
+    */
+    public function addFactory($name, $factory)
     {
-        $namespace = trim($namespace, '\\');
-        $this->_namespaces[$namespace] = $namespace;
+        $this->_factories[$name] = $factory;
         return $this;
     }
     
     /**
-     * Has namespace.
-     * @param string $namespace
+     * Has factory?
+     * @param string $name
      * @return boolean
      */
-    public function hasNamespace($namespace)
+    public function hasFactory($name)
     {
-        return isset($this->_namespaces[trim($namespace, '\\')]);
+        return isset($this->_factories[$name]);
+    }
+    
+    public function getFactory($name)
+    {
+        if (!$this->hasFactory($name)) {
+            throw new Exception("There is no factory to create service {$name}");
+        }
+        return $this->_factories[$name];
     }
     
     /**
-     * Remove namespace.
-     * @param string $namespace
-     * @return \Commons\Service\ServiceManager
+     * Remove factory.
+     * @param string $name
+     * @return ServiceManager
      */
-    public function removeNamespace($namespace)
+    public function removeFactory($name)
     {
-        unset($this->_namespaces[trim($namespace, '\\')]);
+        unset($this->_factories[$name]);
         return $this;
     }
     
     /**
-     * Set namespaces.
-     * @param array<string> $namespaces
-     * @return \Commons\Service\ServiceManager
+     * Set factories.
+     * @param array<string, string|callable> $factories
+     * @return ServiceManager
      */
-    public function setNamespaces(array $namespaces)
+    public function setFactories(array $factories)
     {
-        $this->_namespaces = array();
-        foreach ($namespaces as $namespace) {
-            $this->addNamespace($namespace);
+        $this->_factories = array();
+        foreach ($factories as $name => $factory) {
+            $this->addFactory($name, $factory);
         }
         return $this;
     }
     
     /**
-     * Get namespaces.
-     * @return array<string>
+     * Get factories.
+     * @return array<string, string|callable>
      */
-    public function getNamespaces() 
+    public function getFactories()
     {
-        return $this->_namespaces;
+        return $this->_factories;
     }
     
     /**
-     * Add service instance.
+     * Create new service instance.
      * @param string $name
-     * @param ServiceInterface $instance
-     * @return \Commons\Service\ServiceManager
+     * @throws Exception
+     * @return object
      */
-    public function addService($name, ServiceInterface $instance)
+    public function createService($name)
     {
-        $this->_instances[$name] = $instance;
+        $factory = $this->getFactory($name);
+        if (is_callable($factory)) {
+            $service = call_user_func($factory);
+        } else {
+            $service = new $factory();
+        }
+    
+        if ($service instanceof ServiceManagerAwareInterface) {
+            $service->setServiceManager($this);
+        }
+    
+        return $service;
+    }
+    
+    /**
+     * Set service instance.
+     * @param string $name
+     * @param object $service
+     * @return ServiceManager
+     */
+    public function setService($name, $service)
+    {
+        $this->_services[$name] = $service;
         return $this;
     }
     
     /**
-     * Has plugin instance?
+     * Has service?
      * @param string $name
      * @return boolean
      */
     public function hasService($name)
     {
-        return isset($this->_instances[$name]);
+        return isset($this->_services[$name]);
     }
     
     /**
-     * Get or create plugin instance.
+     * Get or create service instance.
      * @param string $name
-     * @throws Exception
-     * @return \Commons\Service\ServiceInterface
+     * @return object
      */
     public function getService($name)
     {
-        if (!$this->hasService($name)) {
-            foreach ($this->getNamespaces() as $namespace) {
-                $class = '\\'.$namespace.'\\'.ucwords($name).'Service';
-                if (class_exists($class)) {
-                    $this->addService($name, new $class);
-                }
-            }
+        if (!isset($this->_services[$name])) {
+            $this->setService($name, $this->createService($name));
         }
-        if (!$this->hasService($name)) {
-            throw new Exception("Cannot find service '{$name}'");
-        }
-        return $this->_instances[$name];
+        return $this->_services[$name];
     }
     
     /**
-     * Remove plugin instance.
+     * Remove service.
      * @param string $name
-     * @return \Commons\Service\ServiceManager
+     * @return ServiceManager
      */
     public function removeService($name)
     {
-        unset($this->_instances[$name]);
+        unset($this->_services[$name]);
         return $this;
     }
-
+    
+    /**
+     * Set services.
+     * @param array<string, object> $services
+     * @return ServiceManager
+     */
+    public function setServices(array $services)
+    {
+        $this->_services = array();
+        foreach ($services as $name => $service) {
+            $this->setService($name, $service);
+        }
+        return $this;
+    }
+    
+    /**
+     * Get services.
+     * @return array<string, object>
+     */
+    public function getServices()
+    {
+        return $this->_services;
+    }
+    
 }
 

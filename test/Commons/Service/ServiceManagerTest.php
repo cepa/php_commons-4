@@ -14,46 +14,97 @@
 
 namespace Commons\Service;
 
-use Mock\Service\FooService as MockFooService;
+use Mock\Service\TestService as MockTestService;
 
 class ServiceManagerTest extends \PHPUnit_Framework_TestCase
 {
     
-    public function testAddHasRemoveNamespace()
+    public function testAddHasGetRemoveFactory()
     {
         $manager = new ServiceManager();
-        $this->assertFalse($manager->hasNamespace('xxx'));
-        $b = $manager->addNamespace('xxx');
-        $this->assertTrue($b instanceof ServiceManager);
-        $this->assertTrue($b->hasNamespace('xxx'));
-        $b = $manager->removeNamespace('xxx');
-        $this->assertTrue($b instanceof ServiceManager);
-        $this->assertFalse($manager->hasNamespace('xxx'));
+        $this->assertFalse($manager->hasFactory('xxx'));
+        $m = $manager->addFactory('xxx', function(){});
+        $this->assertTrue($m instanceof ServiceManager);
+        $this->assertTrue($manager->hasFactory('xxx'));
+        $this->assertTrue(is_callable($manager->getFactory('xxx')));
+        $m = $manager->removeFactory('xxx');
+        $this->assertTrue($m instanceof ServiceManager);
+        $this->assertFalse($manager->hasFactory('xxx'));
     }
     
-    public function testSetGetNamespaces()
+    public function testGetFactoryException()
     {
+        $this->setExpectedException('\Commons\Service\Exception');
         $manager = new ServiceManager();
-        $this->assertEquals(0, count($manager->getNamespaces()));
-        $b = $manager->setNamespaces(array('xxx', 'yyy'));
-        $this->assertTrue($b instanceof ServiceManager);
-        $this->assertEquals(2, count($manager->getNamespaces()));
-        $this->assertTrue($manager->hasNamespace('xxx'));
-        $this->assertTrue($manager->hasNamespace('yyy'));
-        $this->assertFalse($manager->hasNamespace('zzz'));
+        $manager->getFactory('xxx');
     }
     
-    public function testAddHasGetRemoveService()
+    public function testSetGetFactories()
     {
         $manager = new ServiceManager();
-        $this->assertFalse($manager->hasService('foo'));
-        $b = $manager->addService('foo', new MockFooService());
-        $this->assertTrue($b instanceof ServiceManager);
-        $this->assertTrue($manager->hasService('foo'));
-        $this->assertTrue($manager->getService('foo') instanceof ServiceInterface);
-        $b = $manager->removeService('foo');
-        $this->assertTrue($b instanceof ServiceManager);
-        $this->assertFalse($manager->hasService('foo'));
+        $this->assertEquals(0, count($manager->getFactories()));
+        $m = $manager->setFactories(array(
+            'xxx' => function(){},
+            'yyy' => function(){}
+        ));
+        $this->assertTrue($m instanceof ServiceManager);
+        $this->assertEquals(2, count($manager->getFactories()));
+    }
+    
+    public function testSetGetHasRemoveService()
+    {
+        $manager = new ServiceManager();
+        $this->assertFalse($manager->hasService('xxx'));
+        $m = $manager->setService('xxx', $this->getMock('\Commons\Service\ServiceInterface'));
+        $this->assertTrue($m instanceof ServiceManager);
+        $this->assertTrue($manager->hasService('xxx'));
+        $m = $manager->removeService('xxx');
+        $this->assertTrue($m instanceof ServiceManager);
+        $this->assertFalse($manager->hasService('xxx'));
+    }
+    
+    public function testGetServiceException()
+    {
+        $this->setExpectedException('\Commons\Service\Exception');
+        $manager = new ServiceManager();
+        $manager->getService('xxx');
+    }
+    
+    public function testSetGetServices()
+    {
+        $manager = new ServiceManager();
+        $this->assertEquals(0, count($manager->getServices()));
+        $this->assertFalse($manager->hasService('xxx'));
+        $m = $manager->setServices(array(
+            'xxx' => $this->getMock('\Commons\Service\ServiceInterface'),
+            'yyy' => $this->getMock('\Commons\Service\ServiceInterface')
+        ));
+        $this->assertTrue($m instanceof ServiceManager);
+        $this->assertEquals(2, count($manager->getServices()));
+        $this->assertTrue($manager->hasService('xxx'));
+    }
+    
+    public function testCreateServiceByClosureFactory()
+    {
+        $test = $this;
+        $manager = new ServiceManager();
+        $manager->addFactory('Foo', function() use($test){
+            return $test->getMock('\Commons\Service\ServiceInterface');
+        });
+        $service = $manager->getService('Foo');
+        $this->assertTrue($service instanceof ServiceInterface);
+    }
+    
+    public function testServiceDependencyInjection()
+    {
+        $manager = new ServiceManager();
+        $manager
+            ->addFactory('Foo', function(){ return new MockTestService('Foo'); })
+            ->addFactory('Poo', function(){ return new MockTestService('Poo'); });
+        $foo = $manager->getService('Foo');
+        $this->assertEquals('Foo', $foo->getName());
+        $poo = $foo->getServiceManager()->getService('Poo');
+        $this->assertEquals('Poo', $poo->getName());
     }
     
 }

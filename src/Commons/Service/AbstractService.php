@@ -14,28 +14,31 @@
 
 namespace Commons\Service;
 
-abstract class AbstractService implements ServiceInterface
+abstract class AbstractService implements ServiceManagerAwareInterface
 {
     
-    protected $_config;
+    protected $_serviceManager;
     
     /**
-     * Set service config.
-     * @see \Commons\Service\ServiceInterface::setConfig()
+     * Set service manager.
+     * @see \Commons\Service\ServiceManagerAwareInterface::setServiceManager()
      */
-    public function setConfig($config)
+    public function setServiceManager(ServiceManager $serviceManager)
     {
-        $this->_config = $config;
+        $this->_serviceManager = $serviceManager;
         return $this;
     }
     
     /**
-     * Get service config.
-     * @see \Commons\Service\ServiceInterface::getConfig()
+     * Get service manager.
+     * @see \Commons\Service\ServiceManagerAwareInterface::getServiceManager()
      */
-    public function getConfig()
+    public function getServiceManager()
     {
-        return $this->_config;
+        if (!isset($this->_serviceManager)) {
+            throw new Exception("Missing service manager instance");
+        }
+        return $this->_serviceManager;
     }
     
 }
