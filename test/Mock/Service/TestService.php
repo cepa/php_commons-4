@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file       Commons/Service/ServiceInterface.php
+ * @file       Mock/Service/TestService.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,11 +12,23 @@
  * =============================================================================
  */
 
-namespace Commons\Service;
+namespace Mock\Service;
 
-use Commons\Config\ConfigAwareInterface;
+use Commons\Service\AbstractService;
 
-interface ServiceInterface extends ConfigAwareInterface
+class TestService extends AbstractService
 {
+    
+    protected $_name;
+    
+    public function __construct($name)
+    {
+        $this->_name = $name;
+    }
+    
+    public function getName()
+    {
+        return $this->_name;
+    }
     
 }
