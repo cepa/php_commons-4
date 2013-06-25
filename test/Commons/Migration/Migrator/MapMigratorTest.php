@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file       Commons/Migration/MigratorTest.php
+ * @file       Commons/Migration/MapMigrator/MapMigratorTest.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,42 +12,42 @@
  * =============================================================================
  */
 
-namespace Commons\Migration;
+namespace Commons\Migration\Migrator;
 
+use Commons\Migration\Map;
 use Mock\Migration\Persistence;
-
 use Mock\Migration\Versioner;
 
-class MigratorTest extends \PHPUnit_Framework_TestCase
+class MapMigratorTest extends \PHPUnit_Framework_TestCase
 {
     
     public function testSetHasGetRemoveMap()
     {
-        $migrator = new Migrator();
+        $migrator = new MapMigrator();
         $this->assertFalse($migrator->hasMap('xxx'));
         $m = $migrator->setMap('xxx', new Map());
-        $this->assertTrue($m instanceof Migrator);
+        $this->assertTrue($m instanceof MapMigrator);
         $this->assertTrue($migrator->hasMap('xxx'));
         $m = $migrator->removeMap('xxx');
-        $this->assertTrue($m instanceof Migrator);
+        $this->assertTrue($m instanceof MapMigrator);
         $this->assertFalse($migrator->hasMap('xxx'));
     }
     
     public function testSetGetClearMaps()
     {
-        $migrator = new Migrator();
+        $migrator = new MapMigrator();
         $this->assertEquals(0, count($migrator->getMaps()));
         $m = $migrator->setMaps(array('x' => new Map(), 'y' => new Map()));
-        $this->assertTrue($m instanceof Migrator);
+        $this->assertTrue($m instanceof MapMigrator);
         $this->assertEquals(2, count($migrator->getMaps()));
         $m = $migrator->clearMaps();
-        $this->assertTrue($m instanceof Migrator);
+        $this->assertTrue($m instanceof MapMigrator);
         $this->assertEquals(0, count($migrator->getMaps()));
     }
     
     public function testUpgrade_AllMigrations()
     {
-        $migrator = new Migrator(array(
+        $migrator = new MapMigrator(array(
             'mock' => new Map(array(
                 1 => 'Mock\\Migration\\FirstMigration',
                 2 => 'Mock\\Migration\\SecondMigration',
@@ -61,7 +61,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
         Persistence::$counter = 0;
         
         $m = $migrator->upgrade();
-        $this->assertTrue($m instanceof Migrator);
+        $this->assertTrue($m instanceof MapMigrator);
         // Check if version of the mock map is correct.
         $this->assertEquals(4, Persistence::$version['mock']);
         // Check if all migrations incremented the counter.
@@ -70,7 +70,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
     
     public function testUpgrade_FromSecond()
     {
-        $migrator = new Migrator(array(
+        $migrator = new MapMigrator(array(
             'mock' => new Map(array(
                 1 => 'Mock\\Migration\\FirstMigration',
                 2 => 'Mock\\Migration\\SecondMigration',
@@ -84,7 +84,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
         Persistence::$counter = 0;
         
         $m = $migrator->upgrade();
-        $this->assertTrue($m instanceof Migrator);
+        $this->assertTrue($m instanceof MapMigrator);
         // Check if version of the mock map is correct.
         $this->assertEquals(4, Persistence::$version['mock']);
         // Check if all migrations incremented the counter.
@@ -93,7 +93,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
     
     public function testUpgrade_FromSecondToThird()
     {
-        $migrator = new Migrator(array(
+        $migrator = new MapMigrator(array(
             'mock' => new Map(array(
                 1 => 'Mock\\Migration\\FirstMigration',
                 2 => 'Mock\\Migration\\SecondMigration',
@@ -106,8 +106,8 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
         Persistence::$version = array('mock' => 2);
         Persistence::$counter = 0;
         
-        $m = $migrator->upgrade(3);
-        $this->assertTrue($m instanceof Migrator);
+        $m = $migrator->setUpgradeMax(3)->upgrade();
+        $this->assertTrue($m instanceof MapMigrator);
         // Check if version of the mock map is correct.
         $this->assertEquals(3, Persistence::$version['mock']);
         // Check if all migrations incremented the counter.
@@ -116,7 +116,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
     
     public function testUpgrade_NothingToUpgrade()
     {
-        $migrator = new Migrator(array(
+        $migrator = new MapMigrator(array(
             'mock' => new Map(array(
                 1 => 'Mock\\Migration\\FirstMigration',
                 2 => 'Mock\\Migration\\SecondMigration',
@@ -130,7 +130,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
         Persistence::$counter = 1 + 2 + 4 + 8;
         
         $m = $migrator->upgrade();
-        $this->assertTrue($m instanceof Migrator);
+        $this->assertTrue($m instanceof MapMigrator);
         // Check if version of the mock map is correct.
         $this->assertEquals(4, Persistence::$version['mock']);
         // Check if all migrations incremented the counter.
@@ -139,7 +139,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
     
     public function testDowngrade_AllMigrations()
     {
-        $migrator = new Migrator(array(
+        $migrator = new MapMigrator(array(
             'mock' => new Map(array(
                 1 => 'Mock\\Migration\\FirstMigration',
                 2 => 'Mock\\Migration\\SecondMigration',
@@ -153,7 +153,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
         Persistence::$counter = 1 + 2 + 4 + 8;
         
         $m = $migrator->downgrade();
-        $this->assertTrue($m instanceof Migrator);
+        $this->assertTrue($m instanceof MapMigrator);
         // Check if version of the mock map is correct.
         $this->assertEquals(0, Persistence::$version['mock']);
         // Check if all migrations decremented the counter.
@@ -162,7 +162,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
     
     public function testDowngrade_FromThird()
     {
-        $migrator = new Migrator(array(
+        $migrator = new MapMigrator(array(
             'mock' => new Map(array(
                 1 => 'Mock\\Migration\\FirstMigration',
                 2 => 'Mock\\Migration\\SecondMigration',
@@ -176,7 +176,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
         Persistence::$counter = 1 + 2 + 4;
         
         $m = $migrator->downgrade();
-        $this->assertTrue($m instanceof Migrator);
+        $this->assertTrue($m instanceof MapMigrator);
         // Check if version of the mock map is correct.
         $this->assertEquals(0, Persistence::$version['mock']);
         // Check if all migrations decremented the counter.
@@ -185,7 +185,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
     
     public function testDowngrade_FromThirdToSecond()
     {
-        $migrator = new Migrator(array(
+        $migrator = new MapMigrator(array(
             'mock' => new Map(array(
                 1 => 'Mock\\Migration\\FirstMigration',
                 2 => 'Mock\\Migration\\SecondMigration',
@@ -198,8 +198,8 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
         Persistence::$version = array('mock' => 3);
         Persistence::$counter = 1 + 2 + 4;
         
-        $m = $migrator->downgrade(2);
-        $this->assertTrue($m instanceof Migrator);
+        $m = $migrator->setDowngradeMin(2)->downgrade();
+        $this->assertTrue($m instanceof MapMigrator);
         // Check if version of the mock map is correct.
         $this->assertEquals(2, Persistence::$version['mock']);
         // Check if all migrations decremented the counter.
@@ -208,7 +208,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
     
     public function testDowngrade_NothingToUpgrade()
     {
-        $migrator = new Migrator(array(
+        $migrator = new MapMigrator(array(
             'mock' => new Map(array(
                 1 => 'Mock\\Migration\\FirstMigration',
                 2 => 'Mock\\Migration\\SecondMigration',
@@ -222,7 +222,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
         Persistence::$counter = 0;
         
         $m = $migrator->downgrade();
-        $this->assertTrue($m instanceof Migrator);
+        $this->assertTrue($m instanceof MapMigrator);
         // Check if version of the mock map is correct.
         $this->assertEquals(0, Persistence::$version['mock']);
         // Check if all migrations decremented the counter.

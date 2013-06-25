@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file       Commons/Migration/Migrator.php
+ * @file       Commons/Migration/Migrator/MapMigrator.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -12,20 +12,23 @@
  * =============================================================================
  */
 
-namespace Commons\Migration;
+namespace Commons\Migration\Migrator;
 
-use Commons\Autoloader\DefaultAutoloader;
-use Commons\Autoloader\Exception as AutoloaderException;
+use Commons\Callback\Callback;
+use Commons\Log\LoggerAwareInterface;
+use Commons\Migration\Exception;
+use Commons\Migration\Map;
+use Commons\Migration\MigrationInterface;
 use Commons\Migration\Versioner\VersionerInterface;
-use Commons\Log\Log;
-use Commons\Log\Logger;
 
-class Migrator
+class MapMigrator implements MigratorInterface
 {
     
     protected $_maps = array();
     protected $_versioner;
-    protected $_logger;
+    protected $_upgradeMax = null;
+    protected $_downgradeMin = 0;
+    protected $_factory;
     
     /**
      * Init.
@@ -37,33 +40,10 @@ class Migrator
     }
     
     /**
-     * Set logger.
-     * @param Logger $logger
-     * @return \Commons\Migration\Migrator
-     */
-    public function setLogger(Logger $logger)
-    {
-        $this->_logger = $logger;
-        return $this;
-    }
-    
-    /**
-     * 
-     * @return Logger
-     */
-    public function getLogger()
-    {
-        if (!isset($this->_logger)) {
-            $this->setLogger(Log::getLogger());
-        }
-        return $this->_logger;
-    }
-    
-    /**
      * Set map.
      * @param string $name
      * @param Map $map
-     * @return \Commons\Migration\Migrator
+     * @return \Commons\Migration\Migrator\MigratorInterface
      */
     public function setMap($name, Map $map)
     {
@@ -97,7 +77,7 @@ class Migrator
     /**
      * Remove map.
      * @param string $name
-     * @return \Commons\Migration\Migrator
+     * @return \Commons\Migration\Migrator\MigratorInterface
      */
     public function removeMap($name)
     {
@@ -108,7 +88,7 @@ class Migrator
     /**
      * Set maps.
      * @param array $maps
-     * @return \Commons\Migration\Migrator
+     * @return \Commons\Migration\Migrator\MigratorInterface
      */
     public function setMaps(array $maps)
     {
@@ -129,7 +109,7 @@ class Migrator
     
     /**
      * Clear maps.
-     * @return \Commons\Migration\Migrator
+     * @return \Commons\Migration\Migrator\MigratorInterface
      */
     public function clearMaps()
     {
@@ -140,7 +120,7 @@ class Migrator
     /**
      * Set versioner.
      * @param VersionerInterface $versioner
-     * @return \Commons\Migration\Migrator
+     * @return \Commons\Migration\Migrator\MigratorInterface
      */
     public function setVersioner(VersionerInterface $versioner)
     {
@@ -162,10 +142,82 @@ class Migrator
     }
     
     /**
-     * Upgrade.
-     * @return \Commons\Migration\Migrator
+     * Set upgrade max.
+     * @param int $max
+     * @return \Commons\Migration\Migrator\MapMigrator
      */
-    public function upgrade($max = null)
+    public function setUpgradeMax($max)
+    {
+        $this->_upgradeMax = $max;
+        return $this;
+    }
+    
+    /**
+     * Get upgrade max.
+     * @return int
+     */
+    public function getUpgradeMax()
+    {
+        return $this->_upgradeMax;
+    }
+    
+    /**
+     * Set downgrade min.
+     * @param int $min
+     * @return \Commons\Migration\Migrator\MapMigrator
+     */
+    public function setDowngradeMin($min)
+    {
+        $this->_downgradeMin = $min;
+        return $this;
+    }
+    
+    /**
+     * Get downgrade min.
+     * @return int
+     */
+    public function getDowngradeMin()
+    {
+        return $this->_downgradeMin;
+    }
+    
+    /**
+     * Set factory.
+     * @param callable|\Commons\Callback\Callback $callable
+     * @return \Commons\Migration\Migrator\MapMigrator
+     */
+    public function setFactory($callable)
+    {
+        if (!($callable instanceof Callback)) {
+            $callable = new Callback($callable);
+        }
+        $this->_factory = $callable;
+        return $this;
+    }
+    
+    /**
+     * Get factory.
+     * @throws Exception
+     * @return callable|\Commons\Callback\Callback
+     */
+    public function getFactory()
+    {
+        if (!isset($this->_factory)) {
+            $this->setFactory(function($className){
+                if (!class_exists($className, true)) {
+                    throw new Exception("Cannot load migration class '{$className}'");
+                }
+                return new $className();
+            });
+        }
+        return $this->_factory;
+    }
+    
+    /**
+     * Upgrade.
+     * @return \Commons\Migration\Migrator\MigratorInterface
+     */
+    public function upgrade()
     {
         $versioner = $this->getVersioner();
         foreach ($this->getMaps() as $name => $map) {
@@ -173,9 +225,11 @@ class Migrator
             ksort($migrations);
             $current = $versioner->getVersion($name);
             foreach ($migrations as $version => $className) {
-                if (isset($max) && $version > $max) break;
+                if ($this->getUpgradeMax() && $version > $this->getUpgradeMax()) break;
                 if ($current < $version) {
-                    $this->getLogger()->debug("Upgrade {$name} from {$current} to {$version} ({$className})");
+                    if ($this instanceof LoggerAwareInterface) {
+                        $this->getLogger()->debug("Upgrade {$name} from {$current} to {$version} ({$className})");
+                    }
                     $this->_createMigrationInstance($className)->upgrade();
                     $current = $version;
                     $versioner->setVersion($name, $current);
@@ -187,9 +241,9 @@ class Migrator
     
     /**
      * Downgrade.
-     * @return \Commons\Migration\Migrator
+     * @return \Commons\Migration\Migrator\MigratorInterface
      */
-    public function downgrade($min = 0)
+    public function downgrade()
     {
         $versioner = $this->getVersioner();
         foreach ($this->getMaps() as $name => $map) {
@@ -197,15 +251,17 @@ class Migrator
             krsort($migrations);
             $current = $versioner->getVersion($name);
             foreach ($migrations as $version => $className) {
-                if ($version <= $min) break;
+                if ($version <= $this->getDowngradeMin()) break;
                 if ($current >= $version) {
-                    $this->getLogger()->debug("Downgrade {$name} from {$current} to ".($version-1)." ({$className})");
+                    if ($this instanceof LoggerAwareInterface) {
+                        $this->getLogger()->debug("Downgrade {$name} from {$current} to ".($version-1)." ({$className})");
+                    }
                     $this->_createMigrationInstance($className)->downgrade();
                     $current = $version - 1;
                     $versioner->setVersion($name, $current);
                 }                
             }
-            if ($min == 0) {
+            if ($this->getDowngradeMin() == 0) {
                 $versioner->setVersion($name, 0);
             }
         }
@@ -220,12 +276,9 @@ class Migrator
      */
     protected function _createMigrationInstance($className)
     {
-        if (!class_exists($className, true)) {
-            throw new Exception("Cannot load migration class '{$className}'");
-        }
-        $migration = new $className;
+        $migration = $this->getFactory()->call($className);
         if (!($migration instanceof MigrationInterface)) {
-            throw new Exception("Invalid migration claSS '{$className}'");
+            throw new Exception("Invalid migration class '{$className}'");
         }
         return $migration;
     }
