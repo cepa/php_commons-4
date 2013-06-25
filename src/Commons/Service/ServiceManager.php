@@ -14,7 +14,7 @@
 
 namespace Commons\Service;
 
-class ServiceManager
+class ServiceManager implements ServiceManagerInterface
 {
 
     protected $_factories = array();
@@ -96,7 +96,11 @@ class ServiceManager
         if (is_callable($factory)) {
             $service = call_user_func($factory);
         } else {
-            $service = new $factory();
+            if (class_exists($factory)) {
+                $service = new $factory();
+            } else {
+                throw new Exception("There is no class '$factory'");
+            }
         }
     
         if ($service instanceof ServiceManagerAwareInterface) {

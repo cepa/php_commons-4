@@ -15,7 +15,7 @@
 namespace Commons\Application;
 
 use Commons\Log\Logger;
-use Commons\Service\ServiceManager;
+use Commons\Service\ServiceManagerInterface;
 use Mock\Application as MockApplication;
 
 class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
@@ -51,7 +51,7 @@ class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
     public function testSetGetServiceManager()
     {
         $app = new MockApplication();
-        $this->assertTrue($app->getServiceManager() instanceof ServiceManager);
+        $this->assertTrue($app->getServiceManager() instanceof ServiceManagerInterface);
     }
         
 }

@@ -23,7 +23,7 @@ abstract class AbstractService implements ServiceManagerAwareInterface
      * Set service manager.
      * @see \Commons\Service\ServiceManagerAwareInterface::setServiceManager()
      */
-    public function setServiceManager(ServiceManager $serviceManager)
+    public function setServiceManager(ServiceManagerInterface $serviceManager)
     {
         $this->_serviceManager = $serviceManager;
         return $this;

@@ -19,6 +19,7 @@ use Commons\Config\ConfigAwareInterface;
 use Commons\Log\Log;
 use Commons\Log\LoggerAwareInterface;
 use Commons\Service\ServiceManager;
+use Commons\Service\ServiceManagerInterface;
 use Commons\Service\ServiceManagerAwareInterface;
 
 abstract class AbstractApplication implements ServiceManagerAwareInterface
@@ -91,10 +92,10 @@ abstract class AbstractApplication implements ServiceManagerAwareInterface
     
     /**
      * Set service manager.
-     * @param ServiceManager $manager
+     * @param ServiceManagerInterface $manager
      * @return \Commons\Application\AbstractApplication
      */
-    public function setServiceManager(ServiceManager $manager)
+    public function setServiceManager(ServiceManagerInterface $manager)
     {
         $this->_serviceManager = $manager;
         return $this;
@@ -102,7 +103,7 @@ abstract class AbstractApplication implements ServiceManagerAwareInterface
     
     /**
      * Get service manager.
-     * @return ServiceManager
+     * @return ServiceManagerInterface
      */
     public function getServiceManager()
     {
