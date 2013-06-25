@@ -19,14 +19,17 @@ use Commons\Http\Response;
 use Commons\Plugin\PluginBroker;
 use Commons\Plugin\Exception as PluginException;
 use Commons\Plugin\PluginAwareInterface;
+use Commons\Service\ServiceManagerAwareInterface;
+use Commons\Service\ServiceManagerInterface;
 
-abstract class AbstractController implements PluginAwareInterface
+abstract class AbstractController implements PluginAwareInterface, ServiceManagerAwareInterface
 {
     
     protected $_request;
     protected $_response;
     protected $_resourcesPath;
     protected $_pluginBroker;
+    protected $_serviceManager;
     
     /**
      * Init constructor.
@@ -145,6 +148,30 @@ abstract class AbstractController implements PluginAwareInterface
             $this->setPluginBroker($pluginBroker);
         }
         return $this->_pluginBroker;
+    }
+    
+    /**
+     * Set service manager.
+     * @param ServiceManagerInterface $serviceManager
+     * @return \Commons\Light\Controller\AbstractController
+     */
+    public function setServiceManager(ServiceManagerInterface $serviceManager)
+    {
+        $this->_serviceManager = $serviceManager;
+        return $this;
+    }
+    
+    /**
+     * Get service manager.
+     * @throws Exception
+     * @return ServiceManagerInterface
+     */
+    public function getServiceManager()
+    {
+        if (!isset($this->_serviceManager)) {
+            throw new Exception("Missing service manager instance");
+        }
+        return $this->_serviceManager;
     }
     
     /**

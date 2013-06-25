@@ -18,6 +18,8 @@ use Commons\Http\Response;
 use Commons\Http\Request;
 use Commons\Light\Route\RouteInterface;
 use Commons\Light\Route\StaticRoute;
+use Commons\Service\ServiceManager;
+use Commons\Service\ServiceManagerInterface;
 use Mock\Light\Dispatcher as MockDispatcher;
 
 class AbstractDispatcherTest extends \PHPUnit_Framework_TestCase
@@ -68,6 +70,15 @@ class AbstractDispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($dispatcher->getRoute('y') instanceof RouteInterface);
         $d = $dispatcher->clearRoutes();
         $this->assertEquals(0, count($dispatcher->getRoutes()));
+    }
+    
+    public function testSetGetServiceManager()
+    {
+        $dispatcher = new MockDispatcher();
+        $this->assertTrue($dispatcher->getServiceManager() instanceof ServiceManagerInterface);
+        $d = $dispatcher->setServiceManager(new ServiceManager());
+        $this->assertTrue($d instanceof AbstractDispatcher);
+        $this->assertTrue($dispatcher->getServiceManager() instanceof ServiceManagerInterface);
     }
     
     public function testGetRouteException()
