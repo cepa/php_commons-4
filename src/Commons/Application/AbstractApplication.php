@@ -21,17 +21,12 @@ use Commons\Log\LoggerAwareInterface;
 use Commons\Service\ServiceManager;
 use Commons\Service\ServiceManagerAwareInterface;
 
-abstract class AbstractApplication implements 
-        LoggerAwareInterface, 
-        ConfigAwareInterface, 
-        ServiceManagerAwareInterface
+abstract class AbstractApplication implements ServiceManagerAwareInterface
 {
 
     protected $_environment;
     protected $_version;
     protected $_path;
-    protected $_logger;
-    protected $_config;
     protected $_serviceManager;
 
     /**
@@ -92,49 +87,6 @@ abstract class AbstractApplication implements
     public function getPath()
     {
         return $this->_path;
-    }
-    
-    /**
-     * Set logger.
-     * @param LoggerInterface $logger
-     * @return \Commons\Application\AbstractApplication
-     */
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->_logger = $logger;
-        return $this;
-    }
-    
-    /**
-     * Get logger.
-     * @return LoggerInterface
-     */
-    public function getLogger()
-    {
-        if (!isset($this->_logger)) {
-            $this->setLogger(Log::getLogger());
-        }
-        return $this->_logger;
-    }
-
-    /**
-     * Set config.
-     * @param mixed $config
-     * @return AbstractApplication
-     */
-    public function setConfig($config)
-    {
-        $this->_config = $config;
-        return $this;
-    }
-
-    /**
-     * Get config.
-     * @return mixed
-     */
-    public function getConfig()
-    {
-        return $this->_config;
     }
     
     /**
