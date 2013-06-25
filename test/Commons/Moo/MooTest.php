@@ -14,6 +14,10 @@
 
 namespace Commons\Moo;
 
+use Commons\Service\ServiceManagerInterface;
+
+use Commons\Service\ServiceManager;
+
 use Commons\Callback\Callback;
 use Commons\Http\Response;
 use Commons\Http\Request;
@@ -125,6 +129,21 @@ class MooTest extends \PHPUnit_Framework_TestCase
         $m = $moo->setPluginBroker(new PluginBroker());
         $this->assertTrue($m instanceof Moo);
         $this->assertTrue($moo->getPluginBroker() instanceof PluginBroker);
+    }
+    
+    public function testSetGetServiceManager()
+    {
+        $moo = new Moo();
+        $m = $moo->setServiceManager(new ServiceManager());
+        $this->assertTrue($m instanceof Moo);
+        $this->assertTrue($moo->getServiceManager() instanceof ServiceManagerInterface);
+    }
+    
+    public function testGetServiceManagerException()
+    {
+        $this->setExpectedException('\Commons\Moo\Exception');
+        $moo = new Moo();
+        $moo->getServiceManager();
     }
     
     public function testInit()
