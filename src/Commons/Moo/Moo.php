@@ -26,9 +26,11 @@ use Commons\Light\Renderer\LayoutRenderer;
 use Commons\Light\Renderer\RendererInterface;
 use Commons\Light\View\ViewInterface;
 use Commons\Light\View\PhtmlView;
+use Commons\Service\ServiceManagerAwareInterface;
+use Commons\Service\ServiceManagerInterface;
 use Commons\Utils\DebugUtils;
 
-class Moo implements PluginAwareInterface
+class Moo implements PluginAwareInterface, ServiceManagerAwareInterface
 {
     
     protected $_baseUri;
@@ -38,6 +40,7 @@ class Moo implements PluginAwareInterface
     protected $_callbacks = array();
     protected $_routes = array();
     protected $_pluginBroker;
+    protected $_serviceManager;
     
     /**
      * Set base uri.
@@ -299,6 +302,28 @@ class Moo implements PluginAwareInterface
     }
     
     /**
+     * Set service manager.
+     * @see \Commons\Service\ServiceManagerAwareInterface::setServiceManager()
+     */
+    public function setServiceManager(ServiceManagerInterface $serviceManager)
+    {
+        $this->_serviceManager = $serviceManager;
+        return $this;
+    }
+
+    /**
+     * Get service manager.
+     * @see \Commons\Service\ServiceManagerAwareInterface::getServiceManager()
+     */
+    public function getServiceManager()
+    {
+        if (!isset($this->_serviceManager)) {
+            throw new Exception("Missing service manager instance");
+        }
+        return $this->_serviceManager;
+    }
+    
+    /**
      * Set init callback.
      * This callback will be executed at the beginning.
      * @param mixed $callback
@@ -453,11 +478,9 @@ class Moo implements PluginAwareInterface
     
     protected function _renderView($view)
     {
-
         if (!($view instanceof ViewInterface)) {
             $view = new PhtmlView();
         }
-        
         $this->getResponse()
             ->appendBody($this->getRenderer()->render($view))
             ->send();
