@@ -48,15 +48,6 @@ class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/path', $app->getPath());
     }
     
-    public function testSetGetConfig()
-    {
-        $app = new MockApplication();
-        $this->assertNull($app->getConfig());
-        $a = $app->setConfig(array());
-        $this->assertTrue($a instanceof AbstractApplication);
-        $this->assertTrue(is_array($app->getConfig()));
-    }
-    
     public function testSetGetServiceManager()
     {
         $app = new MockApplication();
