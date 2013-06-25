@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file       Commons/Service/ServiceManagerAwareInterface.php
+ * @file       Commons/Service/ServiceManagerInterface.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
@@ -14,20 +14,14 @@
 
 namespace Commons\Service;
 
-interface ServiceManagerAwareInterface
+interface ServiceManagerInterface
 {
-
-    /**
-     * Set service manager.
-     * @param ServiceManagerInterface $serviceManager
-     * @return ServiceManagerAwareInterface
-     */
-    public function setServiceManager(ServiceManagerInterface $serviceManager);
     
     /**
-     * Get service manager.
-     * @return ServiceManagerInterface
+     * Get service.
+     * @param string $name
+     * @return object
      */
-    public function getServiceManager();
+    public function getService($name);
     
 }
