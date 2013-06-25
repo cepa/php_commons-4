@@ -18,6 +18,7 @@ use Commons\Buffer\OutputBuffer;
 use Commons\Http\Request;
 use Commons\Http\Response;
 use Commons\Light\Controller\AbstractController;
+use Commons\Service\ServiceManagerAwareInterface;
 
 class HttpDispatcher extends AbstractDispatcher
 {
@@ -215,6 +216,9 @@ class HttpDispatcher extends AbstractDispatcher
 
         /** @var $controller AbstractController */
         $controller = new $controllerClass($this->getRequest(), $this->getResponse());
+        if ($controller instanceof ServiceManagerAwareInterface) {
+            $controller->setServiceManager($this->getServiceManager());
+        }
         $controller->dispatch($params);
         
         $this->getResponse()->prependBody(OutputBuffer::end());

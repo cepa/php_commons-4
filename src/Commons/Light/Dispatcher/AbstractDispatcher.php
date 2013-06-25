@@ -17,8 +17,11 @@ namespace Commons\Light\Dispatcher;
 use Commons\Http\Request;
 use Commons\Http\Response;
 use Commons\Light\Route\RouteInterface;
+use Commons\Service\ServiceManager;
+use Commons\Service\ServiceManagerAwareInterface;
+use Commons\Service\ServiceManagerInterface;
 
-abstract class AbstractDispatcher
+abstract class AbstractDispatcher implements ServiceManagerAwareInterface
 {
     /**
      * @var Request
@@ -34,6 +37,11 @@ abstract class AbstractDispatcher
      * @var RouteInterface[]
      */
     protected $_routes = array();
+    
+    /**
+     * @var ServiceManagerInterface
+     */
+    protected $_serviceManager;
     
     /**
      * Set http request.
@@ -158,6 +166,30 @@ abstract class AbstractDispatcher
     {
         $this->_routes = array();
         return $this;
+    }
+    
+    /**
+     * Set service manager.
+     * @param ServiceManagerInterface $serviceManager
+     * @return \Commons\Light\Dispatcher\AbstractDispatcher
+     */
+    public function setServiceManager(ServiceManagerInterface $serviceManager)
+    {
+        $this->_serviceManager = $serviceManager;
+        return $this;
+    }
+    
+    /**
+     * Get service manager.
+     * @throws Exception
+     * @return \Commons\Service\ServiceManagerInterface
+     */
+    public function getServiceManager()
+    {
+        if (!isset($this->_serviceManager)) {
+            $this->setServiceManager(new ServiceManager());
+        }
+        return $this->_serviceManager;
     }
 
     /**
