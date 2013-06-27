@@ -81,7 +81,10 @@ class CollectionContainer implements \ArrayAccess, \Countable, \Serializable, \I
      */
     public function setAll(array $collection)
     {
-        $this->_collection = $collection;
+        $this->_collection = array();
+        foreach ($collection as $name => $value) {
+            $this->set($name, $value);
+        }
         return $this;
     }
 
