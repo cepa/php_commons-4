@@ -579,6 +579,10 @@ class Query implements \Countable
      */
     public function groupBy($sql)
     {
+        if (is_null($sql)) {
+            $this->_groupByExpression->clear();
+            return $this;
+        }
         $args = func_get_args();
         $this->_groupByExpression
             ->set('GROUP BY')
@@ -610,6 +614,10 @@ class Query implements \Countable
      */
     public function having($sql)
     {
+        if (is_null($sql)) {
+            $this->_havingExpression->clear();
+            return $this;
+        }
         $args = func_get_args();
         $this->_havingExpression
             ->set('HAVING')
@@ -624,6 +632,10 @@ class Query implements \Countable
      */
     public function union($sql)
     {
+        if (is_null($sql)) {
+            $this->_unionExpression->clear();
+            return $this;
+        }
         $args = func_get_args();
         $this->_unionExpression
             ->set('UNION')
@@ -638,6 +650,10 @@ class Query implements \Countable
      */
     public function orderBy($sql)
     {
+        if (is_null($sql)) {
+            $this->_orderByExpression->clear();
+            return $this;
+        }
         $args = func_get_args();
         $this->_orderByExpression
             ->set('ORDER BY')
@@ -705,6 +721,10 @@ class Query implements \Countable
      */
     public function join($sql)
     {
+        if (is_null($sql)) {
+            $this->_joinExpression->clear();
+            return $this;
+        }
         $args = func_get_args();
         $this->_joinExpression
             ->add('JOIN')
