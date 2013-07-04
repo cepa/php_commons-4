@@ -45,7 +45,6 @@ class DebugUtils
                 <pre><?= $e->getTraceAsString() ?></pre>
             </div>
         </div>
-        <div style="text-align:center; padding:20px; font-size:10px; color:#444444;">&copy; <?= date('Y') ?> <a href="http://www.hellworx.com">HellWorx Software</a></div>
         </body>
         </html>
         <?   
