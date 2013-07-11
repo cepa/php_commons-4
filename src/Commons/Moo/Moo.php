@@ -43,5 +43,15 @@ class Moo extends AbstractMoo implements ServiceManagerAwareInterface
         }
         return $this->_serviceManager;
     }
+    
+    /**
+     * Helper method, get service from service manager.
+     * @param string $name
+     * @return object
+     */
+    public function getService($name)
+    {
+        return $this->getServiceManager()->getService($name);
+    }
         
 }
