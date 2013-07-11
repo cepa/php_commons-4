@@ -85,6 +85,7 @@ class PdoDriver implements DriverInterface
         $database  = (isset($options['database']) ? $options['database'] : null);
         $username  = (isset($options['username']) ? $options['username'] : null);
         $password  = (isset($options['password']) ? $options['password'] : null);
+        $driverOptions = (isset($options['options']) ? $options['options'] : array());
         
         $dsn = "{$driver}:host={$host};";
         if (!empty($port)) {
@@ -95,7 +96,7 @@ class PdoDriver implements DriverInterface
         }
 
         try {
-            $this->_pdo = new \PDO($dsn, $username, $password);
+            $this->_pdo = new \PDO($dsn, $username, $password, $driverOptions);
             $this->_pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             
             // MySQL charset.
