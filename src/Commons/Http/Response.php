@@ -17,10 +17,10 @@ namespace Commons\Http;
 class Response
 {
 
-    public $_body = '';
-    public $_headers = array();
-    public $_statusCode = StatusCode::HTTP_OK;
-    public $_statusMessage = 'OK';
+    protected $_body = '';
+    protected $_headers = array();
+    protected $_statusCode = StatusCode::HTTP_OK;
+    protected $_statusMessage = 'OK';
     
     /**
      * Append body.
