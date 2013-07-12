@@ -98,4 +98,14 @@ class CollectionContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(6, $result);
     }
     
+    public function testPopulateCollection()
+    {
+        $x = new CollectionContainer(array('a' => 123, 'b' => 456, 'c' => 789));
+        $y = new CollectionContainer($x);
+        $this->assertEquals(3, count($y));
+        $this->assertEquals(123, $y['a']);
+        $this->assertEquals(456, $y['b']);
+        $this->assertEquals(789, $y['c']);
+    }
+    
 }

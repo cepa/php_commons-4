@@ -21,11 +21,13 @@ class CollectionContainer implements \ArrayAccess, \Countable, \Serializable, \I
     
     /**
      * Prepare collection.
-     * @param array $collection
+     * @param array|object $collection
      */
-    public function __construct(array $collection = array())
+    public function __construct($collection = null)
     {
-        $this->_collection = $collection;
+        if (isset($collection)) {
+            $this->populate($collection);
+        }
     }
     
     /**
@@ -76,18 +78,14 @@ class CollectionContainer implements \ArrayAccess, \Countable, \Serializable, \I
     
     /**
      * Set collection.
-     * @param array $collection
+     * @param array|object $collection
      * @return CollectionContainer
      */
-    public function setAll(array $collection)
+    public function setAll($collection)
     {
-        $this->_collection = array();
-        foreach ($collection as $name => $value) {
-            $this->set($name, $value);
-        }
-        return $this;
+        return $this->populate($collection);
     }
-
+    
     /**
      * Get collection.
      * @return array
@@ -198,6 +196,34 @@ class CollectionContainer implements \ArrayAccess, \Countable, \Serializable, \I
     public function getIterator()
     {
         return new \ArrayIterator($this->_collection);
+    }
+
+    /**
+     * Populate.
+     * @param array|object $collection
+     * @return CollectionContainer
+     */
+    public function populate($collection)
+    {
+        $this->_collection = array();
+        if (is_object($collection)) {
+            if ($collection instanceof \IteratorAggregate) {
+                $items = $collection;
+            } else if (method_exists($collection, 'toArray')) {
+                $items = $collection->toArray();
+            } else {
+                throw new Exception("Invalid collection parameter");
+            }
+        } else if (is_array($collection)) {
+            $items = $collection;
+        } else {
+            throw new Exception("Invalid collection parameter");
+        }
+        foreach ($items as $name => $value) {
+            $this->set($name, $value);
+        }
+        return $this;
+        
     }
 
 }
