@@ -16,6 +16,7 @@ namespace Commons\Sql;
 
 use Commons\Entity\Collection;
 use Commons\Entity\Entity;
+use Commons\Sql\Sql;
 use Commons\Sql\Driver\PdoDriver;
 use Commons\Sql\Connection\ConnectionInterface;
 use Commons\Sql\Connection\Connection;
@@ -693,6 +694,93 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue($a[2] instanceof Entity);
             $this->assertEquals('789', $a[2]->a);
             $this->assertEquals('ghi', $a[2]->b);
+            
+            $this->_connection->disconnect();
+            \Bootstrap::dropDatabase($database);
+            
+        } catch (Exception $e) {
+            \Bootstrap::abort($e);
+        }
+    }
+    
+    public function testExecuteRealMultiNestedTransactionsCommit()
+    {
+        try {
+            $database = \Bootstrap::createDatabase();
+            $conn = $this->_connection
+                ->setDriver(new PdoDriver())
+                ->connect(\Bootstrap::getDatabaseOptions($database));
+            
+            if ($conn->getDatabaseType() == Sql::TYPE_MYSQL) {
+                $this->executeStatement("CREATE TABLE test ( a int, b varchar(128) ) ENGINE=InnoDB");
+            } else {
+                $this->executeStatement("CREATE TABLE test ( a int, b varchar(128) )");
+            }
+            
+            $this->assertFalse($conn->inTransaction());
+            $conn->begin();
+            $this->assertTrue($conn->inTransaction());
+            $this->executeStatement("INSERT INTO test(a, b) VALUES (123, 'abc')");
+                $conn->begin();
+                $this->executeStatement("INSERT INTO test(a, b) VALUES (456, 'def')");
+                    $conn->begin();
+                    $this->executeStatement("INSERT INTO test(a, b) VALUES (789, 'ghi')");
+                    $conn->commit();
+                $conn->commit();
+            $this->assertTrue($conn->inTransaction());
+            $conn->commit();
+            $this->assertFalse($conn->inTransaction());
+            
+            $records = $conn->createQuery()
+                ->select('*')
+                ->from('test')
+                ->execute()
+                ->fetchCollection();
+            $this->assertEquals(3, count($records));
+            
+            $this->_connection->disconnect();
+            \Bootstrap::dropDatabase($database);
+            
+        } catch (Exception $e) {
+            \Bootstrap::abort($e);
+        }
+    }
+    
+    public function testExecuteRealMultiNestedTransactionsRollback()
+    {
+        $this->markTestIncomplete("This test was marked incomplete due to problem on MySQL 5.1 that requires further investigation");
+        try {
+            $database = \Bootstrap::createDatabase();
+            $conn = $this->_connection
+                ->setDriver(new PdoDriver())
+                ->connect(\Bootstrap::getDatabaseOptions($database));
+            
+            if ($conn->getDatabaseType() == Sql::TYPE_MYSQL) {
+                $this->executeStatement("CREATE TABLE test ( a int, b varchar(128) ) ENGINE=InnoDB");
+            } else {
+                $this->executeStatement("CREATE TABLE test ( a int, b varchar(128) )");
+            }
+            
+            $this->assertFalse($conn->inTransaction());
+            $conn->begin();
+            $this->assertTrue($conn->inTransaction());
+            $this->executeStatement("INSERT INTO test(a, b) VALUES (123, 'abc')");
+                $conn->begin();
+                $this->executeStatement("INSERT INTO test(a, b) VALUES (456, 'def')");
+                    $conn->begin();
+                    $this->executeStatement("INSERT INTO test(a, b) VALUES (789, 'ghi')");
+                    $conn->commit();
+                $this->assertTrue($conn->inTransaction());
+                $conn->rollback();
+                $this->assertFalse($conn->inTransaction());
+            $conn->commit();
+            
+            $records = $conn->createQuery()
+                ->select('*')
+                ->from('test')
+                ->execute()
+                ->fetchCollection();
+            $this->assertEquals(0, count($records));
             
             $this->_connection->disconnect();
             \Bootstrap::dropDatabase($database);
