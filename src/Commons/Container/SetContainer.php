@@ -48,9 +48,12 @@ class SetContainer extends CollectionContainer
      * @throws Exception
      * @return mixed
      */
-    public function get($index)
+    public function get($index, $defaultValue = null)
     {
         if (!parent::has((int) $index)) {
+            if (isset($defaultValue)) {
+                return $defaultValue;
+            }
             throw new Exception("Index $index has not been found!");
         }
         return parent::get((int) $index);

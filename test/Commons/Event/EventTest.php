@@ -38,17 +38,17 @@ class EventTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(Event::getDispatcher() instanceof \Mock\Event\Dispatcher);
     }
     
-    public function testBindRaiseClear()
+    public function testBindRaiseClearEvent()
     {
         Event::setDispatcher(new Dispatcher());
-        Event::bind('mock_event', array($this, 'changeState'));
+        Event::bindEvent('mock_event', array($this, 'changeState'));
         
-        Event::raise('mock_event', array('state' => 'test'));
+        Event::raiseEvent('mock_event', array('state' => 'test'));
         $this->assertEquals('test', $this->_state);
         
         $this->_state = null;
-        Event::clear('mock_event');
-        Event::raise('mock_event', array('state' => 'test'));
+        Event::clearEvent('mock_event');
+        Event::raiseEvent('mock_event', array('state' => 'test'));
         $this->assertNull($this->_state);
     }
     
