@@ -113,6 +113,15 @@ class CollectionContainer implements \ArrayAccess, \Countable, \Serializable, \I
         $this->_collection = array();
         return $this;
     }
+    
+    /**
+     * Alias.
+     * @return CollectionContainer
+     */
+    public function clear()
+    {
+        return $this->clearAll();
+    }
 
     /**
      * Convert collection to single string.
