@@ -33,9 +33,9 @@ class AssocContainer extends CollectionContainer
      * @param string $name
      * @return mixed
      */
-    public function get($name)
+    public function get($name, $defaultValue = null)
     {
-        return parent::get((string) $name);
+        return parent::get((string) $name, $defaultValue);
     }
 
     /**

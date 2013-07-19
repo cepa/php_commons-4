@@ -17,8 +17,8 @@ class EventListener
     
 }
 
-Event::bind('first event', array(new EventListener(), 'onEvent'));
-Event::bind('second event', array(new EventListener(), 'onEvent'));
+Event::bindEvent('first event', array(new EventListener(), 'onEvent'));
+Event::bindEvent('second event', array(new EventListener(), 'onEvent'));
 
-Event::raise('first event', array('a' => 123, 'b' => 456));
-Event::raise('second event', array('x' => 666, 'y' => 999));
+Event::raiseEvent('first event', array('a' => 123, 'b' => 456));
+Event::raiseEvent('second event', array('x' => 666, 'y' => 999));

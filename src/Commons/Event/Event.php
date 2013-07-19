@@ -92,9 +92,9 @@ class Event extends AssocContainer
      * @param Commons\Event\Event|string $event
      * @param Commons\Callback\Callback|string|array $callback
      */
-    public static function bind($event, $callback)
+    public static function bindEvent($event, $callback)
     {
-        self::getDispatcher()->bind(self::_prepareEvent($event), self::_prepareCallback($callback));
+        self::getDispatcher()->bind(self::_prepareEvent($event), self::_prepareEventCallback($callback));
     }
     
     /**
@@ -102,7 +102,7 @@ class Event extends AssocContainer
      * @param Commons\Event\Event|string $event
      * @param array $params
      */
-    public static function raise($event, array $params = null)
+    public static function raiseEvent($event, array $params = null)
     {
         $event = self::_prepareEvent($event);
         if (isset($params)) {
@@ -115,7 +115,7 @@ class Event extends AssocContainer
      * Clear event bindings.
      * @param Commons\Event\Event|string $event
      */
-    public static function clear($event)
+    public static function clearEvent($event)
     {
         self::getDispatcher()->clear(self::_prepareEvent($event));
     }
@@ -128,7 +128,7 @@ class Event extends AssocContainer
         return $event;
     }
     
-    protected static function _prepareCallback($callback)
+    protected static function _prepareEventCallback($callback)
     {
         if (!($callback instanceof Callback)) {
             $callback = new Callback($callback);
