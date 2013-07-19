@@ -21,7 +21,8 @@ class PdoDriver implements DriverInterface
 {
     
     protected $_pdo;
-    protected $_inTransaction = false;
+    private $_inTransaction = false;
+    private $_transactionCounter = 0; 
     
     /**
      * Dummy.
@@ -96,6 +97,9 @@ class PdoDriver implements DriverInterface
         }
 
         try {
+            $this->_inTransaction = false;
+            $this->_transactionCounter = 0;
+            
             $this->_pdo = new \PDO($dsn, $username, $password, $driverOptions);
             $this->_pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             
@@ -115,6 +119,8 @@ class PdoDriver implements DriverInterface
      */
     public function disconnect()
     {
+        $this->_inTransaction = false;
+        $this->_transactionCounter = 0;
         $this->_pdo = null;
     }
     
@@ -140,8 +146,11 @@ class PdoDriver implements DriverInterface
     public function begin()
     {
         try {
-            $this->getPdo()->beginTransaction();
+            if ($this->_transactionCounter == 0) {
+                $this->getPdo()->beginTransaction();
+            }
             $this->_inTransaction = true;
+            $this->_transactionCounter++;
         } catch (\PDOException $e) {
             throw new Exception($e);
         }
@@ -153,8 +162,13 @@ class PdoDriver implements DriverInterface
     public function commit()
     {
         try {
-            $this->getPdo()->commit();
-            $this->_inTransaction = false;
+            if ($this->_inTransaction) {
+                $this->_transactionCounter--;
+                if ($this->_transactionCounter == 0) {
+                    $this->getPdo()->commit();
+                    $this->_inTransaction = false;
+                }
+            }
         } catch (\PDOException $e) {
             throw new Exception($e);
         }
@@ -166,8 +180,11 @@ class PdoDriver implements DriverInterface
     public function rollback()
     {
         try {
-            $this->getPdo()->rollBack();
-            $this->_inTransaction = false;
+            if ($this->_inTransaction) {
+                $this->getPdo()->rollBack();
+                $this->_inTransaction = false;
+                $this->_transactionCounter = 0;
+            }
         } catch (\PDOException $e) {
             throw new Exception($e);
         }
