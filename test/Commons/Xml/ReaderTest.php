@@ -192,4 +192,12 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("Don't forget me this weekend!", (string) $xml->body);
     }
     
+    public function testReadRss()
+    {
+        $filename = ROOT_PATH.'/test/fixtures/test_xml_reader_rss.xml';
+        $reader = new Reader();
+        $xml = $reader->readFromFile($filename);
+        $this->assertEquals(6, count($xml->channel)); // 3 text fiels + 3 items
+    }
+    
 }
