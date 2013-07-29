@@ -18,6 +18,7 @@ use Commons\Buffer\OutputBuffer;
 use Commons\Callback\Callback;
 use Commons\Http\Response;
 use Commons\Http\Request;
+use Commons\Http\StatusCode;
 use Commons\Plugin\PluginBroker;
 use Commons\Plugin\PluginAwareInterface;
 use Commons\Light\Route\RestRoute;
@@ -165,7 +166,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     public function getCallback($key)
     {
         if (!$this->hasCallback($key)) {
-            throw new Exception("No callback for key '{$key}'");
+            throw new Exception("No callback for key '{$key}'", StatusCode::HTTP_INTERNAL_SERVER_ERROR);
         }
         return $this->_callbacks[$key];
     }
@@ -235,7 +236,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     public function getRoute($key)
     {
         if (!$this->hasRoute($key)) {
-            throw new Exception("No route for key '{$key}'");
+            throw new Exception("No route for key '{$key}'", StatusCode::HTTP_INTERNAL_SERVER_ERROR);
         }
         return $this->_routes[$key];
     }
@@ -404,7 +405,7 @@ abstract class AbstractMoo implements PluginAwareInterface
                 }
             }
             
-            throw new Exception("Error 404");
+            throw new Exception("Unknown route /".$this->getRequest()->getUri(), StatusCode::HTTP_NOT_FOUND);
             
         } catch (\Exception $e) {
             if ($this->hasCallback('error')) {
