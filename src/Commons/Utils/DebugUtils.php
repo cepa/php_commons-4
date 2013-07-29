@@ -28,6 +28,7 @@ class DebugUtils
         $message = get_class($e).": ".$e->getMessage()."\n".$e->getTraceAsString();
         Log::critical(str_replace("\n", ': ', $message));
         
+        header("HTTP/1.1 500 Internal Server Error");
         header("Content-Type: text/html; charset=utf-8");
         ?>
         <html>
