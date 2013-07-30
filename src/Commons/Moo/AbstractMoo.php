@@ -398,7 +398,7 @@ abstract class AbstractMoo implements PluginAwareInterface
                 $params = $route->match($this->getRequest());
                 if (is_array($params)) {
                     $params[0] = $this;
-                    $view = $this->getCallback($key)->callArray($params);
+                    $view = $this->callAction($key, $params);
                     $content = OutputBuffer::end();
                     $this->getResponse()->appendBody($content);
                     return $this->_renderView($view);
@@ -410,7 +410,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         } catch (\Exception $e) {
             if ($this->hasCallback('error')) {
                 try {
-                    $view = $this->getCallback('error')->call($this, $e);
+                    $view = $this->callAction('error', array($this, $e));
                     return $this->_renderView($view);
                 } catch (\Exception $e) {
                     DebugUtils::renderExceptionPage($e);
@@ -434,6 +434,17 @@ abstract class AbstractMoo implements PluginAwareInterface
     }
     
     /**
+     * Run callback by name.
+     * @param string $action
+     * @param array $params
+     * @return mixed
+     */
+    public function callAction($action, array $params = array())
+    {
+        return $this->getCallback($action)->callArray($params);
+    } 
+    
+    /**
      * Invoke a closure or a plugin.
      * @param string $name
      * @param array $arguments
@@ -447,12 +458,12 @@ abstract class AbstractMoo implements PluginAwareInterface
             foreach ($args as $arg) {
                 $params[] = $arg;
             }
-            return $this->getCallback($name)->callArray($params);
+            return $this->callAction($name, $params);
         }
         return $this->getPluginBroker()->invoke($this, $name, $args);
     }
     
-    protected function _renderView($view)
+    private function _renderView($view)
     {
         if (!($view instanceof ViewInterface)) {
             $view = new PhtmlView();
