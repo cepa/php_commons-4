@@ -26,9 +26,11 @@ class XmlView implements ViewInterface
      * Init xml view.
      * @param Xml $xml
      */
-    public function __construct(Xml $xml = null)
+    public function __construct($xml = null)
     {
-        $this->_xml = $xml;
+        if (isset($xml)) {
+            $this->setXml($xml);
+        }
     }
     
     /**
@@ -36,8 +38,11 @@ class XmlView implements ViewInterface
      * @param Xml $xml
      * @return \Commons\Light\View\XmlView
      */
-    public function setXml(Xml $xml)
+    public function setXml($xml)
     {
+        if (!($xml instanceof Xml)) {
+            $xml = new Xml($xml);
+        }
         $this->_xml = $xml;
         return $this;
     }
