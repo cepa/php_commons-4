@@ -25,7 +25,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     {
         $xml = new Xml();
         $this->assertTrue($xml instanceof TraversableContainer);
-        $this->assertEquals('', $xml->getName());
+        $this->assertEquals('xml', $xml->getName());
         $this->assertEquals('', (string) $xml);
         $this->assertEquals(0, count($xml));
     }

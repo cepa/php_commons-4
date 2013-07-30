@@ -22,6 +22,14 @@ class Xml extends TraversableContainer implements \Serializable
     /** @var AssocContainer */
     protected $_attributes;
     
+    public function __construct($mixed = null)
+    {
+        parent::__construct($mixed);
+        if ($this->getName() == '') {
+            $this->setName('xml');
+        }
+    }
+    
     /**
      * Clear.
      * @see Commons\Container\TraversableContainer::clear()
