@@ -106,7 +106,7 @@ class Reader
     {
     	$str = $this->_parseProperties($str);
         libxml_use_internal_errors(true);
-        $simple = @simplexml_load_string($str);
+        $simple = @simplexml_load_string($str, null, \LIBXML_NOCDATA);
         if (!$simple) {
             $message = 'simplexml_load_string failed';
             foreach (libxml_get_errors() as $error) {

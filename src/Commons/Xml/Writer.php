@@ -14,6 +14,8 @@
 
 namespace Commons\Xml;
 
+use Commons\Container\TraversableContainer;
+
 class Writer
 {
     
@@ -49,13 +51,24 @@ class Writer
      * @param Xml $xml
      * @return string
      */
-    protected function _recursiveGenerateXmlString(Xml $xml)
+    protected function _recursiveGenerateXmlString(TraversableContainer $xml)
     {
         $data = $xml->getData();
-        $xmlName = ($xml->getName() != '' ? $xml->getName() : 'xml');
+        $itemName = '';
+        $xmlName = ($xml->getName() != '' ? $xml->getName() : 'item');
+        if (!ctype_alpha(substr($xmlName, 0, 1))) {
+            $itemName = $xmlName;
+            $xmlName = 'item';
+        }        
+        
         $str = '<'.$xmlName;
-        foreach ($xml->getAttributes() as $name => $value) {
-            $str .= ' '.$name.'="'.htmlentities($value).'"';
+        if (!empty($itemName)) {
+            $str .= ' name="'.htmlentities($itemName).'"';
+        }
+        if ($xml instanceof Xml) {
+            foreach ($xml->getAttributes() as $name => $value) {
+                $str .= ' '.$name.'="'.htmlentities($value).'"';
+            }
         }
         if (empty($data)) {
             return $str.'/>';
@@ -67,7 +80,12 @@ class Writer
                 $str .= $this->_recursiveGenerateXmlString($node);
             }
         } else {
-            $str .= htmlentities((string) $data);
+            $text = (string) $data;
+            if (ctype_alnum($text)) {
+                $str .= $text;
+            } else {
+                $str .= '<![CDATA['.($text).']]>';
+            }
         }
         
         return $str.'</'.$xmlName.'>';
