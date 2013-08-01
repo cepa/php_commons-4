@@ -70,7 +70,7 @@ class Writer
                 $str .= ' '.$name.'="'.htmlentities($value).'"';
             }
         }
-        if (empty($data)) {
+        if ($data == '') {
             return $str.'/>';
         }
         $str .= '>';
@@ -81,7 +81,7 @@ class Writer
             }
         } else {
             $text = (string) $data;
-            if (ctype_alnum($text)) {
+            if (preg_match('/^([A-Za-z0-9\-_\/\:\.\,\?\!\@\#\$\%\*\(\)\[\]\+\=\{\} ]+)$/', $text)) {
                 $str .= $text;
             } else {
                 $str .= '<![CDATA['.($text).']]>';
