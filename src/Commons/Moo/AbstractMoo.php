@@ -405,7 +405,7 @@ abstract class AbstractMoo implements PluginAwareInterface
                 }
             }
             
-            throw new Exception("Unknown route /".$this->getRequest()->getUri(), StatusCode::HTTP_NOT_FOUND);
+            throw new Exception("Unknown route ".$this->getRequest()->getMethod()." /".$this->getRequest()->getUri(), StatusCode::HTTP_NOT_FOUND);
             
         } catch (\Exception $e) {
             if ($this->hasCallback('error')) {
