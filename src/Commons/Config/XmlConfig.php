@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- * @file       Commons/Config/Xml.php
+ * @file       Commons/Config/XmlConfig.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
  * 
  * @copyright  PHP Commons
