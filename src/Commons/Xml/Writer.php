@@ -56,7 +56,7 @@ class Writer
         $data = $xml->getData();
         $itemName = '';
         $xmlName = ($xml->getName() != '' ? $xml->getName() : 'item');
-        if (!ctype_alpha(substr($xmlName, 0, 1))) {
+        if (!ctype_alpha($xmlName{0}) || !preg_match('/^([a-zA-Z0-9_]+)$/', $xmlName)) {
             $itemName = $xmlName;
             $xmlName = 'item';
         }        
