@@ -172,6 +172,16 @@ class MooTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($moo->hasRoute('HEAD xxx'));
     }
     
+    public function testHead()
+    {
+        $moo = new Moo();
+        $this->assertFalse($moo->hasCallback('HEAD xxx'));
+        $this->assertFalse($moo->hasRoute('HEAD xxx'));
+        $moo->head('/xxx', function($moo){});
+        $this->assertTrue($moo->hasCallback('HEAD xxx'));
+        $this->assertTrue($moo->hasRoute('HEAD xxx'));
+    }
+    
     public function testGet()
     {
         $moo = new Moo();
@@ -210,6 +220,36 @@ class MooTest extends \PHPUnit_Framework_TestCase
         $moo->delete('/xxx', function($moo){});
         $this->assertTrue($moo->hasCallback('DELETE xxx'));
         $this->assertTrue($moo->hasRoute('DELETE xxx'));
+    }
+    
+    public function testTrace()
+    {
+        $moo = new Moo();
+        $this->assertFalse($moo->hasCallback('TRACE xxx'));
+        $this->assertFalse($moo->hasRoute('TRACE xxx'));
+        $moo->trace('/xxx', function($moo){});
+        $this->assertTrue($moo->hasCallback('TRACE xxx'));
+        $this->assertTrue($moo->hasRoute('TRACE xxx'));
+    }
+    
+    public function testOptions()
+    {
+        $moo = new Moo();
+        $this->assertFalse($moo->hasCallback('OPTIONS xxx'));
+        $this->assertFalse($moo->hasRoute('OPTIONS xxx'));
+        $moo->options('/xxx', function($moo){});
+        $this->assertTrue($moo->hasCallback('OPTIONS xxx'));
+        $this->assertTrue($moo->hasRoute('OPTIONS xxx'));
+    }
+    
+    public function testConnect()
+    {
+        $moo = new Moo();
+        $this->assertFalse($moo->hasCallback('CONNECT xxx'));
+        $this->assertFalse($moo->hasRoute('CONNECT xxx'));
+        $moo->connect('/xxx', function($moo){});
+        $this->assertTrue($moo->hasCallback('CONNECT xxx'));
+        $this->assertTrue($moo->hasRoute('CONNECT xxx'));
     }
     
     public function testMooIndex()

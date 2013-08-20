@@ -18,9 +18,6 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
 {
     
     protected $_name;
-    /**
-     * @var TraversableContainer[]|array
-     */
     protected $_data;
     protected $_counter;
     protected $_lookup;
@@ -39,31 +36,10 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
         }
         
         if (is_array($mixed)) {
-            foreach ($mixed as $key => $value) {
-                if (is_array($value)) {
-                    $this[$key] = new TraversableContainer($value);
-                } else {
-                    $this[$key] = $value;
-                }
-            }
+            $this->populate($mixed);
         }
     }
 
-    /**
-     * @param TraversableContainer $node
-     * @param array $array
-     */
-    protected function _populateFromArray(TraversableContainer $node, array $array)
-    {
-        foreach ($array as $key => $value) {
-            if (is_array($value)) {
-                $node[$key] = new TraversableContainer($value);
-            } else {
-                $node[$key] = $value;
-            }
-        }
-    }
-    
     /**
      * Reset.
      * @return TraversableContainer
@@ -74,6 +50,23 @@ class TraversableContainer implements \ArrayAccess, \Countable, \IteratorAggrega
         $this->_data = null;
         $this->_counter = 0;
         $this->_lookup = array();
+        return $this;
+    }
+    
+    /**
+     * Populate from array.
+     * @param array $array
+     * @return TraversableContainer
+     */
+    public function populate(array $array)
+    {
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $this[$key] = new TraversableContainer($value);
+            } else {
+                $this[$key] = $value;
+            }
+        }
         return $this;
     }
     
