@@ -337,6 +337,17 @@ abstract class AbstractMoo implements PluginAwareInterface
     }
     
     /**
+     * HTTP HEAD action.
+     * @param string $uri
+     * @param mixed $callback
+     * @return \Commons\Moo\Moo
+     */
+    public function head($uri, $callback)
+    {
+        return $this->action('HEAD', $uri, $callback);
+    }
+    
+    /**
      * HTTP GET action.
      * @param string $uri
      * @param mixed $callback
@@ -378,6 +389,39 @@ abstract class AbstractMoo implements PluginAwareInterface
     public function delete($uri, $callback)
     {
         return $this->action('DELETE', $uri, $callback);
+    }
+    
+    /**
+     * HTTP TRACE action.
+     * @param string $uri
+     * @param mixed $callback
+     * @return \Commons\Moo\Moo
+     */
+    public function trace($uri, $callback)
+    {
+        return $this->action('TRACE', $uri, $callback);
+    }
+    
+    /**
+     * HTTP OPTIONS action.
+     * @param string $uri
+     * @param mixed $callback
+     * @return \Commons\Moo\Moo
+     */
+    public function options($uri, $callback)
+    {
+        return $this->action('OPTIONS', $uri, $callback);
+    }
+    
+    /**
+     * HTTP CONNECT action.
+     * @param string $uri
+     * @param mixed $callback
+     * @return \Commons\Moo\Moo
+     */
+    public function connect($uri, $callback)
+    {
+        return $this->action('CONNECT', $uri, $callback);
     }
     
     /**
