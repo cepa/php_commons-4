@@ -41,10 +41,11 @@ class CollectionContainer implements \ArrayAccess, \Countable, \Serializable, \I
         $this->_collection[$name] = $value;
         return $this;
     }
-    
+
     /**
      * Get collection element.
      * @param mixed $name
+     * @param null $defaultValue
      * @return mixed:
      */
     public function get($name, $defaultValue = null)

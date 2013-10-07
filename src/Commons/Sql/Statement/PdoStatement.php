@@ -18,19 +18,18 @@ use Commons\Entity\Collection;
 use Commons\Log\Log;
 use Commons\Sql\Driver\DriverInterface;
 use Commons\Sql\Driver\PdoDriver;
-use Commons\Sql\Sql;
 
 class PdoStatement implements StatementInterface
 {
     
     protected $_rawSql;
     protected $_stmt;
-    
+
     /**
      * Init statement.
      * @param DriverInterface $driver
      * @param string $rawSql
-     * @throws InvalidArgumentException
+     * @throws Exception
      */
     public function __construct(DriverInterface $driver, $rawSql)
     {

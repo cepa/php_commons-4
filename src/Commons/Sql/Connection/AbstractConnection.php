@@ -36,6 +36,7 @@ abstract class AbstractConnection implements ConnectionInterface, RepositoryAwar
      * Set repository instance.
      * @param string $repoClass
      * @param RepositoryInterface $instance
+     * @return $this|\Commons\Entity\RepositoryAwareInterface
      */
     public function setRepository($repoClass, RepositoryInterface $instance)
     {

@@ -41,10 +41,11 @@ class SetContainer extends CollectionContainer
         }
         return parent::set((int) $index, $element);
     }
-    
+
     /**
      * Get an element from the set.
      * @param int $index
+     * @param null $defaultValue
      * @throws Exception
      * @return mixed
      */

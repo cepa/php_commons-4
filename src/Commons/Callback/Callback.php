@@ -14,8 +14,6 @@
 
 namespace Commons\Callback;
 
-use Commons\Exception\InvalidArgumentException;
-
 class Callback
 {
     
@@ -23,7 +21,6 @@ class Callback
     
     /**
      * Create a callback.
-     * @throws InvalidArgumentException
      */
     public function __construct()
     {

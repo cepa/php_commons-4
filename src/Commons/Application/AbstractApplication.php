@@ -14,10 +14,7 @@
 
 namespace Commons\Application;
 
-use Psr\Log\LoggerInterface;
-use Commons\Config\ConfigAwareInterface;
 use Commons\Log\Log;
-use Commons\Log\LoggerAwareInterface;
 use Commons\Service\ServiceManager;
 use Commons\Service\ServiceManagerInterface;
 use Commons\Service\ServiceManagerAwareInterface;

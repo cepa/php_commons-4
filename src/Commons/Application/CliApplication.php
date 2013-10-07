@@ -19,12 +19,13 @@ class CliApplication extends AbstractApplication
     
     private $_argv = array();
     private $_argc = 0;
-    
+
     /**
      * Init cli application.
      * Check for CLI sapi and pcntl module.
      * @param array $argv
-     * @throws MissingDependencyException
+     * @param array $argv
+     * @throws Exception
      */
     public function __construct(array $argv = array())
     {
@@ -44,7 +45,7 @@ class CliApplication extends AbstractApplication
     /**
      * Set argv.
      * @param array $argv
-     * @return \Commons\Light\Application\CliApplication
+     * @return \Commons\Application\CliApplication
      */
     public function setArgv(array $argv)
     {
@@ -90,7 +91,7 @@ class CliApplication extends AbstractApplication
      */
     public function shutdown($signo)
     {
-        
+        return 0;
     }
     
 }
