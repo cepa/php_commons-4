@@ -21,11 +21,11 @@ class BaseUrlPlugin extends AbstractPlugin
 {
     
     protected $_baseUrl;
-    
+
     /**
      * Set base url.
      * @param string $baseUrl
-     * @return \Commons\Template\Plugin\BaseUrlPlugin
+     * @return \Commons\Http\Plugin\BaseUrlPlugin
      */
     public function setBaseUrl($baseUrl)
     {

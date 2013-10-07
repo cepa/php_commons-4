@@ -18,15 +18,25 @@ use Commons\Callback\Callback;
 
 class ValidableContainer extends CollectionContainer
 {
-    
+
+    /**
+     * @var \Commons\Callback\Callback
+     */
     protected $_validator;
-    
+
+    /**
+     * @param $callable
+     * @return \Commons\Container\ValidableContainer
+     */
     public function setValidator($callable)
     {
         $this->_validator = new Callback($callable);
         return $this;
     }
-    
+
+    /**
+     * @return \Commons\Callback\Callback
+     */
     public function getValidator()
     {
         return $this->_validator;

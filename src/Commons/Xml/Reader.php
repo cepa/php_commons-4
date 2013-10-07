@@ -131,10 +131,11 @@ class Reader
         }
         return $this->readFromUrl($filename);
     }
-    
+
     /**
      * Read xml from url.
      * @param string $url
+     * @throws Exception
      * @return Reader
      */
     public function readFromUrl($url)

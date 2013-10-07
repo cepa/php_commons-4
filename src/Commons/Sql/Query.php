@@ -18,7 +18,7 @@ use Commons\Container\AssocContainer;
 use Commons\Sql\Connection\ConnectionInterface;
 use Commons\Sql\Statement\StatementInterface;
 
-class Query implements \Countable 
+class Query implements \Countable
 {
 
     const TYPE_SELECT = 'SELECT';
@@ -288,9 +288,7 @@ class Query implements \Countable
         $this->_limitExpression        = clone $this->_limitExpression;
         $this->_offsetExpression       = clone $this->_offsetExpression;
         $this->_joinExpression         = clone $this->_joinExpression;
-        $this->_endingExpression       = clone $this->_endingExpression;      
-        $this->_entityClass = clone $this->_entityClass;
-        $this->_defaultTableName = clone $this->_defaultTableName; 
+        $this->_endingExpression       = clone $this->_endingExpression;
     }
     
     /**
@@ -844,6 +842,7 @@ class Query implements \Countable
 
     /**
      * Convert to an SQL string.
+     * @throws Exception
      * @return string
      */
     public function toSql()
@@ -892,15 +891,15 @@ class Query implements \Countable
                 break;
 
             default:
-                throw new Exception("Unknown query type '{$this->type}'!");
+                throw new Exception("Unknown query type '{$this->_type}'!");
         }
         return trim($sql);
     }
 
     /**
      * Execute a query and fetch the result.
-     * @param int $hydrate
      * @param mixed $options
+     * @internal param int $hydrate
      * @return Query
      */
     public function execute($options = null)
@@ -943,10 +942,10 @@ class Query implements \Countable
     {
         return $this->getStatement()->fetchArray();
     }
-    
+
     /**
      * Fetch single value from a column.
-     * @param string $index
+     * @param int|string $index
      * @return int|string
      */
     public function fetchScalar($index = 0)

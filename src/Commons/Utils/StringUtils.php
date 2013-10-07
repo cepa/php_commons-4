@@ -18,11 +18,12 @@ class StringUtils
 {
 
     protected function __construct() {}
-    
+
     /**
      * Check if string starts with a string.
      * @param string $haystack
      * @param string $needle
+     * @param bool $caseSensitive
      * @return boolean
      */
     public static function startsWith($haystack, $needle, $caseSensitive = true)
@@ -33,11 +34,12 @@ class StringUtils
         }
         return (substr($haystack, 0, strlen($needle)) == $needle);
     }
-    
+
     /**
      * Check if string ends with a string.
      * @param string $haystack
      * @param string $needle
+     * @param bool $caseSensitive
      * @return boolean
      */
     public static function endsWith($haystack, $needle, $caseSensitive = true)
@@ -97,8 +99,9 @@ class StringUtils
 
     /**
      * Convert file size to text
-     * @param   int     $size
-     * @param   string  $space  Replace spaces to separator;
+     * @param   int $size
+     * @param   string $space  Replace spaces to separator;
+     * @param int $round
      * @return  string
      */
     public static function fileSizeToText($size, $space = ' ', $round = 2)
@@ -118,17 +121,19 @@ class StringUtils
     /**
      * Remove whitespaces from a string.
      * @param string $string
+     * @param string $replace
      * @return string
      */
     public static function removeWhitespaces($string, $replace = ' ') 
     {
         return preg_replace('/\s+/', $replace, $string);
     }
-    
+
     /**
      * Truncate text to n-words.
-     * @param   string  $text   Text
+     * @param   string $text   Text
      * @param   int $nWords
+     * @throws Exception
      * @return  string
      */
     public static function truncateWords($text, $nWords)
@@ -148,7 +153,9 @@ class StringUtils
 
     /**
      * Normalize string, make it seo friendly.
-     * @param   string  $text
+     * @param   string $text
+     * @param string $separator
+     * @throws Exception
      * @return  string
      */
     public static function normalize($text, $separator = '-')
@@ -161,10 +168,11 @@ class StringUtils
         $text = trim($text, $separator);
         return $text == '' ? '-' : $text;
     }
-    
+
     /**
      * Restrictive normalization for latin languages.
      * @param string $text
+     * @param string $separator
      * @return string
      */
     public static function latinNormalize($text, $separator = '-')

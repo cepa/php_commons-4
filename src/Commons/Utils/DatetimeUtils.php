@@ -37,10 +37,6 @@ class DatetimeUtils
         }
         
         $delta = $now - $time;
-        $days = 0;
-        $hours = 0;
-        $minutes = 0;
-        $seconds = 0;
         $ago = '';
         
         if ($delta >= 86400) {

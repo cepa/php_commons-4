@@ -268,7 +268,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     
     /**
      * Get routes.
-     * @return array<\Commons\Light\Route\RouteInterface>
+     * @return \Commons\Light\Route\RouteInterface[]
      */
     public function getRoutes()
     {
@@ -486,13 +486,13 @@ abstract class AbstractMoo implements PluginAwareInterface
     public function callAction($action, array $params = array())
     {
         return $this->getCallback($action)->callArray($params);
-    } 
-    
+    }
+
     /**
      * Invoke a closure or a plugin.
      * @param string $name
-     * @param array $arguments
-     * @throws Exception
+     * @param array $args
+     * @internal param array $arguments
      * @return \Commons\Callback\Callback
      */
     public function __call($name, array $args = array())

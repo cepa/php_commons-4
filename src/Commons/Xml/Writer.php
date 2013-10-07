@@ -18,10 +18,12 @@ use Commons\Container\TraversableContainer;
 
 class Writer
 {
-    
+
     /**
      * Write xml to a string.
      * @param Xml $xml
+     * @param string $header
+     * @return string
      */
     public function writeToString(Xml $xml, $header = '')
     {
@@ -45,10 +47,10 @@ class Writer
             throw new Exception("file_put_contents failed!");
         }
     }
-    
+
     /**
      * Generate xml.
-     * @param Xml $xml
+     * @param \Commons\Container\TraversableContainer|\Commons\Xml\Xml $xml
      * @return string
      */
     protected function _recursiveGenerateXmlString(TraversableContainer $xml)

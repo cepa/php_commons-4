@@ -31,6 +31,7 @@ class AssocContainer extends CollectionContainer
     /**
      * Get assoc element.
      * @param string $name
+     * @param null $defaultValue
      * @return mixed
      */
     public function get($name, $defaultValue = null)
@@ -51,6 +52,7 @@ class AssocContainer extends CollectionContainer
     /**
      * Remove assoc element.
      * @param string $name
+     * @return \Commons\Container\CollectionContainer
      */
     public function remove($name)
     {
