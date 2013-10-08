@@ -404,7 +404,9 @@ class Request
             if (isset($baseUri)) {
                 $uri = $_SERVER['REQUEST_URI'];
                 if (substr($uri, 0, strlen($baseUri)) == $baseUri) {
-                    $uri = substr($uri, strlen($baseUri));
+                    if ($baseUri != '/') {
+                        $uri = substr($uri, strlen($baseUri));
+                    }
                     $uri = strtok($uri, '?');
                 }
             } else {
