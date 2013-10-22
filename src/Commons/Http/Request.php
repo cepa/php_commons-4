@@ -421,8 +421,15 @@ class Request
             ->setUri($uri)
             ->setParams($_GET)
             ->setPostParams($_POST)
-            ->setHeaders($_SERVER)
-            ->setBody(file_get_contents('php://input'));
+            ->setHeaders($_SERVER);
+        
+        /**
+         * @note
+         * Deprecated! This line is potentially too dangerous because it can 
+         * easily lead to memory exhausted error when trying to upload a big
+         * piece of content at once (webdav-like upload).
+         */
+        //$request->setBody(file_get_contents('php://input'));
         
         if (isset($_SERVER['PHP_AUTH_USER'])) {
             $request->setAuthUsername($_SERVER['PHP_AUTH_USER']);

@@ -279,4 +279,15 @@ class MooTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('http://example.com/some/app/xxx', $moo->assetUrl('/xxx'));
     }
     
+    public function testRequestFactory()
+    {
+        $moo = new Moo();
+        $moo->setRequestFactory(function(){
+            $request = new Request();
+            $request->setUri('test');
+            return $request;
+        });
+        $this->assertEquals('test', $moo->getRequest()->getUri());
+    }
+    
 }

@@ -33,6 +33,7 @@ abstract class AbstractMoo implements PluginAwareInterface
 {
     
     protected $_baseUri;
+    protected $_requestFactory;
     protected $_request;
     protected $_response;
     protected $_renderer;
@@ -64,6 +65,31 @@ abstract class AbstractMoo implements PluginAwareInterface
     }
     
     /**
+     * Set request factory;
+     * @param unknown $callable
+     * @return \Commons\Moo\AbstractMoo
+     */
+    public function setRequestFactory($callable)
+    {
+        if (!($callable instanceof Callback)) {
+            $callable = new Callback($callable);
+        }
+        $this->_requestFactory = $callable;
+        return $this;
+    }
+    
+    public function getRequestFactory()
+    {
+        if (!isset($this->_requestFactory)) {
+            $moo = $this;
+            $this->setRequestFactory(function() use($moo){
+                return Request::processHttpRequest($moo->getBaseUri());
+            });
+        }
+        return $this->_requestFactory;
+    }
+    
+    /**
      * Set request.
      * @param \Commons\Http\Request $request
      * @return \Commons\Moo\Moo
@@ -81,7 +107,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     public function getRequest()
     {
         if (!isset($this->_request)) {
-            $this->setRequest(Request::processHttpRequest($this->getBaseUri()));
+            $this->setRequest($this->getRequestFactory()->call());
         }
         return $this->_request;
     }
