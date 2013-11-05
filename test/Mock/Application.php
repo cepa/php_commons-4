@@ -19,4 +19,21 @@ use Commons\Application\AbstractApplication;
 class Application extends AbstractApplication
 {
     
+    public $test;
+    
+    public function init1()
+    {
+        $this->test .= '1';
+    }
+    
+    public function init2()
+    {
+        $this->test .= '2';
+    }
+    
+    public function init3()
+    {
+        $this->test .= '3';
+    }
+    
 }

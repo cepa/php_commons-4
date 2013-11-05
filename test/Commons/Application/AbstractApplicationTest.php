@@ -53,5 +53,12 @@ class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
         $app = new MockApplication();
         $this->assertTrue($app->getServiceManager() instanceof ServiceManagerInterface);
     }
+    
+    public function testInit()
+    {
+        $app = new MockApplication();
+        $app->init();
+        $this->assertEquals($app->test, '123');
+    }
         
 }

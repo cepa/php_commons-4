@@ -21,6 +21,7 @@ use Commons\Log\LoggerAwareInterface;
 use Commons\Service\ServiceManager;
 use Commons\Service\ServiceManagerInterface;
 use Commons\Service\ServiceManagerAwareInterface;
+use Commons\Utils\StringUtils;
 
 abstract class AbstractApplication implements ServiceManagerAwareInterface
 {
@@ -111,6 +112,22 @@ abstract class AbstractApplication implements ServiceManagerAwareInterface
             $this->setServiceManager(new ServiceManager());
         }
         return $this->_serviceManager;
+    }
+    
+    /**
+     * Init application.
+     * Run all init* methods.
+     * @return \Commons\Application\AbstractApplication
+     */
+    public function init()
+    {
+        $reflection = new \ReflectionClass($this);
+        foreach ($reflection->getMethods() as $method) {
+            if ($method->getName() != 'init' && StringUtils::startsWith($method->getName(), 'init')) {
+                $method->invoke($this);
+            }
+        }
+        return $this;
     }
 
 }
