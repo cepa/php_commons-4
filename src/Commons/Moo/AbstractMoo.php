@@ -35,6 +35,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     protected $_baseUri;
     protected $_requestFactory;
     protected $_request;
+    protected $_responseFactory;
     protected $_response;
     protected $_renderer;
     protected $_callbacks = array();
@@ -66,7 +67,7 @@ abstract class AbstractMoo implements PluginAwareInterface
 
     /**
      * Set request factory;
-     * @param unknown $callable
+     * @param mixed $callable
      * @return \Commons\Moo\AbstractMoo
      */
     public function setRequestFactory($callable)
@@ -78,6 +79,10 @@ abstract class AbstractMoo implements PluginAwareInterface
         return $this;
     }
 
+    /**
+     * Get request factory.
+     * @return Commons\Callback\Callback
+     */
     public function getRequestFactory()
     {
         if (!isset($this->_requestFactory)) {
@@ -113,6 +118,35 @@ abstract class AbstractMoo implements PluginAwareInterface
     }
 
     /**
+     * Set response factory;
+     * @param mixed $callable
+     * @return \Commons\Moo\AbstractMoo
+     */
+    public function setResponseFactory($callable)
+    {
+        if (!($callable instanceof Callback)) {
+            $callable = new Callback($callable);
+        }
+        $this->_responseFactory = $callable;
+        return $this;
+    }
+
+    /**
+     * Get response factory.
+     * @return Commons\Callback\Callback
+     */
+    public function getResponseFactory()
+    {
+        if (!isset($this->_responseFactory)) {
+            $moo = $this;
+            $this->setResponseFactory(function() use($moo){
+                return new Response();
+            });
+        }
+        return $this->_responseFactory;
+    }
+
+    /**
      * Set response.
      * @param \Commons\Http\Response $response
      * @return \Commons\Moo\Moo
@@ -130,7 +164,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     public function getResponse()
     {
         if (!isset($this->_response)) {
-            $this->setResponse(new Response());
+            $this->setResponse($this->getResponseFactory()->call());
         }
         return $this->_response;
     }
