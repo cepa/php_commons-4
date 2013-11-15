@@ -14,17 +14,17 @@ $moo
     ->init(function(Moo $moo){
         $moo->getRenderer()->setLayout($moo->createView('layout'));
     })
-    
+
     ->get('/', function(Moo $moo){
         $view = $moo->createView('index');
         $view->message = 'Hello World!';
         return $view;
     })
-    
+
     ->get('/about', function(Moo $moo){
         return $moo->createView('about');
     })
-    
+
     ->closure('createView', function(Moo $moo, $template){
         $view = new MustacheView();
         $view
@@ -32,7 +32,7 @@ $moo
             ->setTemplate($template);
         return $view;
     })
-    
+
     ->closure('getMustacheEngine', function(Moo $moo){
         static $engine;
         if (!isset($engine)) {
@@ -47,5 +47,5 @@ $moo
         }
         return $engine;
     })
-    
+
     ->moo();

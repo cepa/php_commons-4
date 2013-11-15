@@ -4,7 +4,7 @@
  * =============================================================================
  * @file       Commons/Moo/AbstractMoo.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
- * 
+ *
  * @copyright  PHP Commons
  *             Copyright (C) 2009-2013 PHP Commons Contributors
  *             All rights reserved.
@@ -31,7 +31,7 @@ use Commons\Utils\DebugUtils;
 
 abstract class AbstractMoo implements PluginAwareInterface
 {
-    
+
     protected $_baseUri;
     protected $_requestFactory;
     protected $_request;
@@ -40,7 +40,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     protected $_callbacks = array();
     protected $_routes = array();
     protected $_pluginBroker;
-    
+
     /**
      * Set base uri.
      * @param string $baseUri
@@ -51,7 +51,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         $this->_baseUri = $baseUri;
         return $this;
     }
-    
+
     /**
      * Get base uri.
      * @return string
@@ -63,7 +63,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         }
         return $this->_baseUri;
     }
-    
+
     /**
      * Set request factory;
      * @param unknown $callable
@@ -77,7 +77,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         $this->_requestFactory = $callable;
         return $this;
     }
-    
+
     public function getRequestFactory()
     {
         if (!isset($this->_requestFactory)) {
@@ -88,7 +88,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         }
         return $this->_requestFactory;
     }
-    
+
     /**
      * Set request.
      * @param \Commons\Http\Request $request
@@ -99,7 +99,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         $this->_request = $request;
         return $this;
     }
-    
+
     /**
      * Get request.
      * @return \Commons\Http\Request
@@ -111,7 +111,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         }
         return $this->_request;
     }
-    
+
     /**
      * Set response.
      * @param \Commons\Http\Response $response
@@ -122,7 +122,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         $this->_response = $response;
         return $this;
     }
-    
+
     /**
      * Get response.
      * @return \Commons\Http\Response
@@ -134,7 +134,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         }
         return $this->_response;
     }
-    
+
     /**
      * Set renderer.
      * @param RendererInterface $renderer
@@ -145,7 +145,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         $this->_renderer = $renderer;
         return $this;
     }
-    
+
     /**
      * Get renderer.
      * @return RendererInterface
@@ -157,7 +157,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         }
         return $this->_renderer;
     }
-    
+
     /**
      * Set callback.
      * @param string $key
@@ -172,7 +172,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         $this->_callbacks[$key] = $callback;
         return $this;
     }
-    
+
     /**
      * Has callback?
      * @param string $key
@@ -182,7 +182,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     {
         return isset($this->_callbacks[$key]);
     }
-    
+
     /**
      * Get callback.
      * @param string $key
@@ -196,7 +196,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         }
         return $this->_callbacks[$key];
     }
-    
+
     /**
      * Remove callback.
      * @param string $key
@@ -207,7 +207,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         unset($this->_callbacks[$key]);
         return $this;
     }
-    
+
     /**
      * Set callbacks.
      * @param array $callbacks
@@ -221,7 +221,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         }
         return $this;
     }
-    
+
     /**
      * Get callbacks.
      * @return array<\Commons\Callback\Callback>
@@ -230,7 +230,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     {
         return $this->_callbacks;
     }
-    
+
     /**
      * Set route.
      * @param string $key
@@ -242,7 +242,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         $this->_routes[$key] = $route;
         return $this;
     }
-    
+
     /**
      * Has route?
      * @param string $key
@@ -252,7 +252,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     {
         return isset($this->_routes[$key]);
     }
-    
+
     /**
      * Get route.
      * @param string $key
@@ -266,7 +266,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         }
         return $this->_routes[$key];
     }
-    
+
     /**
      * Remove route.
      * @param string $key
@@ -277,7 +277,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         unset($this->_routes[$key]);
         return $this;
     }
-    
+
     /**
      * Set routes.
      * @param array $routes
@@ -291,7 +291,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         }
         return $this;
     }
-    
+
     /**
      * Get routes.
      * @return array<\Commons\Light\Route\RouteInterface>
@@ -300,7 +300,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     {
         return $this->_routes;
     }
-    
+
     /**
      * Set plugin broker.
      * @see \Commons\Plugin\PluginAwareInterface::setPluginBroker()
@@ -310,7 +310,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         $this->_pluginBroker = $pluginBroker;
         return $this;
     }
-    
+
     /**
      * Get plugin broker.
      * @see \Commons\Plugin\PluginAwareInterface::getPluginBroker()
@@ -324,7 +324,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         }
         return $this->_pluginBroker;
     }
-    
+
     /**
      * Set init callback.
      * This callback will be executed at the beginning.
@@ -335,7 +335,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     {
         return $this->setCallback('init', $callback);
     }
-    
+
     /**
      * Set error callback.
      * @param mixed $callback
@@ -345,7 +345,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     {
         return $this->setCallback('error', $callback);
     }
-    
+
     /**
      * Set action.
      * @param string $method
@@ -361,7 +361,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         $this->setRoute($key, new RestRoute($method, $uri));
         return $this;
     }
-    
+
     /**
      * HTTP HEAD action.
      * @param string $uri
@@ -372,7 +372,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     {
         return $this->action('HEAD', $uri, $callback);
     }
-    
+
     /**
      * HTTP GET action.
      * @param string $uri
@@ -383,7 +383,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     {
         return $this->action('GET', $uri, $callback);
     }
-    
+
     /**
      * HTTP POST action.
      * @param string $uri
@@ -394,7 +394,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     {
         return $this->action('POST', $uri, $callback);
     }
-    
+
     /**
      * HTTP PUT action.
      * @param string $uri
@@ -405,7 +405,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     {
         return $this->action('PUT', $uri, $callback);
     }
-    
+
     /**
      * HTTP DELETE action.
      * @param string $uri
@@ -416,7 +416,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     {
         return $this->action('DELETE', $uri, $callback);
     }
-    
+
     /**
      * HTTP TRACE action.
      * @param string $uri
@@ -427,7 +427,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     {
         return $this->action('TRACE', $uri, $callback);
     }
-    
+
     /**
      * HTTP OPTIONS action.
      * @param string $uri
@@ -438,7 +438,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     {
         return $this->action('OPTIONS', $uri, $callback);
     }
-    
+
     /**
      * HTTP CONNECT action.
      * @param string $uri
@@ -449,49 +449,21 @@ abstract class AbstractMoo implements PluginAwareInterface
     {
         return $this->action('CONNECT', $uri, $callback);
     }
-    
+
     /**
      * The MOO! dispatcher.
      * @throws Exception
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Http\Response
      */
-    public function moo()
+    public function moo($sendResponse = true)
     {
-        try {
-            OutputBuffer::start();
-            
-            if ($this->hasCallback('init')) {
-                $this->getCallback('init')->call($this);
-            }
-
-            foreach ($this->getRoutes() as $key => $route) {
-                $params = $route->match($this->getRequest());
-                if (is_array($params)) {
-                    $params[0] = $this;
-                    $view = $this->callAction($key, $params);
-                    $content = OutputBuffer::end();
-                    $this->getResponse()->appendBody($content);
-                    return $this->_renderView($view);
-                }
-            }
-            
-            throw new Exception("Unknown route ".$this->getRequest()->getMethod()." /".$this->getRequest()->getUri(), StatusCode::HTTP_NOT_FOUND);
-            
-        } catch (\Exception $e) {
-            if ($this->hasCallback('error')) {
-                try {
-                    $view = $this->callAction('error', array($this, $e));
-                    return $this->_renderView($view);
-                } catch (\Exception $e) {
-                    DebugUtils::renderExceptionPage($e);
-                }
-            } else {
-                DebugUtils::renderExceptionPage($e);
-            }
+        $response = $this->_mooDispatcher();
+        if ($sendResponse && $response instanceof Response) {
+            $response->send();
         }
-        return $this;
+        return $response;
     }
-    
+
     /**
      * Register a closure callback.
      * @param string $name
@@ -502,7 +474,18 @@ abstract class AbstractMoo implements PluginAwareInterface
     {
         return $this->setCallback($name, $callback);
     }
-    
+
+    /**
+     * Alias to closure.
+     * @param string $name
+     * @param mixed $callback
+     * @return \Commons\Moo\AbstractMoo
+     */
+    public function plugin($name, $callback)
+    {
+        return $this->closure($name, $callback);
+    }
+
     /**
      * Run callback by name.
      * @param string $action
@@ -512,8 +495,8 @@ abstract class AbstractMoo implements PluginAwareInterface
     public function callAction($action, array $params = array())
     {
         return $this->getCallback($action)->callArray($params);
-    } 
-    
+    }
+
     /**
      * Invoke a closure or a plugin.
      * @param string $name
@@ -532,16 +515,50 @@ abstract class AbstractMoo implements PluginAwareInterface
         }
         return $this->getPluginBroker()->invoke($this, $name, $args);
     }
-    
-    private function _renderView($view)
+
+    protected function _mooDispatcher()
     {
-        if (!($view instanceof ViewInterface)) {
-            $view = new PhtmlView();
+        try {
+            OutputBuffer::start();
+
+            if ($this->hasCallback('init')) {
+                $this->getCallback('init')->call($this);
+            }
+
+            foreach ($this->getRoutes() as $key => $route) {
+                $params = $route->match($this->getRequest());
+                if (is_array($params)) {
+                    $params[0] = $this;
+                    return $this->_mooActionExecutor($key, $params);
+                }
+            }
+
+            throw new Exception("Unknown route ".$this->getRequest()->getMethod()." /".$this->getRequest()->getUri(), StatusCode::HTTP_NOT_FOUND);
+
+        } catch (\Exception $e) {
+            if ($this->hasCallback('error')) {
+                try {
+                    return $this->_mooActionExecutor('error', array($this, $e));
+                } catch (\Exception $e) {
+                    DebugUtils::renderExceptionPage($e);
+                }
+            } else {
+                DebugUtils::renderExceptionPage($e);
+            }
         }
-        $this->getResponse()
-            ->appendBody($this->getRenderer()->render($view))
-            ->send();
-        return $this;
+        return $this->getResponse();
     }
-    
+
+    protected function _mooActionExecutor($action, array $params = array())
+    {
+        $view = $this->callAction($action, $params);
+        $content = OutputBuffer::end();
+        $response = $this->getResponse();
+        $response->appendBody($content);
+        if ($view instanceof ViewInterface) {
+            $response->appendBody($this->getRenderer()->render($view));
+        }
+        return $response;
+    }
+
 }
