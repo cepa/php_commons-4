@@ -54,6 +54,17 @@
         <mkdir dir="./test/tmp"/>
     </target>
     
+	<!-- Linter -->
+    <target name="linter">
+        <apply executable="php" failonerror="true">
+            <arg value="-l" />
+            <fileset dir=".">
+                <include name="**/*.php" />
+                <exclude name="vendor/" />
+            </fileset>
+        </apply>
+    </target>
+
     <!-- Test -->
     <target name="test" depends="prepare"
             description="Unit testing">
@@ -101,7 +112,7 @@
     </target>
 
     <!-- Continous integration -->
-    <target name="ci" depends="clean, prepare, test"
+    <target name="ci" depends="clean, prepare, linter, test"
             description="Continous integration">
     </target>
 
