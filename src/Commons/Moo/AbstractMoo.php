@@ -45,7 +45,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     /**
      * Set base uri.
      * @param string $baseUri
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function setBaseUri($baseUri)
     {
@@ -97,7 +97,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     /**
      * Set request.
      * @param \Commons\Http\Request $request
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function setRequest(Request $request)
     {
@@ -149,7 +149,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     /**
      * Set response.
      * @param \Commons\Http\Response $response
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function setResponse(Response $response)
     {
@@ -172,7 +172,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     /**
      * Set renderer.
      * @param RendererInterface $renderer
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function setRenderer(RendererInterface $renderer)
     {
@@ -196,7 +196,7 @@ abstract class AbstractMoo implements PluginAwareInterface
      * Set callback.
      * @param string $key
      * @param mixed $callback
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function setCallback($key, $callback)
     {
@@ -234,7 +234,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     /**
      * Remove callback.
      * @param string $key
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function removeCallback($key)
     {
@@ -245,7 +245,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     /**
      * Set callbacks.
      * @param array $callbacks
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function setCallbacks(array $callbacks)
     {
@@ -269,7 +269,7 @@ abstract class AbstractMoo implements PluginAwareInterface
      * Set route.
      * @param string $key
      * @param RouteInterface $route
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function setRoute($key, RouteInterface $route)
     {
@@ -304,7 +304,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     /**
      * Remove route.
      * @param string $key
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function removeRoute($key)
     {
@@ -315,7 +315,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     /**
      * Set routes.
      * @param array $routes
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function setRoutes(array $routes)
     {
@@ -363,7 +363,7 @@ abstract class AbstractMoo implements PluginAwareInterface
      * Set init callback.
      * This callback will be executed at the beginning.
      * @param mixed $callback
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function init($callback)
     {
@@ -373,7 +373,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     /**
      * Set error callback.
      * @param mixed $callback
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function error($callback)
     {
@@ -385,22 +385,33 @@ abstract class AbstractMoo implements PluginAwareInterface
      * @param string $method
      * @param string $uri
      * @param mixed $callback
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function action($method, $uri, $callback)
     {
         $uri = trim($uri, '/');
-        $key = $method.' '.$uri;
+        $key = (empty($method) ? '' : $method.' ').$uri;
         $this->setCallback($key, $callback);
         $this->setRoute($key, new RestRoute($method, $uri));
         return $this;
     }
 
     /**
+     * Route uri to the closure for any method.
+     * @param string $uri
+     * @param mixed $callback
+     * @return \Commons\Moo\AbstractMoo
+     */
+    public function route($uri, $callback)
+    {
+        return $this->action('', $uri, $callback);
+    }
+
+    /**
      * HTTP HEAD action.
      * @param string $uri
      * @param mixed $callback
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function head($uri, $callback)
     {
@@ -411,7 +422,7 @@ abstract class AbstractMoo implements PluginAwareInterface
      * HTTP GET action.
      * @param string $uri
      * @param mixed $callback
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function get($uri, $callback)
     {
@@ -422,7 +433,7 @@ abstract class AbstractMoo implements PluginAwareInterface
      * HTTP POST action.
      * @param string $uri
      * @param mixed $callback
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function post($uri, $callback)
     {
@@ -433,7 +444,7 @@ abstract class AbstractMoo implements PluginAwareInterface
      * HTTP PUT action.
      * @param string $uri
      * @param mixed $callback
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function put($uri, $callback)
     {
@@ -444,7 +455,7 @@ abstract class AbstractMoo implements PluginAwareInterface
      * HTTP DELETE action.
      * @param string $uri
      * @param mixed $callback
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function delete($uri, $callback)
     {
@@ -455,7 +466,7 @@ abstract class AbstractMoo implements PluginAwareInterface
      * HTTP TRACE action.
      * @param string $uri
      * @param mixed $callback
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function trace($uri, $callback)
     {
@@ -466,7 +477,7 @@ abstract class AbstractMoo implements PluginAwareInterface
      * HTTP OPTIONS action.
      * @param string $uri
      * @param mixed $callback
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function options($uri, $callback)
     {
@@ -477,7 +488,7 @@ abstract class AbstractMoo implements PluginAwareInterface
      * HTTP CONNECT action.
      * @param string $uri
      * @param mixed $callback
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function connect($uri, $callback)
     {
@@ -502,7 +513,7 @@ abstract class AbstractMoo implements PluginAwareInterface
      * Register a closure callback.
      * @param string $name
      * @param mixed $callback
-     * @return \Commons\Moo\Moo
+     * @return \Commons\Moo\AbstractMoo
      */
     public function closure($name, $callback)
     {
