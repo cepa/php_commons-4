@@ -20,4 +20,5 @@ $moo
         var_dump($b);
     })
 
-    ->moo();
+    ->moo()
+    ->send();

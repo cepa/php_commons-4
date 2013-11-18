@@ -21,7 +21,7 @@ $moo
     ->init(function(Moo $moo){
         $moo->getResponse()->setHeader('Content-Type', 'application/json');
     })
-    
+
     /**
      * Catch all exceptions.
      */
@@ -31,7 +31,7 @@ $moo
             'error' => $e->getMessage()
         ));
     })
-    
+
     /**
      * GET /
      * Dummy index.
@@ -39,7 +39,7 @@ $moo
     ->get('/', function(Moo $moo){
         return new JsonView();
     })
-    
+
     /**
      * GET /books
      * Fetch list of all books in plain json format.
@@ -48,7 +48,7 @@ $moo
         $books = $moo->getBookRepository()->fetchCollection();
         return new JsonView($books->toArray());
     })
-    
+
     /**
      * POST /books
      * Create a new book.
@@ -66,7 +66,7 @@ $moo
         $moo->getResponse()->setStatus(StatusCode::HTTP_CREATED);
         return new JsonView($book->toArray());
     })
-    
+
     /**
      * GET /books/id
      * Get a book by ID.
@@ -75,7 +75,7 @@ $moo
     ->get('/books/([0-9]+)', function(Moo $moo, $id){
         return new JsonView($moo->getBook($id)->toArray());
     })
-    
+
     /**
      * PUT /books/id
      * Update a book with given ID.
@@ -91,7 +91,7 @@ $moo
         $moo->getResponse()->setStatus(StatusCode::HTTP_ACCEPTED);
         return new JsonView($book->toArray());
     })
-    
+
     /**
      * DELETE /books/id
      * Delete a book with given ID.
@@ -102,7 +102,7 @@ $moo
         $moo->getResponse()->setStatus(StatusCode::HTTP_ACCEPTED);
         return new JsonView();
     })
-    
+
     /**
      * Get book by id.
      */
@@ -113,14 +113,14 @@ $moo
         }
         return $book;
     })
-    
+
     /**
      * Get book repository instance.
      */
     ->closure('getBookRepository', function(Moo $moo){
         return $moo->getSqlConnection()->getRepository('BookRepository');
     })
-    
+
     /**
      * Decode http request body to json traversable object.
      */
@@ -129,7 +129,7 @@ $moo
         $decoder = new JsonDecoder();
         return new TraversableContainer($decoder->decode($body));
     })
-    
+
     /**
      * Get or load config.
      */
@@ -141,7 +141,7 @@ $moo
         }
         return $config;
     })
-    
+
     /**
      * Get or create SQL connection instance.
      */
@@ -161,5 +161,7 @@ $moo
         }
         return $connection;
     })
-    
-    ->moo();
+
+    ->moo()
+    ->send();
+
