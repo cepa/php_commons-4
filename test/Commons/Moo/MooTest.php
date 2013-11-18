@@ -171,6 +171,16 @@ class MooTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($moo->hasRoute('HEAD xxx'));
     }
 
+    public function testRoute()
+    {
+        $moo = new Moo();
+        $this->assertFalse($moo->hasCallback('xxx'));
+        $this->assertFalse($moo->hasRoute('xxx'));
+        $moo->route('/xxx', function($moo){});
+        $this->assertTrue($moo->hasCallback('xxx'));
+        $this->assertTrue($moo->hasRoute('xxx'));
+    }
+
     public function testHead()
     {
         $moo = new Moo();
@@ -266,10 +276,30 @@ class MooTest extends \PHPUnit_Framework_TestCase
 
     public function testMooIndexSilent()
     {
+        OutputBuffer::start();
         $moo = new Moo();
-        $moo
+        $response = $moo
             ->get('/', function($moo){ echo "index"; })
             ->moo(false);
+        $content = OutputBuffer::end();
+        $this->assertEquals('', $content);
+        $this->assertTrue($response instanceof Response);
+        $this->assertEquals('index', $response->getBody());
+    }
+
+    public function testMooRouteAny()
+    {
+        OutputBuffer::start();
+        $moo = new Moo();
+        $moo->getRequest()->setMethod('HEAD');
+        $response = $moo
+            ->route('/', function($moo){ echo "ok"; })
+            ->head('/', function($moo){ echo "fail"; })
+            ->moo();
+        $content = OutputBuffer::end();
+        $this->assertEquals('ok', $content);
+        $this->assertTrue($response instanceof Response);
+        $this->assertEquals('ok', $response->getBody());
     }
 
     public function testMooClosures()
