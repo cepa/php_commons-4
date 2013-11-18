@@ -261,28 +261,16 @@ class MooTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($moo->hasRoute('CONNECT xxx'));
     }
 
-    public function testMooIndexVerbose()
+    public function testMooIndex()
     {
         OutputBuffer::start();
         $moo = new Moo();
         $response = $moo
             ->get('/', function($moo){ echo "index"; })
             ->moo();
+        $response->send();
         $content = OutputBuffer::end();
         $this->assertEquals('index', $content);
-        $this->assertTrue($response instanceof Response);
-        $this->assertEquals('index', $response->getBody());
-    }
-
-    public function testMooIndexSilent()
-    {
-        OutputBuffer::start();
-        $moo = new Moo();
-        $response = $moo
-            ->get('/', function($moo){ echo "index"; })
-            ->moo(false);
-        $content = OutputBuffer::end();
-        $this->assertEquals('', $content);
         $this->assertTrue($response instanceof Response);
         $this->assertEquals('index', $response->getBody());
     }
@@ -296,6 +284,7 @@ class MooTest extends \PHPUnit_Framework_TestCase
             ->route('/', function($moo){ echo "ok"; })
             ->head('/', function($moo){ echo "fail"; })
             ->moo();
+        $response->send();
         $content = OutputBuffer::end();
         $this->assertEquals('ok', $content);
         $this->assertTrue($response instanceof Response);

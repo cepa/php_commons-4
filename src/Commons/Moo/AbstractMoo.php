@@ -500,13 +500,9 @@ abstract class AbstractMoo implements PluginAwareInterface
      * @throws Exception
      * @return \Commons\Http\Response
      */
-    public function moo($sendResponse = true)
+    public function moo()
     {
-        $response = $this->_mooDispatcher();
-        if ($sendResponse && $response instanceof Response) {
-            $response->send();
-        }
-        return $response;
+        return $this->_mooDispatcher();
     }
 
     /**
@@ -573,6 +569,7 @@ abstract class AbstractMoo implements PluginAwareInterface
             foreach ($this->getRoutes() as $key => $route) {
                 $params = $route->match($this->getRequest());
                 if (is_array($params)) {
+                    $this->setRoutes(array());
                     $params[0] = $this;
                     return $this->_mooActionExecutor($key, $params);
                 }
@@ -596,12 +593,15 @@ abstract class AbstractMoo implements PluginAwareInterface
 
     protected function _mooActionExecutor($action, array $params = array())
     {
-        $view = $this->callAction($action, $params);
+        $result = $this->callAction($action, $params);
         $content = OutputBuffer::end();
+        if ($result instanceof Response) {
+            return $result;
+        }
         $response = $this->getResponse();
         $response->appendBody($content);
-        if ($view instanceof ViewInterface) {
-            $response->appendBody($this->getRenderer()->render($view));
+        if ($result instanceof ViewInterface) {
+            $response->appendBody($this->getRenderer()->render($result));
         }
         return $response;
     }

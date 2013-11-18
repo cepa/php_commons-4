@@ -48,4 +48,5 @@ $moo
         return $engine;
     })
 
-    ->moo();
+    ->moo()
+    ->send();
