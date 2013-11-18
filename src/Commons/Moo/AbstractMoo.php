@@ -41,6 +41,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     protected $_callbacks = array();
     protected $_routes = array();
     protected $_pluginBroker;
+    private $_nestedCounter = 0;
 
     /**
      * Set base uri.
@@ -566,6 +567,7 @@ abstract class AbstractMoo implements PluginAwareInterface
                 $this->getCallback('init')->call($this);
             }
 
+            $this->_nestedCounter++;
             foreach ($this->getRoutes() as $key => $route) {
                 $params = $route->match($this->getRequest());
                 if (is_array($params)) {
@@ -574,20 +576,23 @@ abstract class AbstractMoo implements PluginAwareInterface
                     return $this->_mooActionExecutor($key, $params);
                 }
             }
+            $this->_nestedCounter--;
 
-            throw new Exception("Unknown route ".$this->getRequest()->getMethod()." /".$this->getRequest()->getUri(), StatusCode::HTTP_NOT_FOUND);
+            throw new Exception(
+                "Unknown route ".$this->getRequest()->getMethod()." /".$this->getRequest()->getUri(),
+                StatusCode::HTTP_NOT_FOUND);
 
         } catch (\Exception $e) {
-            if ($this->hasCallback('error')) {
-                try {
-                    return $this->_mooActionExecutor('error', array($this, $e));
-                } catch (\Exception $e) {
-                    DebugUtils::renderExceptionPage($e);
-                }
-            } else {
-                DebugUtils::renderExceptionPage($e);
+            // Handle exceptions on the top level of nested dispatching.
+            if ($this->_nestedCounter == 1 && $this->hasCallback('error')) {
+                return $this->_mooActionExecutor('error', array($this, $e));
+
             }
+            // Unroll nested dispatching.
+            $this->_nestedCounter--;
+            throw $e;
         }
+
         return $this->getResponse();
     }
 
