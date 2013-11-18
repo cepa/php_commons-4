@@ -558,6 +558,12 @@ abstract class AbstractMoo implements PluginAwareInterface
         return $this->getPluginBroker()->invoke($this, $name, $args);
     }
 
+    /**
+     * Run MOO dispatcher.
+     * Following implementation allows nested (traversable) routing.
+     * @throws Exception
+     * @return \Commons\Http\Response
+     */
     protected function _mooDispatcher()
     {
         try {
@@ -584,7 +590,7 @@ abstract class AbstractMoo implements PluginAwareInterface
 
         } catch (\Exception $e) {
             // Handle exceptions on the top level of nested dispatching.
-            if ($this->_nestedCounter == 1 && $this->hasCallback('error')) {
+            if ($this->_nestedCounter <= 1 && $this->hasCallback('error')) {
                 return $this->_mooActionExecutor('error', array($this, $e));
 
             }
@@ -596,6 +602,12 @@ abstract class AbstractMoo implements PluginAwareInterface
         return $this->getResponse();
     }
 
+    /**
+     * Execute callback.
+     * @param string $action
+     * @param array $params
+     * @return \Commons\Http\Response
+     */
     protected function _mooActionExecutor($action, array $params = array())
     {
         $result = $this->callAction($action, $params);
@@ -609,6 +621,18 @@ abstract class AbstractMoo implements PluginAwareInterface
             $response->appendBody($this->getRenderer()->render($result));
         }
         return $response;
+    }
+
+    /**
+     * Get nested counter.
+     * Nested counter counts how many times _mooDispatcher was called in recursion.
+     * This method returns the level of a node in routing tree if using nested routing.
+     * The root is 0, the next level is 1, and so on...
+     * @return number
+     */
+    protected function _mooNestedCounter()
+    {
+        return $this->_nestedCounter;
     }
 
 }

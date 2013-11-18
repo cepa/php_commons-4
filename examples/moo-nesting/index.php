@@ -21,7 +21,7 @@ $moo
      */
     ->error(function(Moo $moo, \Exception $e){
         $moo->getResponse()->setStatus(StatusCode::HTTP_NOT_FOUND);
-        $moo->print('error');
+        $moo->print('error: '.$e->getMessage());
     })
 
     /**
