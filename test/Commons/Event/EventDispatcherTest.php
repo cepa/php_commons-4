@@ -16,13 +16,18 @@ namespace Commons\Event;
 
 use Commons\Callback\Callback;
 
+class MockSomeCrazyEvent
+{
+    public $state;
+}
+
 class EventDispatcherTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testDispatcher()
     {
         $dispatcher = new EventDispatcher();
-        $d = $dispatcher->bind('\Commons\Event\Event', function($e){
+        $d = $dispatcher->bind('\Commons\Event\Event', function ($e) {
             $e->state .= 'X';
         });
         $this->assertTrue($d instanceof EventDispatcherInterface);
@@ -38,6 +43,31 @@ class EventDispatcherTest extends \PHPUnit_Framework_TestCase
             ->raise($event);
 
         $this->assertEquals('XXX', $event->state);
+    }
+
+    public function testStopPropagation()
+    {
+        $dispatcher = new EventDispatcher();
+
+        $dispatcher->bind('Commons\Event\MockSomeCrazyEvent', function (MockSomeCrazyEvent $e) {
+            $e->state .= 'X';
+        });
+
+        $dispatcher->bind('Commons\Event\MockSomeCrazyEvent', function (MockSomeCrazyEvent $e) {
+            $e->state .= 'Y';
+            return false; // Stop propagation.
+        });
+
+        $dispatcher->bind('Commons\Event\MockSomeCrazyEvent', function (MockSomeCrazyEvent $e) {
+            $e->state .= 'Z';
+        });
+
+        $event = new MockSomeCrazyEvent();
+        $event->state = '';
+
+        $dispatcher->raise($event);
+
+        $this->assertEquals('XY', $event->state);
     }
 
 }
