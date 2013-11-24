@@ -36,7 +36,9 @@ class EventDispatcher implements EventDispatcherInterface
             $classname = $this->_classname($event);
             if (isset($this->_bindings[$classname])) {
                 foreach ($this->_bindings[$classname] as $callable) {
-                    $callable->call($event);
+                    if ($callable->call($event) === false) {
+                        break; // Stop propagation.
+                    }
                 }
             }
         }
