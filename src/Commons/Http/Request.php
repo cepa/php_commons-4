@@ -4,7 +4,7 @@
  * =============================================================================
  * @file       Commons/Http/Request.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
- * 
+ *
  * @copyright  PHP Commons
  *             Copyright (C) 2009-2013 PHP Commons Contributors
  *             All rights reserved.
@@ -16,7 +16,7 @@ namespace Commons\Http;
 
 class Request
 {
-    
+
     protected $_params = array();
     protected $_post = array();
     protected $_headers = array();
@@ -25,7 +25,7 @@ class Request
     protected $_body = '';
     protected $_authUsername;
     protected $_authPassword;
-    
+
     /**
      * Set params.
      * @param array $params
@@ -36,7 +36,7 @@ class Request
         $this->_params = $params;
         return $this;
     }
-    
+
     /**
      * Get params.
      * @return array
@@ -45,7 +45,7 @@ class Request
     {
         return $this->_params;
     }
-    
+
     /**
      * Clear params.
      * @return \Commons\Http\Request
@@ -55,7 +55,7 @@ class Request
         $this->_params = array();
         return $this;
     }
-    
+
     /**
      * Set param.
      * @param string $name
@@ -67,7 +67,7 @@ class Request
         $this->_params[$name] = $value;
         return $this;
     }
-    
+
     /**
      * Get param.
      * @param string $name
@@ -81,7 +81,7 @@ class Request
         }
         return $defaultValue;
     }
-    
+
     /**
      * Has param.
      * @param string $name
@@ -91,7 +91,7 @@ class Request
     {
         return isset($this->_params[$name]);
     }
-    
+
     /**
      * Remove param.
      * @param string $name
@@ -102,7 +102,7 @@ class Request
         unset($this->_params[$name]);
         return $this;
     }
-    
+
     /**
      * Set post data.
      * @param array $post
@@ -113,7 +113,7 @@ class Request
         $this->_post = $post;
         return $this;
     }
-    
+
     /**
      * Get post data.
      * @return array
@@ -122,7 +122,7 @@ class Request
     {
         return $this->_post;
     }
-    
+
     /**
      * Clear post data.
      * @return \Commons\Http\Request
@@ -132,7 +132,7 @@ class Request
         $this->_post = array();
         return $this;
     }
-    
+
     /**
      * Set post param.
      * @param string $name
@@ -144,7 +144,7 @@ class Request
         $this->_post[$name] = $value;
         return $this;
     }
-    
+
     /**
      * Get post param.
      * @param string $name
@@ -158,7 +158,7 @@ class Request
         }
         return $defaultValue;
     }
-    
+
     /**
      * Has post param.
      * @param string $name
@@ -168,7 +168,7 @@ class Request
     {
         return isset($this->_post[$name]);
     }
-    
+
     /**
      * Remove post param.
      * @param string $name
@@ -179,7 +179,7 @@ class Request
         unset($this->_post[$name]);
         return $this;
     }
-    
+
     /**
      * Set headers.
      * @param array $headers
@@ -190,7 +190,7 @@ class Request
         $this->_headers = $headers;
         return $this;
     }
-    
+
     /**
      * Get headers.
      * @return array
@@ -199,7 +199,7 @@ class Request
     {
         return $this->_headers;
     }
-    
+
     /**
      * Clear headers.
      * @return \Commons\Http\Request
@@ -209,7 +209,7 @@ class Request
         $this->_headers = array();
         return $this;
     }
-    
+
     /**
      * Set header.
      * @param string $name
@@ -221,7 +221,7 @@ class Request
         $this->_headers[$name] = $value;
         return $this;
     }
-    
+
     /**
      * Get header.
      * @param string $name
@@ -235,7 +235,7 @@ class Request
         }
         return $this->_headers[$name];
     }
-    
+
     /**
      * Has header.
      * @param string $name
@@ -245,7 +245,7 @@ class Request
     {
         return isset($this->_headers[$name]);
     }
-    
+
     /**
      * Remove header.
      * @param string $name
@@ -256,7 +256,7 @@ class Request
         unset($this->_headers[$name]);
         return $this;
     }
-    
+
     /**
      * Set method.
      * @param string $method
@@ -267,7 +267,7 @@ class Request
         $this->_method = strtoupper($method);
         return $this;
     }
-    
+
     /**
      * Get method.
      * @return string
@@ -276,7 +276,7 @@ class Request
     {
         return $this->_method;
     }
-    
+
     /**
      * Check if get method.
      * @return boolean
@@ -285,7 +285,7 @@ class Request
     {
         return ($this->_method == 'GET');
     }
-    
+
     /**
      * Check if post method.
      * @return boolean
@@ -294,7 +294,7 @@ class Request
     {
         return ($this->_method == 'POST');
     }
-    
+
     /**
      * Check if this is XMLHttpRequest (AJAX).
      * @return boolean
@@ -306,7 +306,7 @@ class Request
         }
         return false;
     }
-    
+
     /**
      * Set uri.
      * @param string $uri
@@ -317,7 +317,7 @@ class Request
         $this->_uri = $uri;
         return $this;
     }
-    
+
     /**
      * Get uri.
      * @return string
@@ -326,7 +326,7 @@ class Request
     {
         return $this->_uri;
     }
-    
+
     /**
      * Set body.
      * @param string $body
@@ -337,7 +337,7 @@ class Request
         $this->_body = $body;
         return $this;
     }
-    
+
     /**
      * Get body.
      * @return string
@@ -346,7 +346,7 @@ class Request
     {
         return $this->_body;
     }
-    
+
     /**
      * Set http auth username.
      * @param string $username
@@ -357,7 +357,7 @@ class Request
         $this->_authUsername = $username;
         return $this;
     }
-    
+
     /**
      * Get http auth username.
      * @return string
@@ -366,7 +366,7 @@ class Request
     {
         return $this->_authUsername;
     }
-    
+
     /**
      * Set http auth password.
      * @param string $password
@@ -377,7 +377,7 @@ class Request
         $this->_authPassword = $password;
         return $this;
     }
-    
+
     /**
      * Get http auth password.
      * @return string
@@ -386,19 +386,19 @@ class Request
     {
         return $this->_authPassword;
     }
-    
+
     /**
-     * Process server http request.
+     * Process incoming http request.
      * @param string $baseUri
      * @return \Commons\Http\Request
      */
-    public static function processHttpRequest($baseUri = null)
+    public static function processIncomingRequest($baseUri = null)
     {
         $method = 'GET';
         if (isset($_SERVER['REQUEST_METHOD'])) {
             $method = $_SERVER['REQUEST_METHOD'];
         }
-        
+
         $uri = '/';
         if (isset($_SERVER['REQUEST_URI'])) {
             if (isset($baseUri)) {
@@ -414,7 +414,7 @@ class Request
             }
         }
         $uri = trim($uri, '/');
-        
+
         $request = new Request();
         $request
             ->setMethod($method)
@@ -422,25 +422,25 @@ class Request
             ->setParams($_GET)
             ->setPostParams($_POST)
             ->setHeaders($_SERVER);
-        
+
         /**
          * @note
-         * Deprecated! This line is potentially too dangerous because it can 
+         * Deprecated! This line is potentially too dangerous because it can
          * easily lead to memory exhausted error when trying to upload a big
          * piece of content at once (webdav-like upload).
          */
         //$request->setBody(file_get_contents('php://input'));
-        
+
         if (isset($_SERVER['PHP_AUTH_USER'])) {
             $request->setAuthUsername($_SERVER['PHP_AUTH_USER']);
         }
         if (isset($_SERVER['PHP_AUTH_PW'])) {
             $request->setAuthPassword($_SERVER['PHP_AUTH_PW']);
         }
-        
+
         return $request;
     }
-    
+
     /**
      * Extract base uri from $_SERVER['SCRIPT_NAME']
      * @return string|null
@@ -452,5 +452,5 @@ class Request
         }
         return null;
     }
-    
+
 }

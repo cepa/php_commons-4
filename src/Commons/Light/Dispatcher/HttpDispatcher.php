@@ -168,7 +168,7 @@ class HttpDispatcher extends AbstractDispatcher
     public function getRequest()
     {
         if (!isset($this->_request)) {
-            $this->_request = Request::processHttpRequest($this->getBaseUri());
+            $this->_request = Request::processIncomingRequest($this->getBaseUri());
         }
         return $this->_request;
     }

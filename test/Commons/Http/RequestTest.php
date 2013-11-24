@@ -197,7 +197,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $_GET = array('a' => 1, 'b' => 2, 'c' => 3);
         $_POST = array('x' => 123, 'y' => 456);
         
-        $request = Request::processHttpRequest();
+        $request = Request::processIncomingRequest();
         $this->assertEquals('test', $request->getUri());
         $this->assertEquals('POST', $request->getMethod());
         $this->assertEquals(1, $request->getParam('a'));
@@ -217,7 +217,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $_GET = array('a' => 1, 'b' => 2, 'c' => 3);
         $_POST = array('x' => 123, 'y' => 456);
         
-        $request = Request::processHttpRequest('/some/web/dir/');
+        $request = Request::processIncomingRequest('/some/web/dir/');
         $this->assertEquals('test', $request->getUri());
         $this->assertEquals('POST', $request->getMethod());
         $this->assertEquals(1, $request->getParam('a'));

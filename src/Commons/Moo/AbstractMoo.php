@@ -89,7 +89,7 @@ abstract class AbstractMoo implements PluginAwareInterface
         if (!isset($this->_requestFactory)) {
             $moo = $this;
             $this->setRequestFactory(function() use($moo){
-                return Request::processHttpRequest($moo->getBaseUri());
+                return Request::processIncomingRequest($moo->getBaseUri());
             });
         }
         return $this->_requestFactory;

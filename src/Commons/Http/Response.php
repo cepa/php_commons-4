@@ -4,7 +4,7 @@
  * =============================================================================
  * @file       Commons/Http/Response.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
- * 
+ *
  * @copyright  PHP Commons
  *             Copyright (C) 2009-2013 PHP Commons Contributors
  *             All rights reserved.
@@ -14,6 +14,8 @@
 
 namespace Commons\Http;
 
+use Commons\Callback\Callback;
+
 class Response
 {
 
@@ -21,7 +23,8 @@ class Response
     protected $_headers = array();
     protected $_statusCode = StatusCode::HTTP_OK;
     protected $_statusMessage = 'OK';
-    
+    protected $_sender;
+
     /**
      * Append body.
      * @param string $body
@@ -32,7 +35,7 @@ class Response
         $this->_body .= $body;
         return $this;
     }
-    
+
     /**
      * Prepend body.
      * @param string $body
@@ -43,7 +46,7 @@ class Response
         $this->_body = $body.$this->_body;
         return $this;
     }
-    
+
     /**
      * Get body.
      * @return string
@@ -52,7 +55,7 @@ class Response
     {
         return $this->_body;
     }
-    
+
     /**
      * Clear body.
      * @return \Commons\Http\Response
@@ -62,7 +65,7 @@ class Response
         $this->_body = '';
         return $this;
     }
-    
+
     /**
      * Set headers.
      * @param array $headers
@@ -73,7 +76,7 @@ class Response
         $this->_headers = $headers;
         return $this;
     }
-    
+
     /**
      * Get headers.
      * @return array
@@ -82,7 +85,7 @@ class Response
     {
         return $this->_headers;
     }
-    
+
     /**
      * Clear headers.
      * @return \Commons\Http\Response
@@ -92,7 +95,7 @@ class Response
         $this->_headers = array();
         return $this;
     }
-    
+
     /**
      * Set header.
      * @param string $name
@@ -104,7 +107,7 @@ class Response
         $this->_headers[$name] = $value;
         return $this;
     }
-    
+
     /**
      * Get header.
      * @param string $name
@@ -118,7 +121,7 @@ class Response
         }
         return $this->_headers[$name];
     }
-    
+
     /**
      * Has header.
      * @param boolean $name
@@ -128,7 +131,7 @@ class Response
     {
         return isset($this->_headers[$name]);
     }
-    
+
     /**
      * Remove header.
      * @param string $name
@@ -139,7 +142,7 @@ class Response
         unset($this->_headers[$name]);
         return $this;
     }
-    
+
     /**
      * Set status.
      * @param int $code
@@ -156,7 +159,7 @@ class Response
         }
         return $this;
     }
-    
+
     /**
      * Get status code.
      * @return int
@@ -165,7 +168,7 @@ class Response
     {
         return $this->_statusCode;
     }
-    
+
     /**
      * Get status message.
      * @return string
@@ -174,17 +177,54 @@ class Response
     {
         return $this->_statusMessage;
     }
-    
+
+    /**
+     * Set sender callback.
+     * @param callable $callable
+     * @return \Commons\Http\Response
+     */
+    public function setSender($callable)
+    {
+        if (!($callable instanceof Callback)) {
+            $callable = new Callback($callable);
+        }
+        $this->_sender = $callable;
+        return $this;
+    }
+
+    /**
+     * Get sender callback.
+     * @return\Commons\Callback\Callback
+     */
+    public function getSender()
+    {
+        if (!isset($this->_sender)) {
+            $this->setSender(function ($response) {
+                Response::processOutgoingResponse($response);
+            });
+        }
+        return $this->_sender;
+    }
+
     /**
      * Send response to the output.
      */
     public function send()
     {
-        header('HTTP/1.1 '.$this->getStatusCode().' '.$this->getStatusMessage());
-        foreach ($this->_headers as $name => $value) {
+        return $this->getSender()->call($this);
+    }
+
+    /**
+     * Process response and render output.
+     * @param Response $response
+     */
+    public static function processOutgoingResponse(Response $response)
+    {
+        header('HTTP/1.1 '.$response->getStatusCode().' '.$response->getStatusMessage());
+        foreach ($response->_headers as $name => $value) {
             header($name.': '.$value, true);
         }
-        echo $this->_body;
+        echo $response->_body;
     }
-        
+
 }
