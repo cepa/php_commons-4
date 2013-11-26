@@ -32,6 +32,9 @@ use Commons\Utils\DebugUtils;
 abstract class AbstractMoo implements PluginAwareInterface
 {
 
+    const ACTION_PREFIX = 'action ';
+    const PLUGIN_PREFIX = 'plugin ';
+
     protected $_baseUri;
     protected $_requestFactory;
     protected $_request;
@@ -41,7 +44,8 @@ abstract class AbstractMoo implements PluginAwareInterface
     protected $_callbacks = array();
     protected $_routes = array();
     protected $_pluginBroker;
-    private $_nestedCounter = 0;
+    private $_stackCounter = 0;
+    private $_routeStack = array();
 
     /**
      * Set base uri.
@@ -391,7 +395,7 @@ abstract class AbstractMoo implements PluginAwareInterface
     public function action($method, $uri, $callback)
     {
         $uri = trim($uri, '/');
-        $key = (empty($method) ? '' : $method.' ').$uri;
+        $key = self::ACTION_PREFIX.(empty($method) ? '' : $method.' ').$uri;
         $this->setCallback($key, $callback);
         $this->setRoute($key, new RestRoute($method, $uri));
         return $this;
@@ -497,24 +501,14 @@ abstract class AbstractMoo implements PluginAwareInterface
     }
 
     /**
-     * The MOO! dispatcher.
-     * @throws Exception
-     * @return \Commons\Http\Response
-     */
-    public function moo()
-    {
-        return $this->_mooDispatcher();
-    }
-
-    /**
-     * Register a closure callback.
+     * Alias to plugin.
      * @param string $name
      * @param mixed $callback
      * @return \Commons\Moo\AbstractMoo
      */
     public function closure($name, $callback)
     {
-        return $this->setCallback($name, $callback);
+        return $this->plugin($name, $callback);
     }
 
     /**
@@ -525,37 +519,16 @@ abstract class AbstractMoo implements PluginAwareInterface
      */
     public function plugin($name, $callback)
     {
-        return $this->closure($name, $callback);
+        return $this->setCallback(self::PLUGIN_PREFIX.$name, $callback);
     }
 
     /**
-     * Run callback by name.
-     * @param string $action
-     * @param array $params
-     * @return mixed
+     * Check if plugin exists.
+     * @param unknown $method
      */
-    public function callAction($action, array $params = array())
+    public function hasPlugin($method)
     {
-        return $this->getCallback($action)->callArray($params);
-    }
-
-    /**
-     * Invoke a closure or a plugin.
-     * @param string $name
-     * @param array $arguments
-     * @throws Exception
-     * @return \Commons\Callback\Callback
-     */
-    public function __call($name, array $args = array())
-    {
-        if ($this->hasCallback($name)) {
-            $params = array($this);
-            foreach ($args as $arg) {
-                $params[] = $arg;
-            }
-            return $this->callAction($name, $params);
-        }
-        return $this->getPluginBroker()->invoke($this, $name, $args);
+        return $this->hasCallback(self::PLUGIN_PREFIX.$method);
     }
 
     /**
@@ -564,7 +537,7 @@ abstract class AbstractMoo implements PluginAwareInterface
      * @throws Exception
      * @return \Commons\Http\Response
      */
-    protected function _mooDispatcher()
+    public function dispatch()
     {
         try {
             OutputBuffer::start();
@@ -573,16 +546,21 @@ abstract class AbstractMoo implements PluginAwareInterface
                 $this->getCallback('init')->call($this);
             }
 
-            $this->_nestedCounter++;
+            $this->_stackCounter++;
             foreach ($this->getRoutes() as $key => $route) {
                 $params = $route->match($this->getRequest());
                 if (is_array($params)) {
+                    $routes = $this->getRoutes();
+                    array_push($this->_routeStack, $routes);
                     $this->setRoutes(array());
                     $params[0] = $this;
-                    return $this->_mooActionExecutor($key, $params);
+                    $result = $this->_runAction($key, $params);
+                    array_pop($this->_routeStack);
+                    $this->setRoutes($routes);
+                    return $result;
                 }
             }
-            $this->_nestedCounter--;
+            $this->_stackCounter--;
 
             throw new Exception(
                 "Unknown route ".$this->getRequest()->getMethod()." /".$this->getRequest()->getUri(),
@@ -590,16 +568,70 @@ abstract class AbstractMoo implements PluginAwareInterface
 
         } catch (\Exception $e) {
             // Handle exceptions on the top level of nested dispatching.
-            if ($this->_nestedCounter <= 1 && $this->hasCallback('error')) {
-                return $this->_mooActionExecutor('error', array($this, $e));
+            if ($this->_stackCounter <= 1 && $this->hasCallback('error')) {
+                return $this->_runAction('error', array($this, $e));
 
             }
             // Unroll nested dispatching.
-            $this->_nestedCounter--;
+            $this->_stackCounter--;
             throw $e;
         }
 
         return $this->getResponse();
+    }
+
+    /**
+     * Rewind routing to the root level, load top routes and clear stack.
+     * @return \Commons\Moo\AbstractMoo
+     */
+    public function rewind()
+    {
+        if (count($this->_routeStack) > 0) {
+            $this->setRoutes($this->_routeStack[0]);
+            $this->_routeStack = array();
+        }
+        return $this;
+    }
+
+    /**
+     * The MOO! dispatcher.
+     * @note Method kept for backward compatibility.
+     * @throws Exception
+     * @return \Commons\Http\Response
+     */
+    public function moo()
+    {
+        return $this->dispatch();
+    }
+
+    /**
+     * Invoke a plugin.
+     * @param string $name
+     * @param array $arguments
+     * @throws Exception
+     * @return \Commons\Callback\Callback
+     */
+    public function __call($method, array $args = array())
+    {
+        if ($this->hasPlugin($method)) {
+            $params = array($this);
+            foreach ($args as $arg) {
+                $params[] = $arg;
+            }
+            return $this->_runCallback(self::PLUGIN_PREFIX.$method, $params);
+        }
+        return $this->getPluginBroker()->invoke($this, $method, $args);
+    }
+
+    /**
+     * Run callback by name.
+     * @param string $name
+     * @param array $params
+     * @return mixed
+     */
+    protected function _runCallback($name, array $params = array())
+    {
+        return $this->getCallback($name)->callArray($params);
     }
 
     /**
@@ -608,9 +640,9 @@ abstract class AbstractMoo implements PluginAwareInterface
      * @param array $params
      * @return \Commons\Http\Response
      */
-    protected function _mooActionExecutor($action, array $params = array())
+    protected function _runAction($action, array $params = array())
     {
-        $result = $this->callAction($action, $params);
+        $result = $this->_runCallback($action, $params);
         $content = OutputBuffer::end();
         if ($result instanceof Response) {
             return $result;
@@ -619,20 +651,11 @@ abstract class AbstractMoo implements PluginAwareInterface
         $response->appendBody($content);
         if ($result instanceof ViewInterface) {
             $response->appendBody($this->getRenderer()->render($result));
+        } else {
+            $response->appendBody((string) $result);
         }
         return $response;
     }
 
-    /**
-     * Get nested counter.
-     * Nested counter counts how many times _mooDispatcher was called in recursion.
-     * This method returns the level of a node in routing tree if using nested routing.
-     * The root is 0, the next level is 1, and so on...
-     * @return number
-     */
-    protected function _mooNestedCounter()
-    {
-        return $this->_nestedCounter;
-    }
 
 }

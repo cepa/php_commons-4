@@ -4,7 +4,7 @@
  * =============================================================================
  * @file       Commons/Http/RequestTest.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
- * 
+ *
  * @copyright  PHP Commons
  *             Copyright (C) 2009-2013 PHP Commons Contributors
  *             All rights reserved.
@@ -16,7 +16,7 @@ namespace Commons\Http;
 
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
-    
+
     public function testSetGetClearParams()
     {
         $request = new Request();
@@ -30,27 +30,27 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($r instanceof Request);
         $this->assertEquals(0, count($request->getParams()));
     }
-    
+
     public function testSetGetHasRemoveParam()
     {
         $request = new Request();
         $this->assertFalse($request->hasParam('x'));
         $this->assertEquals(666, $request->getParam('x', 666));
-    
+
         $r = $request->setParam('x', 123);
         $this->assertTrue($r instanceof Request);
         $this->assertEquals(1, count($request->getParams()));
         $this->assertTrue($request->hasParam('x'));
         $this->assertEquals(123, $request->getParam('x'));
-    
+
         $this->assertFalse($request->hasParam('y'));
         $this->assertEquals(456, $request->getParam('y', 456));
-    
+
         $r = $request->removeParam('x');
         $this->assertTrue($r instanceof Request);
         $this->assertFalse($request->hasParam('x'));
     }
-    
+
     public function testSetGetClearPostParams()
     {
         $request = new Request();
@@ -64,27 +64,27 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($r instanceof Request);
         $this->assertEquals(0, count($request->getPostParams()));
     }
-    
+
     public function testSetGetHasRemovePostParam()
     {
         $request = new Request();
         $this->assertFalse($request->hasPostParam('x'));
         $this->assertEquals(666, $request->getPostParam('x', 666));
-    
+
         $r = $request->setPostParam('x', 123);
         $this->assertTrue($r instanceof Request);
         $this->assertEquals(1, count($request->getPostParams()));
         $this->assertTrue($request->hasPostParam('x'));
         $this->assertEquals(123, $request->getPostParam('x'));
-    
+
         $this->assertFalse($request->hasPostParam('y'));
         $this->assertEquals(456, $request->getPostParam('y', 456));
-    
+
         $r = $request->removePostParam('x');
         $this->assertTrue($r instanceof Request);
         $this->assertFalse($request->hasPostParam('x'));
     }
-    
+
     public function testSetGetHeaders()
     {
         $request = new Request();
@@ -98,7 +98,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($r instanceof Request);
         $this->assertEquals(0, count($request->getHeaders()));
     }
-    
+
     public function testSetGetHasRemoveHeader()
     {
         $request = new Request();
@@ -111,14 +111,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($r instanceof Request);
         $this->assertFalse($request->hasHeader('X-Header'));
     }
-    
+
     public function testGetHeaderException()
     {
         $this->setExpectedException('\\Commons\\Http\\Exception');
         $request = new Request();
         $request->getHeader('test');
     }
-    
+
     public function testSetGetMethod()
     {
         $request = new Request();
@@ -127,7 +127,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($r instanceof Request);
         $this->assertEquals('POST', $request->getMethod());
     }
-    
+
     public function testIsGetRequest()
     {
         $request = new Request();
@@ -135,7 +135,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $request->setMethod('POST');
         $this->assertFalse($request->isGetRequest());
     }
-    
+
     public function testIsPostRequest()
     {
         $request = new Request();
@@ -143,7 +143,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $request->setMethod('POST');
         $this->assertTrue($request->isPostRequest());
     }
-    
+
     public function testIsAjaxRequest()
     {
         $request = new Request();
@@ -151,7 +151,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $request->setHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
         $this->assertTrue($request->isAjaxRequest());
     }
-    
+
     public function testSetGetUri()
     {
         $request = new Request();
@@ -160,7 +160,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($r instanceof Request);
         $this->assertEquals('xxx', $request->getUri());
     }
-    
+
     public function testSetGetBody()
     {
         $request = new Request();
@@ -169,7 +169,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($r instanceof Request);
         $this->assertEquals('xxx', $request->getBody());
     }
-    
+
     public function testSetGetAuthUsername()
     {
         $request = new Request();
@@ -178,7 +178,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($r instanceof Request);
         $this->assertEquals('xxx', $request->getAuthUsername());
     }
-    
+
     public function testSetGetAuthPassword()
     {
         $request = new Request();
@@ -187,7 +187,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($r instanceof Request);
         $this->assertEquals('xxx', $request->getAuthPassword());
     }
-    
+
     public function testProcessHttpRequest()
     {
         $_SERVER['REQUEST_URI'] = '/test?xxx';
@@ -196,7 +196,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $_SERVER['PHP_AUTH_PW'] = 's3cret';
         $_GET = array('a' => 1, 'b' => 2, 'c' => 3);
         $_POST = array('x' => 123, 'y' => 456);
-        
+
         $request = Request::processIncomingRequest();
         $this->assertEquals('test', $request->getUri());
         $this->assertEquals('POST', $request->getMethod());
@@ -207,7 +207,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('cepa', $request->getAuthUsername());
         $this->assertEquals('s3cret', $request->getAuthPassword());
     }
-        
+
     public function testProcessHttpRequest2()
     {
         $_SERVER['REQUEST_URI'] = '/some/web/dir/test?xxx';
@@ -216,7 +216,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $_SERVER['PHP_AUTH_PW'] = 's3cret';
         $_GET = array('a' => 1, 'b' => 2, 'c' => 3);
         $_POST = array('x' => 123, 'y' => 456);
-        
+
         $request = Request::processIncomingRequest('/some/web/dir/');
         $this->assertEquals('test', $request->getUri());
         $this->assertEquals('POST', $request->getMethod());
@@ -227,12 +227,27 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('cepa', $request->getAuthUsername());
         $this->assertEquals('s3cret', $request->getAuthPassword());
     }
-    
+
     public function testExtractBaseUri()
     {
         $_SERVER['SCRIPT_NAME'] = '/php_commons-4-feature-moo/examples/moo/index.php';
         $baseUri = Request::extractBaseUri();
         $this->assertEquals('/php_commons-4-feature-moo/examples/moo', $baseUri);
     }
-        
+
+    public function testUriTrim()
+    {
+        $request = new Request();
+        $request->setUri('/');
+        $this->assertEquals('', $request->getUri());
+        $request->setUri('//');
+        $this->assertEquals('', $request->getUri());
+        $request->setUri('foo');
+        $this->assertEquals('foo', $request->getUri());
+        $request->setUri('/foo');
+        $this->assertEquals('foo', $request->getUri());
+        $request->setUri('/foo/');
+        $this->assertEquals('foo', $request->getUri());
+    }
+
 }
