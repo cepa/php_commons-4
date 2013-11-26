@@ -44,6 +44,8 @@ abstract class AbstractMoo implements PluginAwareInterface
     protected $_callbacks = array();
     protected $_routes = array();
     protected $_pluginBroker;
+    protected $_preProcessor;
+    protected $_postProcessor;
     private $_stackCounter = 0;
     private $_routeStack = array();
 
@@ -365,6 +367,75 @@ abstract class AbstractMoo implements PluginAwareInterface
     }
 
     /**
+     * Set pre processor.
+     * @note Preprocesor is executed BEFORE action is dispatched.
+     * @param callable $callable
+     * @return \Commons\Moo\AbstractMoo
+     */
+    public function setPreProcessor($callable)
+    {
+        if (!($callable instanceof Callback)) {
+            $callable = new Callback($callable);
+        }
+        $this->_preProcessor = $callable;
+        return $this;
+    }
+
+    /**
+     * Get pre processor.
+     * @return \Commons\Callback\Callback
+     */
+    public function getPreProcessor()
+    {
+        if (!isset($this->_preProcessor)) {
+            $this->setPreProcessor(function () { });
+        }
+        return $this->_preProcessor;
+    }
+
+    /**
+     * Set post processor.
+     * @note Postprocesor is executed AFTER action is dispatched.
+     * @param callable $callable
+     * @return \Commons\Moo\AbstractMoo
+     */
+    public function setPostProcessor($callable)
+    {
+        if (!($callable instanceof Callback)) {
+            $callable = new Callback($callable);
+        }
+        $this->_postProcessor = $callable;
+        return $this;
+    }
+
+    /**
+     * Get post processor.
+     * @throws Exception
+     * @return \Commons\Callback\Callback
+     */
+    public function getPostProcessor()
+    {
+        if (!isset($this->_postProcessor)) {
+            $moo = $this;
+            $this->setPostProcessor(function ($result) use ($moo) {
+                if ($result instanceof Response) {
+                    $moo->setResponse($result);
+                } else if ($result instanceof ViewInterface) {
+                    $moo->getResponse()->appendBody($moo->getRenderer()->render($result));
+                } else if (!is_object($result) && !is_array($result)) {
+                    $moo->getResponse()->appendBody($result);
+                } else {
+                    throw new Exception(
+                        "Invalid result type: ".
+                        (is_object($result) ? get_class($result) : gettype($result))
+                    );
+                }
+            });
+        }
+        return $this->_postProcessor;
+    }
+
+    /**
      * Set init callback.
      * This callback will be executed at the beginning.
      * @param mixed $callback
@@ -540,8 +611,6 @@ abstract class AbstractMoo implements PluginAwareInterface
     public function dispatch()
     {
         try {
-            OutputBuffer::start();
-
             if ($this->hasCallback('init')) {
                 $this->getCallback('init')->call($this);
             }
@@ -554,22 +623,23 @@ abstract class AbstractMoo implements PluginAwareInterface
                     array_push($this->_routeStack, $routes);
                     $this->setRoutes(array());
                     $params[0] = $this;
-                    $result = $this->_runAction($key, $params);
+                    $response = $this->_dispatchAction($key, $params);
                     array_pop($this->_routeStack);
                     $this->setRoutes($routes);
-                    return $result;
+                    return $response;
                 }
             }
             $this->_stackCounter--;
 
             throw new Exception(
                 "Unknown route ".$this->getRequest()->getMethod()." /".$this->getRequest()->getUri(),
-                StatusCode::HTTP_NOT_FOUND);
+                StatusCode::HTTP_NOT_FOUND
+            );
 
         } catch (\Exception $e) {
             // Handle exceptions on the top level of nested dispatching.
             if ($this->_stackCounter <= 1 && $this->hasCallback('error')) {
-                return $this->_runAction('error', array($this, $e));
+                return $this->_dispatchAction('error', array($this, $e));
 
             }
             // Unroll nested dispatching.
@@ -614,48 +684,25 @@ abstract class AbstractMoo implements PluginAwareInterface
     public function __call($method, array $args = array())
     {
         if ($this->hasPlugin($method)) {
-            $params = array($this);
-            foreach ($args as $arg) {
-                $params[] = $arg;
-            }
-            return $this->_runCallback(self::PLUGIN_PREFIX.$method, $params);
+            return $this->getCallback(self::PLUGIN_PREFIX.$method)
+                ->callArray(array_merge(array($this), $args));
         }
         return $this->getPluginBroker()->invoke($this, $method, $args);
     }
 
     /**
-     * Run callback by name.
-     * @param string $name
-     * @param array $params
-     * @return mixed
-     */
-    protected function _runCallback($name, array $params = array())
-    {
-        return $this->getCallback($name)->callArray($params);
-    }
-
-    /**
-     * Execute callback.
+     * Execute action callback.
      * @param string $action
      * @param array $params
      * @return \Commons\Http\Response
      */
-    protected function _runAction($action, array $params = array())
+    protected function _dispatchAction($action, array $params = array())
     {
-        $result = $this->_runCallback($action, $params);
-        $content = OutputBuffer::end();
-        if ($result instanceof Response) {
-            return $result;
-        }
-        $response = $this->getResponse();
-        $response->appendBody($content);
-        if ($result instanceof ViewInterface) {
-            $response->appendBody($this->getRenderer()->render($result));
-        } else {
-            $response->appendBody((string) $result);
-        }
-        return $response;
+        OutputBuffer::start();
+        $this->getPreProcessor()->call();
+        $result = $this->getCallback($action)->callArray($params);
+        $this->getPostProcessor()->call($result);
+        return $this->getResponse()->appendBody(OutputBuffer::end());
     }
-
 
 }
