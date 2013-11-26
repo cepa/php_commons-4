@@ -314,7 +314,7 @@ class Request
      */
     public function setUri($uri)
     {
-        $this->_uri = $uri;
+        $this->_uri = trim($uri, '/');
         return $this;
     }
 

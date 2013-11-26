@@ -164,101 +164,101 @@ class MooTest extends \PHPUnit_Framework_TestCase
     public function testAction()
     {
         $moo = new Moo();
-        $this->assertFalse($moo->hasCallback('HEAD xxx'));
-        $this->assertFalse($moo->hasRoute('HEAD xxx'));
+        $this->assertFalse($moo->hasCallback('action HEAD xxx'));
+        $this->assertFalse($moo->hasRoute('action HEAD xxx'));
         $moo->action('HEAD', '/xxx', function($moo){});
-        $this->assertTrue($moo->hasCallback('HEAD xxx'));
-        $this->assertTrue($moo->hasRoute('HEAD xxx'));
+        $this->assertTrue($moo->hasCallback('action HEAD xxx'));
+        $this->assertTrue($moo->hasRoute('action HEAD xxx'));
     }
 
     public function testRoute()
     {
         $moo = new Moo();
-        $this->assertFalse($moo->hasCallback('xxx'));
-        $this->assertFalse($moo->hasRoute('xxx'));
+        $this->assertFalse($moo->hasCallback('action xxx'));
+        $this->assertFalse($moo->hasRoute('action xxx'));
         $moo->route('/xxx', function($moo){});
-        $this->assertTrue($moo->hasCallback('xxx'));
-        $this->assertTrue($moo->hasRoute('xxx'));
+        $this->assertTrue($moo->hasCallback('action xxx'));
+        $this->assertTrue($moo->hasRoute('action xxx'));
     }
 
     public function testHead()
     {
         $moo = new Moo();
-        $this->assertFalse($moo->hasCallback('HEAD xxx'));
-        $this->assertFalse($moo->hasRoute('HEAD xxx'));
+        $this->assertFalse($moo->hasCallback('action HEAD xxx'));
+        $this->assertFalse($moo->hasRoute('action HEAD xxx'));
         $moo->head('/xxx', function($moo){});
-        $this->assertTrue($moo->hasCallback('HEAD xxx'));
-        $this->assertTrue($moo->hasRoute('HEAD xxx'));
+        $this->assertTrue($moo->hasCallback('action HEAD xxx'));
+        $this->assertTrue($moo->hasRoute('action HEAD xxx'));
     }
 
     public function testGet()
     {
         $moo = new Moo();
-        $this->assertFalse($moo->hasCallback('GET xxx'));
-        $this->assertFalse($moo->hasRoute('GET xxx'));
+        $this->assertFalse($moo->hasCallback('action GET xxx'));
+        $this->assertFalse($moo->hasRoute('action GET xxx'));
         $moo->get('/xxx', function($moo){});
-        $this->assertTrue($moo->hasCallback('GET xxx'));
-        $this->assertTrue($moo->hasRoute('GET xxx'));
+        $this->assertTrue($moo->hasCallback('action GET xxx'));
+        $this->assertTrue($moo->hasRoute('action GET xxx'));
     }
 
     public function testPost()
     {
         $moo = new Moo();
-        $this->assertFalse($moo->hasCallback('POST xxx'));
-        $this->assertFalse($moo->hasRoute('POST xxx'));
+        $this->assertFalse($moo->hasCallback('action POST xxx'));
+        $this->assertFalse($moo->hasRoute('action POST xxx'));
         $moo->post('/xxx', function($moo){});
-        $this->assertTrue($moo->hasCallback('POST xxx'));
-        $this->assertTrue($moo->hasRoute('POST xxx'));
+        $this->assertTrue($moo->hasCallback('action POST xxx'));
+        $this->assertTrue($moo->hasRoute('action POST xxx'));
     }
 
     public function testPut()
     {
         $moo = new Moo();
-        $this->assertFalse($moo->hasCallback('PUT xxx'));
-        $this->assertFalse($moo->hasRoute('PUT xxx'));
+        $this->assertFalse($moo->hasCallback('action PUT xxx'));
+        $this->assertFalse($moo->hasRoute('action PUT xxx'));
         $moo->put('/xxx', function($moo){});
-        $this->assertTrue($moo->hasCallback('PUT xxx'));
-        $this->assertTrue($moo->hasRoute('PUT xxx'));
+        $this->assertTrue($moo->hasCallback('action PUT xxx'));
+        $this->assertTrue($moo->hasRoute('action PUT xxx'));
     }
 
     public function testDelete()
     {
         $moo = new Moo();
-        $this->assertFalse($moo->hasCallback('DELETE xxx'));
-        $this->assertFalse($moo->hasRoute('DELETE xxx'));
+        $this->assertFalse($moo->hasCallback('action DELETE xxx'));
+        $this->assertFalse($moo->hasRoute('action DELETE xxx'));
         $moo->delete('/xxx', function($moo){});
-        $this->assertTrue($moo->hasCallback('DELETE xxx'));
-        $this->assertTrue($moo->hasRoute('DELETE xxx'));
+        $this->assertTrue($moo->hasCallback('action DELETE xxx'));
+        $this->assertTrue($moo->hasRoute('action DELETE xxx'));
     }
 
     public function testTrace()
     {
         $moo = new Moo();
-        $this->assertFalse($moo->hasCallback('TRACE xxx'));
-        $this->assertFalse($moo->hasRoute('TRACE xxx'));
+        $this->assertFalse($moo->hasCallback('action TRACE xxx'));
+        $this->assertFalse($moo->hasRoute('action TRACE xxx'));
         $moo->trace('/xxx', function($moo){});
-        $this->assertTrue($moo->hasCallback('TRACE xxx'));
-        $this->assertTrue($moo->hasRoute('TRACE xxx'));
+        $this->assertTrue($moo->hasCallback('action TRACE xxx'));
+        $this->assertTrue($moo->hasRoute('action TRACE xxx'));
     }
 
     public function testOptions()
     {
         $moo = new Moo();
-        $this->assertFalse($moo->hasCallback('OPTIONS xxx'));
-        $this->assertFalse($moo->hasRoute('OPTIONS xxx'));
+        $this->assertFalse($moo->hasCallback('action OPTIONS xxx'));
+        $this->assertFalse($moo->hasRoute('action OPTIONS xxx'));
         $moo->options('/xxx', function($moo){});
-        $this->assertTrue($moo->hasCallback('OPTIONS xxx'));
-        $this->assertTrue($moo->hasRoute('OPTIONS xxx'));
+        $this->assertTrue($moo->hasCallback('action OPTIONS xxx'));
+        $this->assertTrue($moo->hasRoute('action OPTIONS xxx'));
     }
 
     public function testConnect()
     {
         $moo = new Moo();
-        $this->assertFalse($moo->hasCallback('CONNECT xxx'));
-        $this->assertFalse($moo->hasRoute('CONNECT xxx'));
+        $this->assertFalse($moo->hasCallback('action CONNECT xxx'));
+        $this->assertFalse($moo->hasRoute('action CONNECT xxx'));
         $moo->connect('/xxx', function($moo){});
-        $this->assertTrue($moo->hasCallback('CONNECT xxx'));
-        $this->assertTrue($moo->hasRoute('CONNECT xxx'));
+        $this->assertTrue($moo->hasCallback('action CONNECT xxx'));
+        $this->assertTrue($moo->hasRoute('action CONNECT xxx'));
     }
 
     public function testMooIndex()
@@ -307,6 +307,8 @@ class MooTest extends \PHPUnit_Framework_TestCase
             ->plugin('xxx', function($moo, $x){ return $x; })
             ->xxx(666);
         $this->assertEquals(666, $x);
+        $this->assertTrue($moo->hasPlugin('xxx'));
+        $this->assertFalse($moo->hasPlugin('yyy'));
     }
 
     public function testMooPlugin()
@@ -328,6 +330,150 @@ class MooTest extends \PHPUnit_Framework_TestCase
             return $request;
         });
         $this->assertEquals('test', $moo->getRequest()->getUri());
+    }
+
+    public function testNestedRouterIndex()
+    {
+        $request = new Request();
+        $request->setUri('/');
+        $response = $this->createNestedRouting()
+            ->setRequest($request)
+            ->dispatch();
+        $this->assertEquals('index', $response->getBody());
+    }
+
+    public function testNestedRouterGetNewsList()
+    {
+        $request = new Request();
+        $request->setUri('/news');
+        $response = $this->createNestedRouting()
+            ->setRequest($request)
+            ->dispatch();
+        $this->assertEquals('get news list', $response->getBody());
+    }
+
+    public function testNestedRouterGetNewsById()
+    {
+        $request = new Request();
+        $request->setUri('/news/123');
+        $response = $this->createNestedRouting()
+            ->setRequest($request)
+            ->dispatch();
+        $this->assertEquals('get news 123', $response->getBody());
+    }
+
+    public function testNestedRouterPutNewsById()
+    {
+        $request = new Request();
+        $request
+            ->setUri('/news/123')
+            ->setMethod('PUT')
+            ->setBody('xxx');
+        $response = $this->createNestedRouting()
+            ->setRequest($request)
+            ->dispatch();
+        $this->assertEquals('put news 123 xxx', $response->getBody());
+    }
+
+    public function testNestedRouterGetCommentsList()
+    {
+        $request = new Request();
+        $request->setUri('/comments');
+        $response = $this->createNestedRouting()
+            ->setRequest($request)
+            ->dispatch();
+        $this->assertEquals('get comments list', $response->getBody());
+    }
+
+    public function testNestedRouterPostComment()
+    {
+        $request = new Request();
+        $request
+            ->setUri('/comments')
+            ->setMethod('POST')
+            ->setBody('foo');
+        $response = $this->createNestedRouting()
+            ->setRequest($request)
+            ->dispatch();
+        $this->assertEquals('post comment foo', $response->getBody());
+    }
+
+    public function testNestedRouterRewind()
+    {
+        $request = new Request();
+        $request->setUri('/foo/hoo');
+        $response = $this->createNestedRouting()
+            ->setRequest($request)
+            ->dispatch();
+        $this->assertEquals('get news 666', $response->getBody());
+    }
+
+    public function createNestedRouting()
+    {
+        $moo = new Moo();
+        $moo
+
+            ->plugin('getBody', function (Moo $moo) {
+                return $moo->getRequest()->getBody();
+            })
+
+            ->get('/', function (Moo $moo) {
+                return 'index';
+            })
+
+            ->route('/news(.*)', function (Moo $moo) {
+                return $moo
+
+                    ->get('/news', function (Moo $moo) {
+                        return 'get news list';
+                    })
+
+                    ->route('/news/(.*)', function (Moo $moo) {
+                        return $moo
+
+                            ->get('/news/(.*)', function (Moo $moo, $id) {
+                                return 'get news '.$id;
+                            })
+
+                            ->put('/news/(.*)', function (Moo $moo, $id) {
+                                return 'put news '.$id.' '.$moo->getBody();
+                            })
+
+                            ->dispatch();
+                    })
+
+                    ->dispatch();
+            })
+
+            ->route('/comments(.*)', function (Moo $moo) {
+                return $moo
+
+                    ->get('/comments', function (Moo $moo) {
+                        return 'get comments list';
+                    })
+
+                    ->post('/comments', function (Moo $moo) {
+                        return 'post comment '.$moo->getBody();
+                    })
+
+                    ->dispatch();
+            })
+
+            ->route('/foo(.*)', function (Moo $moo) {
+                return $moo
+
+                    ->route('/foo/hoo(.*)', function (Moo $moo) {
+                        $request = clone $moo->getRequest();
+                        $request->setUri('/news/666');
+                        return $moo->setRequest($request)->rewind()->dispatch();
+                    })
+
+                    ->dispatch();
+            })
+
+            ;
+
+        return $moo;
     }
 
 }
