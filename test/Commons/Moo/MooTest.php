@@ -332,6 +332,34 @@ class MooTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test', $moo->getRequest()->getUri());
     }
 
+    public function testMooPreDispatch()
+    {
+        $moo = new Moo();
+        $moo
+            ->preDispatch(function (Moo $moo) {
+                $moo->getResponse()->appendBody('pre ');
+            })
+            ->get('/', function (Moo $moo) {
+                return 'index';
+            })
+            ;
+        $this->assertEquals('pre index', $moo->dispatch()->getBody());
+    }
+
+    public function testMooPostDispatch()
+    {
+        $moo = new Moo();
+        $moo
+            ->postDispatch(function (Moo $moo) {
+                $moo->getResponse()->appendBody(' post');
+            })
+            ->get('/', function (Moo $moo) {
+                return 'index';
+            })
+            ;
+        $this->assertEquals('index post', $moo->dispatch()->getBody());
+    }
+
     public function testNestedRouterIndex()
     {
         $request = new Request();
