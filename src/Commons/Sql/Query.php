@@ -4,7 +4,7 @@
  * =============================================================================
  * @file       Commons/Sql/Query.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
- * 
+ *
  * @copyright  PHP Commons
  *             Copyright (C) 2009-2013 PHP Commons Contributors
  *             All rights reserved.
@@ -15,10 +15,11 @@
 namespace Commons\Sql;
 
 use Commons\Container\AssocContainer;
+use Commons\Container\SetContainer;
 use Commons\Sql\Connection\ConnectionInterface;
 use Commons\Sql\Statement\StatementInterface;
 
-class Query implements \Countable 
+class Query implements \Countable
 {
 
     const TYPE_SELECT = 'SELECT';
@@ -40,14 +41,21 @@ class Query implements \Countable
      * @var int
      */
     protected $_paramsCounter = 0;
+
     /**
      * @var AssocContainer
      */
     protected $_params = null;
+
+    /**
+     * @var SetContainer
+     */
+    protected $_valueRows = null;
+
     /**
      * @var AssocContainer
      */
-    protected $_updates = null;
+    protected $_valueKeys = null;
 
     /**
      * @var QueryExpression
@@ -98,12 +106,12 @@ class Query implements \Countable
      * @var string
      */
     protected $_entityClass = '\\Commons\\Entity\\Entity';
-    
+
     /**
      * @var string
      */
     protected $_defaultTableName;
-    
+
     /**
      * Init a new query.
      * @param ConnectionInterface $connection
@@ -113,7 +121,7 @@ class Query implements \Countable
         $this->_connection = $connection;
         $this->reset();
     }
-    
+
     /**
      * Destroy query.
      */
@@ -121,7 +129,7 @@ class Query implements \Countable
     {
         $this->_connection = null;
     }
-    
+
     /**
      * Countable.
      * @return int
@@ -130,7 +138,7 @@ class Query implements \Countable
     {
         return $this->_params->count();
     }
-    
+
     /**
      * Set parameter.
      * @param string $name
@@ -140,7 +148,7 @@ class Query implements \Countable
     {
         $this->_params->set($name, $value);
     }
-    
+
     /**
      * Get parameter.
      * @param string $name
@@ -150,7 +158,7 @@ class Query implements \Countable
     {
         return $this->_params->get($name);
     }
-    
+
     /**
      * Check if parameter is set.
      * @param string $name
@@ -160,16 +168,16 @@ class Query implements \Countable
     {
         return $this->_params->has($name);
     }
-    
+
     /**
      * Remove parameter.
      * @param string $name
      */
     public function __unset($name)
     {
-        $this->_params->remove($name);   
+        $this->_params->remove($name);
     }
-    
+
     /**
      * Set sql connection.
      * @param ConnectionInterface $connection
@@ -189,7 +197,7 @@ class Query implements \Countable
     {
         return $this->_connection;
     }
-    
+
     /**
      * Set query type.
      * @param string $type
@@ -209,7 +217,7 @@ class Query implements \Countable
     {
         return $this->_type;
     }
-    
+
     /**
      * Set entity class name.
      * @param string $entityClass
@@ -220,7 +228,7 @@ class Query implements \Countable
         $this->_entityClass = $entityClass;
         return $this;
     }
-    
+
     /**
      * Get entity class name.
      * @return string
@@ -229,7 +237,7 @@ class Query implements \Countable
     {
         return $this->_entityClass;
     }
-    
+
     /**
      * Set default table name.
      * @param string $tableName
@@ -240,7 +248,7 @@ class Query implements \Countable
         $this->_defaultTableName = $tableName;
         return $this;
     }
-    
+
     /**
      * Get default table name.
      * @return string
@@ -259,7 +267,8 @@ class Query implements \Countable
         $this->_type = self::TYPE_SELECT;
         $this->_paramsCounter = 0;
         $this->_params = new AssocContainer();
-        $this->_updates = new AssocContainer();
+        $this->_valueRows = new SetContainer();
+        $this->_valueKeys = new AssocContainer();
         $this->_beginningExpression = new QueryExpression();
         $this->_fromExpression = new QueryExpression();
         $this->_whereExpression = new QueryExpression();
@@ -277,7 +286,8 @@ class Query implements \Countable
     public function __clone()
     {
         $this->_params = clone $this->_params;
-        $this->_updates = clone $this->_updates;
+        $this->_valueRows = clone $this->_valueRows;
+        $this->_valueKeys = clone $this->_valueKeys;
         $this->_beginningExpression    = clone $this->_beginningExpression;
         $this->_fromExpression         = clone $this->_fromExpression;
         $this->_whereExpression        = clone $this->_whereExpression;
@@ -288,11 +298,11 @@ class Query implements \Countable
         $this->_limitExpression        = clone $this->_limitExpression;
         $this->_offsetExpression       = clone $this->_offsetExpression;
         $this->_joinExpression         = clone $this->_joinExpression;
-        $this->_endingExpression       = clone $this->_endingExpression;      
+        $this->_endingExpression       = clone $this->_endingExpression;
         $this->_entityClass = clone $this->_entityClass;
-        $this->_defaultTableName = clone $this->_defaultTableName; 
+        $this->_defaultTableName = clone $this->_defaultTableName;
     }
-    
+
     /**
      * Get beginning expression (SELETC, INSERT, UPDATE, DELETE).
      * @return QueryExpression
@@ -428,17 +438,21 @@ class Query implements \Countable
     /**
      * INSERT INTO statement.
      * @param string $sql
+     * @param array $columnConstraints
      * @return Query
      */
-    public function insert($sql = null)
+    public function insert($sql = null, array $columnConstraints = array())
     {
         $sql = (isset($sql) ? $sql : $this->getDefaultTableName());
-        $args = func_get_args();
         $this->_type = self::TYPE_INSERT;
         $this->_beginningExpression
             ->set('INSERT')
             ->add('INTO')
-            ->add($this->_processSql($sql, $args));
+            ->add($sql);
+        $this->_valueKeys = new AssocContainer();
+        foreach ($columnConstraints as $columnName) {
+            $this->_valueKeys->set($columnName, $columnName);
+        }
         return $this;
     }
 
@@ -916,7 +930,7 @@ class Query implements \Countable
 
         return $this;
     }
-    
+
     /**
      * Fetch row as an entity.
      * @return \Commons\Entity\Entity
@@ -925,7 +939,7 @@ class Query implements \Countable
     {
         return $this->getStatement()->fetch($this->getEntityClass());
     }
-    
+
     /**
      * Fetch all rows as a collection of entities.
      * @return \Commons\Entity\Collection
@@ -934,7 +948,7 @@ class Query implements \Countable
     {
         return $this->getStatement()->fetchCollection($this->getEntityClass());
     }
-    
+
     /**
      * Fetch all rows as array.
      * @return array
@@ -943,7 +957,7 @@ class Query implements \Countable
     {
         return $this->getStatement()->fetchArray();
     }
-    
+
     /**
      * Fetch single value from a column.
      * @param string $index
@@ -953,7 +967,7 @@ class Query implements \Countable
     {
         return $this->getStatement()->fetchScalar($index);
     }
-    
+
     /**
      * Get statement.
      * @throws Exception
@@ -966,7 +980,7 @@ class Query implements \Countable
         }
         return $this->_statement;
     }
-    
+
     /**
      * Set update in insert and update query.
      * @param string $name
@@ -975,10 +989,34 @@ class Query implements \Countable
      */
     public function set($name, $value)
     {
-        $this->_updates->set($name, $value);
+        if (!isset($this->_valueRows[0])) {
+            $this->_valueRows[0] = new AssocContainer();
+        }
+        $this->_valueKeys->set($name, $name);
+        $this->_valueRows[0]->set($name, $value);
         return $this;
     }
-    
+
+    /**
+     * Add values vector used in SQL INSERT operation.
+     * @param array $values
+     */
+    public function addValues($values)
+    {
+        $rows = new AssocContainer();
+        if (count($this->_valueKeys) == 0) {
+            throw new Exception("You need to define column names in insert(...) method before using addValues(...)");
+        }
+        foreach ($this->_valueKeys as $column) {
+            if (!isset($values[$column])) {
+                throw new Exception("Missing value for column {$column}");
+            }
+            $rows[$column] = $values[$column];
+        }
+        $this->_valueRows[] = $rows;
+        return $this;
+    }
+
     /**
      * Convert to string.
      * @return string
@@ -1003,7 +1041,7 @@ class Query implements \Countable
     {
         $out = '';
         $tokens = explode('?', $sql);
-        
+
         $n = count($tokens);
         $m = count($params) - 1;
         /**
@@ -1014,7 +1052,7 @@ class Query implements \Countable
             throw new Exception("Missing bind parameters!");
         }
         */
-        
+
         for ($i = 0; $i < $m; $i++) {
             $paramName = '_'.++$this->_paramsCounter;
             $out .= $tokens[$i];
@@ -1022,21 +1060,25 @@ class Query implements \Countable
             $this->_params->set($paramName, $params[$i+1]);
         }
         $out .= $tokens[$i];
-        
+
         return $out;
     }
-    
+
     /**
      * Generate sql part for insert query.
      * @return QueryExpression
      */
     protected function _generateInsertExpression()
     {
+        if (count($this->_valueRows) == 0) {
+            throw new Exception("There is nothing to insert in this query");
+        }
+
         $exp = new QueryExpression();
-        
+
         $exp->add('(');
         $isFirst = true;
-        foreach ($this->_updates->getAll() as $column => $value) {
+        foreach ($this->_valueKeys as $column => $value) {
             if ($isFirst) {
                 $isFirst = false;
             } else {
@@ -1045,38 +1087,50 @@ class Query implements \Countable
             $exp->add($column);
         }
         $exp->add(')');
-        
+
         $exp->add('VALUES');
-        
+
+        $idx = 0;
+        foreach ($this->_valueRows as $valueRow) {
+            $exp->add($idx++ > 0 ? ',' : '');
+            $this->_generateInsertValuesRowExpression($exp, $valueRow);
+        }
+
+        return $exp;
+    }
+
+    protected function _generateInsertValuesRowExpression(QueryExpression $exp, AssocContainer $valueRow)
+    {
+        $idx = 0;
         $exp->add('(');
-        $isFirst = true;
-        foreach ($this->_updates->getAll() as $column => $value) {
-            if ($isFirst) {
-                $isFirst = false;
-            } else {
-                $exp->add(',');
-            }
+        foreach ($valueRow->getAll() as $column => $value) {
+            $exp->add($idx++ > 0 ? ',' : '');
             $paramName = '_'.++$this->_paramsCounter;
             $exp->add(':'.$paramName);
             $this->_params->set($paramName, $value);
         }
         $exp->add(')');
-        
-        return $exp;
     }
-    
+
     /**
      * Generate sql part for update query.
      * @return QueryExpression
      */
     protected function _generateUpdateExpression()
     {
+        if (count($this->_valueRows) == 0) {
+            throw new Exception("There is nothing to update in this query");
+
+        } else if (count($this->_valueRows) > 1) {
+            throw new Exception("You are trying to update multiple rows at once, not supported");
+        }
+
         $exp = new QueryExpression();
-        
+
         $exp->add('SET');
-        
+
         $isFirst = true;
-        foreach ($this->_updates->getAll() as $column => $value) {
+        foreach ($this->_valueRows[0] as $column => $value) {
             if ($isFirst) {
                 $isFirst = false;
             } else {
@@ -1088,7 +1142,7 @@ class Query implements \Countable
             $exp->add(':'.$paramName);
             $this->_params->set($paramName, $value);
         }
-        
+
         return $exp;
     }
 
