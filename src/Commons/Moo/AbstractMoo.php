@@ -456,6 +456,16 @@ abstract class AbstractMoo implements PluginAwareInterface
         return $this->setCallback('error', $callback);
     }
 
+    public function preDispatch($callback)
+    {
+        return $this->setCallback('preDispatch', $callback);
+    }
+
+    public function postDispatch($callback)
+    {
+        return $this->setCallback('postDispatch', $callback);
+    }
+
     /**
      * Set action.
      * @param string $method
@@ -623,7 +633,9 @@ abstract class AbstractMoo implements PluginAwareInterface
                     array_push($this->_routeStack, $routes);
                     $this->setRoutes(array());
                     $params[0] = $this;
+                    if ($this->hasCallback('preDispatch')) $this->getCallback('preDispatch')->call($this);
                     $response = $this->_dispatchAction($key, $params);
+                    if ($this->hasCallback('postDispatch')) $this->getCallback('postDispatch')->call($this);
                     array_pop($this->_routeStack);
                     $this->setRoutes($routes);
                     return $response;
