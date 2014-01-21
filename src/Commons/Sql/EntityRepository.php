@@ -4,7 +4,7 @@
  * =============================================================================
  * @file       Commons/Sql/EntityRepository.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
- * 
+ *
  * @copyright  PHP Commons
  *             Copyright (C) 2009-2013 PHP Commons Contributors
  *             All rights reserved.
@@ -20,10 +20,10 @@ use Commons\Sql\Connection\ConnectionInterface;
 
 class EntityRepository extends AbstractRepository
 {
-    
+
     protected $_connection;
     protected $_tableName;
-    
+
     /**
      * Init.
      * @param ConnectionInterface $connection
@@ -32,7 +32,7 @@ class EntityRepository extends AbstractRepository
     {
         $this->_connection = $connection;
     }
-    
+
     /**
      * Set connection.
      * @param ConnectionInterface $connection
@@ -43,7 +43,7 @@ class EntityRepository extends AbstractRepository
         $this->_connection = $connection;
         return $this;
     }
-    
+
     /**
      * Get connection.
      * @return ConnectionInterface
@@ -52,7 +52,7 @@ class EntityRepository extends AbstractRepository
     {
         return $this->_connection;
     }
-    
+
     /**
      * Set SQL table name.
      * @param string $tableName
@@ -63,7 +63,7 @@ class EntityRepository extends AbstractRepository
         $this->_tableName = $tableName;
         return $this;
     }
-    
+
     /**
      * Get SQL table name.
      * @return string
@@ -72,7 +72,7 @@ class EntityRepository extends AbstractRepository
     {
         return $this->_tableName;
     }
-    
+
     /**
      * Create new query instance assigned to this entity repository.
      * @return\Commons\Sql\Query
@@ -84,7 +84,7 @@ class EntityRepository extends AbstractRepository
             ->setEntityClass($this->getEntityClass())
             ->setDefaultTableName($this->getTableName());
     }
-    
+
     /**
      * Find an entity by a key value.
      * @param string $key
@@ -101,23 +101,27 @@ class EntityRepository extends AbstractRepository
             ->execute()
             ->fetch();
     }
-    
+
     /**
-     * 
+     *
      * @see \Commons\Entity\RepositoryInterface::fetch()
      */
     public function fetch($primaryKey)
     {
-        return $this->createQuery()
-            ->select()
-            ->from()
-            ->where($this->getPrimaryKey().' = ?', $primaryKey)
-            ->execute()
-            ->fetch();
+        $pKeys = (is_array($this->getPrimaryKey()) ? $this->getPrimaryKey() : array($this->getPrimaryKey()));
+        $pVals = (is_array($primaryKey) ? $primaryKey : array($primaryKey));
+        if (count($pKeys) != count($pVals)) {
+            throw new Exception("Invalid composite primary key");
+        }
+        $query = $this->createQuery()->select()->from();
+        for ($i = 0, $n = count($pKeys); $i < $n; $i++) {
+            $query->addWhere($pKeys[$i].' = ?', $pVals[$i]);
+        }
+        return $query->execute()->fetch();
     }
-    
+
     /**
-     * 
+     *
      * @see \Commons\Entity\RepositoryInterface::fetchCollection()
      */
     public function fetchCollection($criteria = null)
@@ -125,7 +129,7 @@ class EntityRepository extends AbstractRepository
         $query = $this->createQuery()
             ->select()
             ->from();
-        
+
         if (isset($criteria['where'])) {
             if (is_string($criteria['where'])) {
                 $query->where($criteria['where']);
@@ -135,7 +139,7 @@ class EntityRepository extends AbstractRepository
                 }
             }
         }
-        
+
         if (isset($criteria['groupBy'])) {
             if (is_string($criteria['groupBy'])) {
                 $query->groupBy($criteria['groupBy']);
@@ -145,7 +149,7 @@ class EntityRepository extends AbstractRepository
                 }
             }
         }
-        
+
         if (isset($criteria['orderBy'])) {
             if (is_string($criteria['orderBy'])) {
                 $query->orderBy($criteria['orderBy']);
@@ -155,27 +159,65 @@ class EntityRepository extends AbstractRepository
                 }
             }
         }
-        
+
         if (isset($criteria['limit'])) {
             $query->limit($criteria['limit']);
         }
-        
+
         if (isset($criteria['offset'])) {
             $query->offset($criteria['offset']);
         }
-        
+
         return $query->execute()->fetchCollection();
     }
-    
+
     /**
-     * 
+     *
      * @see \Commons\Entity\RepositoryInterface::save()
      */
     public function save(Entity $entity)
     {
+        return (is_array($this->getPrimaryKey())
+            ? $this->_saveByCompositePrimaryKey($entity)
+            : $this->_saveBySinglePrimaryKey($entity));
+    }
+
+    protected function _saveByCompositePrimaryKey(Entity $entity)
+    {
+        $query = $this->createQuery()->select('COUNT(*)')->from();
+        $pKeys = $this->getPrimaryKey();
+        foreach ($pKeys as $pKey) {
+            $query->addWhere($pKey . ' = ?', $entity->get($pKey));
+        }
+        $count = $query->execute()->fetchScalar();
+
+        if ($count == 0) {
+            $query = $this->createQuery()->insert();
+
+        } else {
+            $query = $this->createQuery()->update();
+            foreach ($pKeys as $pKey) {
+            if (!$entity->has($pKey)) {
+                throw new Exception("Missing value for composite key: " . $pKey);
+            }
+            $query->addWhere($pKey . ' = ?', $entity->get($pKey));
+            }
+        }
+
+        foreach ($entity as $key => $value) {
+            $query->set($key, $value);
+        }
+
+        $query->execute();
+
+        return $this;
+    }
+
+    protected function _saveBySinglePrimaryKey(Entity $entity)
+    {
         $primaryKey = $this->getPrimaryKey();
         $query = $this->createQuery();
-        
+
         if ($entity->has($primaryKey)) {
             $pk = $this->createQuery()
                 ->select($this->getPrimaryKey())
@@ -191,13 +233,13 @@ class EntityRepository extends AbstractRepository
         } else {
             $query->insert();
         }
-        
+
         foreach ($entity as $key => $value) {
             $query->set($key, $value);
         }
 
         $query->execute();
-        
+
         if (!$entity->has($primaryKey)) {
             $databaseType = $this->getConnection()->getDatabaseType();
             switch ($databaseType) {
@@ -209,7 +251,7 @@ class EntityRepository extends AbstractRepository
                         ->fetchScalar();
                     $entity->set($primaryKey, $id);
                     break;
-                    
+
                 case Sql::TYPE_POSTGRESQL:
                     $id = $this->getConnection()
                         ->createQuery()
@@ -220,26 +262,29 @@ class EntityRepository extends AbstractRepository
                     break;
             }
         }
-        
+
         return $this;
     }
-    
+
     /**
-     * 
+     *
      * @see \Commons\Entity\RepositoryInterface::delete()
      */
     public function delete(Entity $entity)
     {
-        $primaryKey = $this->getPrimaryKey();
-        if (!$entity->has($primaryKey)) {
-            throw new Exception("Entity does not have a primary key");
+        $pKeys = (is_array($this->getPrimaryKey()) ? $this->getPrimaryKey() : array($this->getPrimaryKey()));
+        foreach ($pKeys as $pKey) {
+            if (!$entity->has($pKey)) {
+                throw new Exception("Entity does not have a primary key: " . $pKey);
+            }
         }
-        $this->createQuery()
-            ->delete()
-            ->where($primaryKey.' = ?', $entity->get($primaryKey))
-            ->execute();
+        $query = $this->createQuery()->delete();
+        foreach ($pKeys as $pKey) {
+            $query->addWhere($pKey . ' = ?', $entity->get($pKey));
+        }
+        $query->execute();
         return $this;
     }
-        
+
 }
 
