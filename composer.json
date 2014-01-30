@@ -29,12 +29,8 @@
     "autoload": {
         "psr-0": {
             "Commons": ["src/", "test/"],
-            "Mock": "test/",
-            "Predis": "vendor/nrk/predis/lib/"
-        },
-        "files": [
-            "./vendor/cepa/Beautify/beautify.php"
-        ]
+            "Mock": "test/"
+        }
     },
     "repositories": {
         "cepa/Beautify": {
@@ -44,18 +40,6 @@
                 "version": "dev-master",
                 "source": {
                     "url": "https://github.com/cepa/Beautify.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
-        },
-        "cepa/php-smartypants": {
-            "type": "package",
-            "package": {
-                "name": "cepa/php-smartypants",
-                "version": "dev-master",
-                "source": {
-                    "url": "https://github.com/cepa/php-smartypants.git",
                     "type": "git",
                     "reference": "master"
                 }
