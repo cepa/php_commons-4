@@ -4,7 +4,7 @@
  * =============================================================================
  * @file       Commons/Sql/Statement/PdoStatement.php
  * @author     Lukasz Cepowski <lukasz@cepowski.com>
- * 
+ *
  * @copyright  PHP Commons
  *             Copyright (C) 2009-2013 PHP Commons Contributors
  *             All rights reserved.
@@ -22,10 +22,10 @@ use Commons\Sql\Sql;
 
 class PdoStatement implements StatementInterface
 {
-    
+
     protected $_rawSql;
     protected $_stmt;
-    
+
     /**
      * Init statement.
      * @param DriverInterface $driver
@@ -36,11 +36,11 @@ class PdoStatement implements StatementInterface
     {
         if (!($driver instanceof PdoDriver)) {
             throw new Exception("Driver instance has to be the PdoDriver");
-        }    
+        }
         $this->_rawSql = $rawSql;
         $this->_stmt = $driver->getPdo()->prepare($rawSql);
     }
-    
+
     /**
      * Destroy statement.
      */
@@ -48,7 +48,16 @@ class PdoStatement implements StatementInterface
     {
         $this->_stmt = null;
     }
-    
+
+    /**
+     * Expose PDOStatement object for custom actions.
+     * @return \PDOStatement
+     */
+    public function getPdoStatement()
+    {
+        return $this->_stmt;
+    }
+
     /**
      * @see Commons\Sql\Statement\StatementInterface::bind()
      */
@@ -65,7 +74,7 @@ class PdoStatement implements StatementInterface
             throw new Exception($e);
         }
     }
-    
+
     /**
      * @see Commons\Sql\Statement\StatementInterface::execute()
      */
@@ -79,7 +88,7 @@ class PdoStatement implements StatementInterface
             throw new Exception($e);
         }
     }
-    
+
     /**
      * @see \Commons\Sql\Statement\StatementInterface::fetch()
      */
@@ -95,7 +104,7 @@ class PdoStatement implements StatementInterface
             throw new Exception($e);
         }
     }
-    
+
     /**
      * @see \Commons\Sql\Statement\StatementInterface::fetchCollection()
      */
@@ -108,7 +117,7 @@ class PdoStatement implements StatementInterface
         }
         return $collection;
     }
-    
+
     /**
      * @see \Commons\Sql\Statement\StatementInterface::fetchArray()
      */
@@ -120,7 +129,7 @@ class PdoStatement implements StatementInterface
             throw new Exception($e);
         }
     }
-    
+
     /**
      * @see \Commons\Sql\Statement\StatementInterface::fetchScalar()
      */
@@ -132,5 +141,5 @@ class PdoStatement implements StatementInterface
             throw new Exception($e);
         }
     }
-    
+
 }
