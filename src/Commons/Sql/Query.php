@@ -22,10 +22,11 @@ use Commons\Sql\Statement\StatementInterface;
 class Query implements \Countable
 {
 
-    const TYPE_SELECT = 'SELECT';
-    const TYPE_INSERT = 'INSERT';
-    const TYPE_UPDATE = 'UPDATE';
-    const TYPE_DELETE = 'DELETE';
+    const TYPE_SELECT  = 'SELECT';
+    const TYPE_INSERT  = 'INSERT';
+    const TYPE_REPLACE = 'REPLACE';
+    const TYPE_UPDATE  = 'UPDATE';
+    const TYPE_DELETE  = 'DELETE';
 
     /**
      * @var Connection\ConnectionInterface
@@ -447,6 +448,28 @@ class Query implements \Countable
         $this->_type = self::TYPE_INSERT;
         $this->_beginningExpression
             ->set('INSERT')
+            ->add('INTO')
+            ->add($sql);
+        $this->_valueKeys = new AssocContainer();
+        foreach ($columnConstraints as $columnName) {
+            $this->_valueKeys->set($columnName, $columnName);
+        }
+        return $this;
+    }
+
+    /**
+     * EXPERMINETAL
+     * REPLACE INTO statement.
+     * @param string $sql
+     * @param array $columnConstraints
+     * @return Query
+     */
+    public function replace($sql = null, array $columnConstraints = array())
+    {
+        $sql = (isset($sql) ? $sql : $this->getDefaultTableName());
+        $this->_type = self::TYPE_REPLACE;
+        $this->_beginningExpression
+            ->set('REPLACE')
             ->add('INTO')
             ->add($sql);
         $this->_valueKeys = new AssocContainer();
@@ -880,6 +903,7 @@ class Query implements \Countable
                 break;
 
             case self::TYPE_INSERT:
+            case self::TYPE_REPLACE:
                 $sql =
                     $this->_beginningExpression->toSql().
                     $this->_generateInsertExpression()->toSql().
