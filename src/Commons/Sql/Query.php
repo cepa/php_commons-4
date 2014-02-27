@@ -300,8 +300,6 @@ class Query implements \Countable
         $this->_offsetExpression       = clone $this->_offsetExpression;
         $this->_joinExpression         = clone $this->_joinExpression;
         $this->_endingExpression       = clone $this->_endingExpression;
-        $this->_entityClass = clone $this->_entityClass;
-        $this->_defaultTableName = clone $this->_defaultTableName;
     }
 
     /**
