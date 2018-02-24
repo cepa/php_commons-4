@@ -1,5 +1,6 @@
 ### PHP Commons
 ***
+_This repository contains legacy code and is no longer maintaned!_
 
 PHP Commons is a set of utility libraries for various types of PHP projects.
 Project is focused to deliver basic PHP components optimized for performance and use in highly loaded applications.
